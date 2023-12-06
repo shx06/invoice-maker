@@ -1,0 +1,50 @@
+<resources>
+    <string name="app_name">Invoice Maker</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="due_date">
+        <item>1 day</item>
+        <item>2 days</item>
+        <item>3 days</item>
+        <item>4 days</item>
+        <item>5 days</item>
+        <item>6 days</item>
+        <item>7 days</item>
+        <item>8 days</item>
+        <item>9 days</item>
+        <item>10 days</item>
+        <item>11 days</item>
+        <item>12 days</item>
+        <item>13 days</item>
+        <item>14 days</item>
+        <item>15 days</item>
+        <item>16 days</item>
+        <item>17 days</item>
+        <item>18 days</item>
+        <item>19 days</item>
+        <item>20 days</item>
+        <item>21 day</item>
+        <item>22 days</item>
+        <item>23 days</item>
+        <item>24 days</item>
+        <item>25 days</item>
+        <item>26 days</item>
+        <item>27 days</item>
+        <item>28 days</item>
+        <item>29 days</item>
+        <item>30 days</item>
+        <item>31 day</item>
+        <item>32 days</item>
+        <item>33 days</item>
+        <item>34 days</item>
+        <item>35 days</item>
+        <item>36 days</item>
+        <item>37 days</item>
+        <item>38 days</item>
+        <item>39 days</item>
+        <item>Custom</item>
+    </string-array>
+</resources>

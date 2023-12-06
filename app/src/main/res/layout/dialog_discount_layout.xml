@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="@dimen/_5sdp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Discount"
+        android:textColor="@color/theme_blue"
+        android:textSize="@dimen/_15ssp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_solid_white_shadow_round_corner"
+        android:orientation="horizontal"
+        android:padding="@dimen/_4sdp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:id="@+id/input_area"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_6sdp"
+            android:background="@drawable/background_solid_white_round"
+            android:hint="0.00"
+            android:padding="@dimen/_5sdp" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:id="@+id/spinner" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="end"
+        android:layout_marginTop="@dimen/_10sdp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            android:id="@+id/btn_cancel" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:text="Save"
+            android:textColor="@color/theme_blue"
+            android:textAllCaps="false"
+            android:id="@+id/btn_save" />
+    </LinearLayout>
+</LinearLayout>

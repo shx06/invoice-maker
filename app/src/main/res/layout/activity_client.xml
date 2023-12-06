@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.ClientActivity"
+        android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_10sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="Client name*" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/client_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_solid_grey_shadow_round_corner"
+                    android:hint="Enter client name"
+                    android:padding="@dimen/_5sdp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="Email address" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/client_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_solid_grey_shadow_round_corner"
+                    android:hint="Enter client email address"
+                    android:padding="@dimen/_5sdp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="Phone" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/client_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_solid_grey_shadow_round_corner"
+                    android:hint="Enter client phone number"
+                    android:padding="@dimen/_5sdp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="Billing address" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/client_billing_address_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_solid_grey_shadow_round_corner"
+                    android:hint="Enter address line 1"
+                    android:padding="@dimen/_5sdp" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/client_billing_address_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_solid_grey_shadow_round_corner"
+                    android:hint="Enter address line 2"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:padding="@dimen/_5sdp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="Shipping address" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/client_shipping_address_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_solid_grey_shadow_round_corner"
+                    android:hint="Enter address line 1"
+                    android:padding="@dimen/_5sdp" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/client_shipping_address_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_solid_grey_shadow_round_corner"
+                    android:hint="Enter address line 2"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:padding="@dimen/_5sdp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="Client Details (Not show on invoice)" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/client_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:lines="3"
+                    android:gravity="top"
+                    android:background="@drawable/background_solid_grey_shadow_round_corner"
+                    android:hint="Enter client details"
+                    android:padding="@dimen/_5sdp" />
+
+                <Button
+                    android:id="@+id/save_next_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@color/theme_blue"
+                    android:textColor="@color/white"
+                    android:text="Save" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>

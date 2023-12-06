@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.CompanyProfileActivity">
+
+    <include layout="@layout/toolbar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/company_image"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_100sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/background_hollow_theme_round"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_upload_image" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/_10sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="Business name*" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/company_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_solid_grey_shadow_round_corner"
+                    android:hint="Enter business name"
+                    android:padding="@dimen/_5sdp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="Email address" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/company_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_solid_grey_shadow_round_corner"
+                    android:hint="Enter business email address"
+                    android:padding="@dimen/_5sdp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="Phone" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/company_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_solid_grey_shadow_round_corner"
+                    android:hint="Enter business phone number"
+                    android:padding="@dimen/_5sdp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="Billing address" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/company_address_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_solid_grey_shadow_round_corner"
+                    android:hint="Enter address line 1"
+                    android:padding="@dimen/_5sdp" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/company_address_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@drawable/background_solid_grey_shadow_round_corner"
+                    android:hint="Enter address line 2"
+                    android:padding="@dimen/_5sdp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="Business website" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/company_website"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_solid_grey_shadow_round_corner"
+                    android:hint="Enter business website"
+                    android:padding="@dimen/_5sdp" />
+
+                <Button
+                    android:id="@+id/save_next_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@color/theme_blue"
+                    android:textColor="@color/white"
+                    android:text="Save" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</LinearLayout>

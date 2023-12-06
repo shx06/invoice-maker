@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/layout_background"
+    android:orientation="vertical"
+    tools:context=".activity.SingleItemActivity">
+
+    <include layout="@layout/toolbar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/_10sdp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/_10sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="Item Name*" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/item_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_solid_grey_shadow_round_corner"
+                    android:hint="Enter Item Name"
+                    android:padding="@dimen/_5sdp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="Item Price*" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/item_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:background="@drawable/background_solid_grey_shadow_round_corner"
+                    android:padding="@dimen/_5sdp"
+                    android:hint="$0.00" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="Item Quantity" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/item_quantity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_solid_grey_shadow_round_corner"
+                    android:inputType="numberDecimal"
+                    android:padding="@dimen/_5sdp"
+                    android:hint="1.00" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="Unit of Measure" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/item_unit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_solid_grey_shadow_round_corner"
+                    android:padding="@dimen/_5sdp"
+                    android:hint="None" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="Discount (in percentage)" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/item_discount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_solid_grey_shadow_round_corner"
+                    android:inputType="numberDecimal"
+                    android:padding="@dimen/_5sdp"
+                    android:hint="0.00%" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="Tax Rate (in percentage)" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/item_tax"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:background="@drawable/background_solid_grey_shadow_round_corner"
+                    android:padding="@dimen/_5sdp"
+                    android:hint="0.00%" />
+
+
+                <Button
+                    android:id="@+id/save_next_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@color/theme_blue"
+                    android:textColor="@color/white"
+                    android:text="Save" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</LinearLayout>
