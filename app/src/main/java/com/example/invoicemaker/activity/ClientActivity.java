@@ -30,6 +30,8 @@ public class ClientActivity extends AppCompatActivity {
         ImageView closeActivity = findViewById(R.id.close_activity);
         closeActivity.setOnClickListener(v -> finish());
 
+        //checking
+
         clientName = findViewById(R.id.client_name);
         clientEmail = findViewById(R.id.client_email);
         clientBillingAddress1 = findViewById(R.id.client_billing_address_1);
