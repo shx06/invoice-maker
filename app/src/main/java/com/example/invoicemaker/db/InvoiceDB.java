@@ -46,6 +46,9 @@ public class InvoiceDB extends SQLiteOpenHelper {
     public static final String COL_5_ii_due_term = "due_term";
     public static final String COL_6_ii_due_date = "due_date";
     public static final String COL_7_ii_p_o = "p_o";
+    public static final String COL_8_ii_pay_status = "pay_status";
+    public static final String COL_9_ii_paid_amount = "paid_amount";
+
 
 
     /////////////////////---------Language Info------------------>>
@@ -88,7 +91,6 @@ public class InvoiceDB extends SQLiteOpenHelper {
     public static final String table_name_invoice_item = "invoice_item";
     public static final String COL_0_invoice_item_id = "ii_id";
     public static final String COL_1_invoice_item_dc_id = "dc_id";
-    public static final String COL_1_invoice_id = "in_id";
     public static final String COL_2_invoice_item_name = "invoice_item_name";
     public static final String COL_3_invoice_item_price = "invoice_item_price";
     public static final String COL_4_invoice_item_quantity = "invoice_item_quantity";
@@ -96,6 +98,15 @@ public class InvoiceDB extends SQLiteOpenHelper {
     public static final String COL_6_invoice_item_discount = "invoice_item_discount";
     public static final String COL_7_invoice_item_tax = "invoice_item_tax";
     public static final String COL_8_invoice_item_desc = "invoice_item_desc";
+
+
+    /////////////////////---------Invoice Item manger------------------>>
+    public static final String table_name_invoice_item_manager = "invoice_item_manager";
+    public static final String COL_0_iim = "iim_id";
+    public static final String COL_1_iim_dc_id = "dc_id";
+    public static final String COL_2_iim_invoice_item_id = "invoice_item_id";
+
+
 
     /////////////////////--------------------------->>
 
