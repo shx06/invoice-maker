@@ -255,17 +255,13 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
         if (m_cur.getCount() > 0) {
             while (m_cur.moveToNext()) {
 
-                totalItemsPrice += Double.parseDouble(m_cur.getString(4)) * Double.parseDouble(m_cur.getString(5));
-                totalItemsDiscount += Double.parseDouble(m_cur.getString(7));
+                totalItemsPrice += Double.parseDouble(m_cur.getString(3)) * Double.parseDouble(m_cur.getString(4));
+                totalItemsDiscount += Double.parseDouble(m_cur.getString(6));
 
                 dataItemsList.add(new SingleItemModel(m_cur.getInt(0), m_cur.getInt(1),
-                        m_cur.getInt(2), m_cur.getString(3), m_cur.getString(4),
-                        m_cur.getString(5), m_cur.getString(6), m_cur.getString(7),
-                        m_cur.getString(8)));
+                        m_cur.getString(2), m_cur.getString(3), m_cur.getString(4),
+                        m_cur.getString(5), m_cur.getString(6), m_cur.getString(7)));
             }
-
-            Log.d(TAG, "fetchInvoiceData:  " + totalItemsPrice);
-            Log.d(TAG, "fetchInvoiceData:  " + totalItemsDiscount * 100);
 
             netItemsPrice = totalItemsPrice - (totalItemsDiscount * 100);
 

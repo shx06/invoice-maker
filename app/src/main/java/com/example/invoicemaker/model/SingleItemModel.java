@@ -2,15 +2,14 @@ package com.example.invoicemaker.model;
 
 public class SingleItemModel {
     String itemName, itemDisc, itemPrice, itemQuantity, itemUnit, itemTax;
-    int ii_id, dc_id, in_id;
+    int ii_id, dc_id;
 
     public SingleItemModel() {
     }
 
-    public SingleItemModel(int ii_id, int dc_id, int in_id, String itemName, String itemPrice, String itemQuantity, String itemUnit, String itemDisc, String itemTax) {
+    public SingleItemModel(int ii_id, int dc_id, String itemName, String itemPrice, String itemQuantity, String itemUnit, String itemDisc, String itemTax) {
         this.ii_id = ii_id;
         this.dc_id = dc_id;
-        this.in_id = in_id;
         this.itemName = itemName;
         this.itemDisc = itemDisc;
         this.itemPrice = itemPrice;
@@ -81,13 +80,5 @@ public class SingleItemModel {
 
     public void setDc_id(int dc_id) {
         this.dc_id = dc_id;
-    }
-
-    public int getIn_id() {
-        return in_id;
-    }
-
-    public void setIn_id(int in_id) {
-        this.in_id = in_id;
     }
 }

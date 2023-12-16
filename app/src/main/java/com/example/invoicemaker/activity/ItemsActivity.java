@@ -69,15 +69,14 @@ public class ItemsActivity extends AppCompatActivity {
     private void FetchDataAndSet() {
         dataItemsList = new ArrayList<>();
 
-        Cursor m_cur = invoiceDB.getRows_invoice_item(Constants.DCReferenceKey);
+        Cursor m_cur = invoiceDB.getAllRows_invoice_item();
 
         if (m_cur.getCount() > 0) {
             while (m_cur.moveToNext()) {
 
                 dataItemsList.add(new SingleItemModel(m_cur.getInt(0), m_cur.getInt(1),
-                        m_cur.getInt(2), m_cur.getString(3), m_cur.getString(4),
-                        m_cur.getString(5), m_cur.getString(6), m_cur.getString(7),
-                        m_cur.getString(8)));
+                        m_cur.getString(2), m_cur.getString(3), m_cur.getString(4),
+                        m_cur.getString(5), m_cur.getString(6), m_cur.getString(7)));
             }
 
         }

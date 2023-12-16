@@ -187,7 +187,6 @@ public class InvoiceDB extends SQLiteOpenHelper {
         db.execSQL("create table " + table_name_invoice_item + "(" +
                 COL_0_invoice_item_id + " integer primary key autoincrement, " +
                 COL_1_invoice_item_dc_id + " integer, " +
-                COL_1_invoice_id + " integer, " +
                 COL_2_invoice_item_name + " text, " +
                 COL_3_invoice_item_price + " text, " +
                 COL_4_invoice_item_quantity + " text, " +
@@ -552,6 +551,15 @@ public class InvoiceDB extends SQLiteOpenHelper {
     public Cursor getRows_invoice_item(int dc_id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select * from " + table_name_invoice_item + " where " + COL_1_invoice_item_dc_id + "='" + dc_id + "'", null);
+
+        return res;
+
+    }
+
+
+    public Cursor getAllRows_invoice_item() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from " + table_name_invoice_item, null);
 
         return res;
 
