@@ -31,8 +31,6 @@ public class ClientActivity extends AppCompatActivity {
         closeActivity.setOnClickListener(v -> finish());
 
         //checking
-        //checking by shadab
-        // hello
 
         clientName = findViewById(R.id.client_name);
         clientEmail = findViewById(R.id.client_email);
