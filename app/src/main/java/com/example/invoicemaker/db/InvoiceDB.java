@@ -69,7 +69,7 @@ public class InvoiceDB extends SQLiteOpenHelper {
 
     /////////////////////--------------------------->>
 
-    /////////////////////-------bill0- to -Client------------------>>
+    /////////////////////-------bill- to -Client------------------>>
     public static final String table_name_client = "client";
     public static final String COL_0_client_id = "ii_id";
     public static final String COL_1_client_dc_id = "dc_id";
