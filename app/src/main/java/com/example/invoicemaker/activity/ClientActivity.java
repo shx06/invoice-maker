@@ -31,7 +31,7 @@ public class ClientActivity extends AppCompatActivity {
         closeActivity.setOnClickListener(v -> finish());
 
         //checking
-
+        // hello new test changes
         clientName = findViewById(R.id.client_name);
         clientEmail = findViewById(R.id.client_email);
         clientBillingAddress1 = findViewById(R.id.client_billing_address_1);
