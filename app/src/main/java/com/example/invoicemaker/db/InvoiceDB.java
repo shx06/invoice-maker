@@ -48,6 +48,13 @@ public class InvoiceDB extends SQLiteOpenHelper {
     public static final String COL_7_ii_p_o = "p_o";
 
 
+    /////////////////////---------Language Info------------------>>
+    public static final String table_name_language_info = "language_info";
+    public static final String COL_0_li_id = "ii_id";
+    public static final String COL_1_li_dc_id = "dc_id";
+    public static final String COL_2_li_language = "language";
+
+
     /////////////////////---------Company------------------>>
     public static final String table_name_company = "company";
     public static final String COL_0_comp_id = "ii_id";
@@ -62,7 +69,7 @@ public class InvoiceDB extends SQLiteOpenHelper {
 
     /////////////////////--------------------------->>
 
-    /////////////////////---------Client------------------>>
+    /////////////////////-------bill0- to -Client------------------>>
     public static final String table_name_client = "client";
     public static final String COL_0_client_id = "ii_id";
     public static final String COL_1_client_dc_id = "dc_id";
@@ -88,6 +95,30 @@ public class InvoiceDB extends SQLiteOpenHelper {
     public static final String COL_5_invoice_item_unit = "invoice_item_unit";
     public static final String COL_6_invoice_item_discount = "invoice_item_discount";
     public static final String COL_7_invoice_item_tax = "invoice_item_tax";
+    public static final String COL_8_invoice_item_desc = "invoice_item_desc";
+
+    /////////////////////--------------------------->>
+
+
+    /////////////////////---------discount Item------------------>>
+    public static final String table_name_discount_item = "discount_item";
+    public static final String COL_0_di_id = "di_id";
+    public static final String COL_1_di_dc_id = "dc_id";
+    public static final String COL_2_di_type = "discount_type";
+    public static final String COL_3_di_discount_value = "discount_value";
+
+
+    /////////////////////--------------------------->>
+
+
+    /////////////////////---------Currency ------------------>>
+    public static final String table_name_currency = "currency";
+    public static final String COL_0_c_id = "di_id";
+    public static final String COL_1_c_dc_id = "dc_id";
+    public static final String COL_3_c_country_name = "country";
+    public static final String COL_2_c_currency_type = "currency_type";
+    public static final String COL_2_c_currency_symbol = "currency_symbol";
+
 
     /////////////////////--------------------------->>
 
