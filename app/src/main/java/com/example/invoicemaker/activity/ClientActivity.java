@@ -29,6 +29,10 @@ public class ClientActivity extends AppCompatActivity {
         toolbarHeader.setText("Add Client");
         ImageView closeActivity = findViewById(R.id.close_activity);
         closeActivity.setOnClickListener(v -> finish());
+        // new testing to push
+
+
+
 
         //checking
         // hello new test changes
