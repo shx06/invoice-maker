@@ -575,7 +575,7 @@ public class InvoiceDB extends SQLiteOpenHelper {
 
 
 
-    /////////////////////---------Invoice Info------------------>>
+    /////////////////////---------Currency------------------>>
 
     public boolean insert_currency_details(int di_id, int dc_id, String countryName, String countryCurrency,
                                                String countrySymbol) {
