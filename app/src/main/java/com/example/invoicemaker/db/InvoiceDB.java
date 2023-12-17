@@ -126,8 +126,8 @@ public class InvoiceDB extends SQLiteOpenHelper {
     public static final String table_name_currency = "currency";
     public static final String COL_0_c_id = "di_id";
     public static final String COL_1_c_dc_id = "dc_id";
-    public static final String COL_3_c_country_name = "country";
-    public static final String COL_2_c_currency_type = "currency_type";
+    public static final String COL_3_c_country_name = "country_name";
+    public static final String COL_2_c_country_symbol = "country_symbol";
     public static final String COL_2_c_currency_symbol = "currency_symbol";
 
 
@@ -196,6 +196,14 @@ public class InvoiceDB extends SQLiteOpenHelper {
 
                 ")");
 
+        db.execSQL("create table " + table_name_currency + "(" +
+                COL_0_c_id + " integer primary key autoincrement, " +
+                COL_1_c_dc_id + " integer, " +
+                COL_3_c_country_name + " text, " +
+                COL_2_c_country_symbol + " text, " +
+                COL_2_c_currency_symbol + " text" +
+
+                ")");
 
     }
 
@@ -560,6 +568,76 @@ public class InvoiceDB extends SQLiteOpenHelper {
     public Cursor getAllRows_invoice_item() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select * from " + table_name_invoice_item, null);
+
+        return res;
+
+    }
+
+
+
+    /////////////////////---------Invoice Info------------------>>
+
+    public boolean insert_currency_details(int di_id, int dc_id, String countryName, String countryCurrency,
+                                               String countrySymbol) {
+
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(COL_0_c_id, di_id);
+        contentValues.put(COL_1_c_dc_id, dc_id);
+        contentValues.put(COL_3_c_country_name, countryName);
+        contentValues.put(COL_2_c_country_symbol, countryCurrency);
+        contentValues.put(COL_2_c_currency_symbol, countrySymbol);
+
+
+        long result = db.insert(table_name_currency, null, contentValues);
+
+
+        return result != -1;
+
+
+    }
+
+
+    public boolean update_currency_details(int dc_id, String name, String invoice_number,
+                                               String created_date, String due_term,
+                                               String due_date,
+                                               String p_o) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(COL_2_ii_name, name);
+        contentValues.put(COL_3_ii_invoice_number, invoice_number);
+        contentValues.put(COL_4_ii_date, created_date);
+        contentValues.put(COL_5_ii_due_term, due_term);
+        contentValues.put(COL_6_ii_due_date, due_date);
+        contentValues.put(COL_7_ii_p_o, p_o);
+
+
+        long result = db.update(table_name_invoice_info, contentValues, " " + COL_1_ii_dc_id + " = ?", new String[]{String.valueOf(dc_id)});
+
+        return result != -1;
+    }
+
+
+    public boolean delete_currency_OneRow(int dc_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete(table_name_invoice_info, " " + COL_1_ii_dc_id + " = ?", new String[]{String.valueOf(dc_id)});
+        if (result == -1) {
+            return false;
+
+        } else {
+            return true;
+
+        }
+    }
+
+
+    public Cursor getRows_currency(int my_dc_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from " + table_name_invoice_info + " where " + COL_1_ii_dc_id + "='" + my_dc_id + "'", null);
 
         return res;
 

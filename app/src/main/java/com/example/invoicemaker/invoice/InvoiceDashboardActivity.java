@@ -128,6 +128,10 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
             customDialogs.displayDiscountDialog();
         });
 
+        currencyLayout.setOnClickListener(v -> {
+            customDialogs.displayCurrencyDialog();
+        });
+
 //        Extra fields needs to delete
 //        paymentLayout.setOnClickListener(v -> {
 //        });
@@ -250,7 +254,7 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 
         Cursor m_cur = invoiceDB.getRows_invoice_item(Constants.DCReferenceKey);
 
-        double netItemsPrice = 0.0, totalItemsPrice = 0.0, totalItemsDiscount = 0.0;
+        double netItemsPrice, totalItemsPrice = 0.0, totalItemsDiscount = 0.0;
 
         if (m_cur.getCount() > 0) {
             while (m_cur.moveToNext()) {

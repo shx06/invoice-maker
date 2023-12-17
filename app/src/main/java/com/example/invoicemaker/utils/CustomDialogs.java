@@ -8,17 +8,27 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.invoicemaker.R;
+import com.example.invoicemaker.adapters.CurrencyAdapter;
+import com.example.invoicemaker.db.InvoiceDB;
+import com.example.invoicemaker.model.CurrencyModel;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomDialogs {
 
     Context context;
     Dialog dialog;
+    InvoiceDB invoiceDB;
 
     public CustomDialogs(Context context) {
         this.context = context;
@@ -65,6 +75,35 @@ public class CustomDialogs {
         });
 
         cancel.setOnClickListener(v3 -> dialog.dismiss());
+        dialog.show();
+    }
+
+    public void displayCurrencyDialog() {
+        dialog = new Dialog(context);
+        dialog.setContentView(R.layout.language_list_layout);
+        dialog.getWindow().setBackgroundDrawable(context.getDrawable(R.drawable.background_solid_white_round));
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(false);
+
+        invoiceDB = new InvoiceDB(context);
+
+        RecyclerView languageRecyclerView = dialog.findViewById(R.id.language_list_recycler_view);
+        TextView cancel = dialog.findViewById(R.id.cancel);
+        TextView save = dialog.findViewById(R.id.save);
+
+        List<CurrencyModel> list = new ArrayList<>();
+        list.add(new CurrencyModel("India", "\u20b9", "ind"));
+        list.add(new CurrencyModel("United States", "$", "usd"));
+        list.add(new CurrencyModel("United Kingdom", "£", "uk"));
+
+        CurrencyAdapter currencyAdapter = new CurrencyAdapter(list, context);
+        languageRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true));
+        languageRecyclerView.setAdapter(currencyAdapter);
+
+        cancel.setOnClickListener(v -> dialog.dismiss());
+        save.setOnClickListener(v -> {
+
+        });
         dialog.show();
     }
 
@@ -115,5 +154,4 @@ public class CustomDialogs {
         cancel.setOnClickListener(v3 -> dialog.dismiss());
         dialog.show();
     }
-
 }
