@@ -205,6 +205,13 @@ public class InvoiceDB extends SQLiteOpenHelper {
 
                 ")");
 
+        db.execSQL("create table " + table_name_invoice_item_manager + "(" +
+                COL_0_iim + " integer primary key autoincrement, " +
+                COL_1_iim_dc_id + " integer, " +
+                COL_2_iim_invoice_item_id + " integer" +
+
+                ")");
+
     }
 
     @Override
@@ -578,7 +585,7 @@ public class InvoiceDB extends SQLiteOpenHelper {
     /////////////////////---------Currency------------------>>
 
     public boolean insert_currency_details(int dc_id, String countryName, String countryCurrency,
-                                               String countrySymbol) {
+                                           String countrySymbol) {
 
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -638,4 +645,79 @@ public class InvoiceDB extends SQLiteOpenHelper {
 
     }
 
+
+
+
+    /////////////////////---------Invoice Items link handler------------------>>
+
+    public boolean insert_invoice_items_link_details(int dc_id, int invoice_item_id) {
+
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(COL_1_iim_dc_id, dc_id);
+        contentValues.put(COL_2_iim_invoice_item_id, invoice_item_id);
+
+
+        long result = db.insert(table_name_invoice_item_manager, null, contentValues);
+
+
+        return result != -1;
+
+
+    }
+
+
+    public boolean update_invoice_items_link_details(int dc_id, String countryName, String countryCurrency,
+                                           String countrySymbol) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(COL_1_c_dc_id, dc_id);
+        contentValues.put(COL_3_c_country_name, countryName);
+        contentValues.put(COL_2_c_country_symbol, countryCurrency);
+        contentValues.put(COL_2_c_currency_symbol, countrySymbol);
+
+
+        long result = db.update(table_name_currency, contentValues, " " + COL_1_c_dc_id + " = ?", new String[]{String.valueOf(dc_id)});
+
+        return result != -1;
+    }
+
+
+    public boolean delete_invoice_items_link_OneRow(int dc_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete(table_name_currency, " " + COL_1_c_dc_id + " = ?", new String[]{String.valueOf(dc_id)});
+        if (result == -1) {
+            return false;
+
+        } else {
+            return true;
+
+        }
+    }
+
+
+    public Cursor getRows_invoice_items_link() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from " + table_name_invoice_item_manager, null);
+
+        return res;
+
+    }
+
+
+    public Cursor getRows_invoice_items_by_invoiceId(int dc_id, int invoice_item_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT COUNT(*) FROM " + table_name_invoice_item_manager +
+                " WHERE " + COL_1_iim_dc_id + " = " + dc_id +
+                " AND " + COL_2_iim_invoice_item_id + " = " + invoice_item_id;
+
+        Cursor res = db.rawQuery(query, null);
+
+        return res;
+    }
 }
