@@ -3,6 +3,7 @@ package com.example.invoicemaker.invoice;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +22,7 @@ import com.example.invoicemaker.activity.ClientActivity;
 import com.example.invoicemaker.activity.CompanyProfileActivity;
 import com.example.invoicemaker.activity.InvoiceInfoActivity;
 import com.example.invoicemaker.activity.ItemsActivity;
+import com.example.invoicemaker.activity.TemplateSelectionActivity;
 import com.example.invoicemaker.adapters.ItemsAdapter;
 import com.example.invoicemaker.db.InvoiceDB;
 import com.example.invoicemaker.model.SingleItemModel;
@@ -47,6 +49,8 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 
     InvoiceDB invoiceDB;
 
+    AppCompatButton btn_save;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +60,8 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
         toolbarHeader.setText("Add Invoice");
         ImageView closeActivity = findViewById(R.id.close_activity);
         closeActivity.setOnClickListener(v -> finish());
+
+        btn_save = findViewById(R.id.btn_save);
 
 
         ////****************** Data manger  -------------------------->
@@ -130,6 +136,13 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 
         currencyLayout.setOnClickListener(v -> {
             customDialogs.displayCurrencyDialog();
+        });
+
+
+        btn_save.setOnClickListener(view -> {
+            Intent j = new Intent(InvoiceDashboardActivity.this, TemplateSelectionActivity.class);
+            startActivity(j);
+
         });
 
 //        Extra fields needs to delete
