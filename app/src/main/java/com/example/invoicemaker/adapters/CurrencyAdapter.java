@@ -1,6 +1,12 @@
 package com.example.invoicemaker.adapters;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.invoicemaker.R;
 import com.example.invoicemaker.db.InvoiceDB;
 import com.example.invoicemaker.model.CurrencyModel;
+import com.example.invoicemaker.utils.Constants;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -22,6 +30,8 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
     List<CurrencyModel> data;
     Context context;
     String positionIndicator;
+    InvoiceDB invoiceDB;
+
 
     public CurrencyAdapter(List<CurrencyModel> data, Context context) {
         this.data = data;
@@ -33,6 +43,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
     public CurrencyAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         context = parent.getContext();
+        invoiceDB = new InvoiceDB(context);
         View view = inflater.inflate(R.layout.single_language_layout, parent, false);
         return new CurrencyAdapter.ViewHolder(view);
     }
@@ -45,9 +56,38 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
 
         holder.itemLayout.setOnClickListener(v -> {
             positionIndicator = data.get(position).getCountry_name();
+
+            Cursor cur = invoiceDB.getRows_currency(Constants.DCReferenceKey);
+
+            if (cur.getCount() > 0) {
+                System.out.println("row_counted company" + new Gson().toJson(cur));
+
+                while (cur.moveToNext()) {
+
+                    boolean result = invoiceDB.update_currency_details(Constants.DCReferenceKey,
+                            data.get(position).getCountry_name(), data.get(position).getCurrency_symbol(), data.get(position).getCountry_symbol());
+
+
+                    if (!result) {
+                        Toast.makeText(context, "Failed to update language", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+            } else {
+                boolean result = invoiceDB.insert_currency_details(Constants.DCReferenceKey,
+                        data.get(position).getCountry_name(), data.get(position).getCurrency_symbol(), data.get(position).getCountry_symbol());
+
+
+                if (!result) {
+                    Toast.makeText(context, "Failed to set language!!!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+
+            cur.close();
+
             notifyDataSetChanged();
         });
-
 
         if(data.get(position).getCountry_name().equals(positionIndicator)) {
             holder.itemLayout.setBackgroundColor(context.getResources().getColor(R.color.light_grey));

@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
                 if (flag == Constants.DefaultFlag) {
                     int dc_id = m_cur.getInt(0);
                     invoiceDB.delete_data_controller_OneRow(dc_id);
+                    invoiceDB.delete_currency_OneRow(dc_id);
 
                 } else {
 
