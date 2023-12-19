@@ -60,8 +60,6 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
             Cursor cur = invoiceDB.getRows_currency(Constants.DCReferenceKey);
 
             if (cur.getCount() > 0) {
-                System.out.println("row_counted company" + new Gson().toJson(cur));
-
                 while (cur.moveToNext()) {
 
                     boolean result = invoiceDB.update_currency_details(Constants.DCReferenceKey,

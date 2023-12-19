@@ -23,8 +23,10 @@ import com.example.invoicemaker.activity.CompanyProfileActivity;
 import com.example.invoicemaker.activity.InvoiceInfoActivity;
 import com.example.invoicemaker.activity.ItemsActivity;
 import com.example.invoicemaker.activity.TemplateSelectionActivity;
+import com.example.invoicemaker.adapters.InvoiceItemsAdapter;
 import com.example.invoicemaker.adapters.ItemsAdapter;
 import com.example.invoicemaker.db.InvoiceDB;
+import com.example.invoicemaker.model.SingleItemInvoiceLinkedModel;
 import com.example.invoicemaker.model.SingleItemModel;
 import com.example.invoicemaker.utils.Constants;
 import com.example.invoicemaker.utils.CustomDialogs;
@@ -41,11 +43,11 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
             companyName, companyWebsite, companyAddress, clientName, clientAdd1, clientAdd2, subTotal;
 
     RecyclerView itemsDataRecyclerView;
-    ItemsAdapter itemsAdapter;
+    InvoiceItemsAdapter itemsAdapter;
 
     CustomDialogs customDialogs;
 
-    List<SingleItemModel> dataItemsList;
+    List<SingleItemInvoiceLinkedModel> dataItemsList;
 
     InvoiceDB invoiceDB;
 
@@ -204,8 +206,6 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
             Cursor cur = invoiceDB.getRows_invoice_info(Constants.DCReferenceKey);
 
             if (cur.getCount() > 0) {
-                System.out.println("row_counted invoice " + cur.getCount());
-
                 while (cur.moveToNext()) {
                     invoiceName.setText(cur.getString(2));
                     invoiceCreatedDate.setText(cur.getString(4));
@@ -223,7 +223,6 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
             Cursor cur = invoiceDB.getRows_company(Constants.DCReferenceKey);
 
             if (cur.getCount() > 0) {
-                System.out.println("row_counted " + cur.getCount());
                 companyReplacable.setVisibility(View.GONE);
                 companyDataLayout.setVisibility(View.VISIBLE);
 
@@ -265,19 +264,17 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 
         dataItemsList = new ArrayList<>();
 
-        Cursor m_cur = invoiceDB.getRows_invoice_item(Constants.DCReferenceKey);
+        Cursor m_cur = invoiceDB.getRows_invoice_items_link(Constants.DCReferenceKey);
 
         double netItemsPrice, totalItemsPrice = 0.0, totalItemsDiscount = 0.0;
 
         if (m_cur.getCount() > 0) {
             while (m_cur.moveToNext()) {
 
-                totalItemsPrice += Double.parseDouble(m_cur.getString(3)) * Double.parseDouble(m_cur.getString(4));
-                totalItemsDiscount += Double.parseDouble(m_cur.getString(6));
+//                totalItemsPrice += Double.parseDouble(m_cur.getString(3)) * Double.parseDouble(m_cur.getString(4));
+//                totalItemsDiscount += Double.parseDouble(m_cur.getString(6));
 
-                dataItemsList.add(new SingleItemModel(m_cur.getInt(0), m_cur.getInt(1),
-                        m_cur.getString(2), m_cur.getString(3), m_cur.getString(4),
-                        m_cur.getString(5), m_cur.getString(6), m_cur.getString(7)));
+                dataItemsList.add(new SingleItemInvoiceLinkedModel(m_cur.getInt(0), m_cur.getInt(1), m_cur.getInt(2)));
             }
 
             netItemsPrice = totalItemsPrice - (totalItemsDiscount * 100);
@@ -292,7 +289,7 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 
 
     private void ItemsRecyclerView() {
-        itemsAdapter = new ItemsAdapter(dataItemsList, this);
+        itemsAdapter = new InvoiceItemsAdapter(dataItemsList, this);
         itemsDataRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true));
         itemsDataRecyclerView.setAdapter(itemsAdapter);
     }

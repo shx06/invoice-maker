@@ -563,9 +563,9 @@ public class InvoiceDB extends SQLiteOpenHelper {
     }
 
 
-    public Cursor getRows_invoice_item(int dc_id) {
+    public Cursor getRows_invoice_item_byId(int ii_id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from " + table_name_invoice_item + " where " + COL_1_invoice_item_dc_id + "='" + dc_id + "'", null);
+        Cursor res = db.rawQuery("select * from " + table_name_invoice_item + " where " + COL_0_invoice_item_id + "='" + ii_id + "'", null);
 
         return res;
 
@@ -668,41 +668,16 @@ public class InvoiceDB extends SQLiteOpenHelper {
 
     }
 
-
-    public boolean update_invoice_items_link_details(int dc_id, String countryName, String countryCurrency,
-                                           String countrySymbol) {
-
+    public void delete_invoice_item_link_by_itemId(int item_id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(COL_1_c_dc_id, dc_id);
-        contentValues.put(COL_3_c_country_name, countryName);
-        contentValues.put(COL_2_c_country_symbol, countryCurrency);
-        contentValues.put(COL_2_c_currency_symbol, countrySymbol);
-
-
-        long result = db.update(table_name_currency, contentValues, " " + COL_1_c_dc_id + " = ?", new String[]{String.valueOf(dc_id)});
-
-        return result != -1;
+        db.delete(table_name_currency, COL_2_iim_invoice_item_id + " = ?", new String[]{String.valueOf(item_id)});
+        db.close();
     }
 
 
-    public boolean delete_invoice_items_link_OneRow(int dc_id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        long result = db.delete(table_name_currency, " " + COL_1_c_dc_id + " = ?", new String[]{String.valueOf(dc_id)});
-        if (result == -1) {
-            return false;
-
-        } else {
-            return true;
-
-        }
-    }
-
-
-    public Cursor getRows_invoice_items_link() {
+    public Cursor getRows_invoice_items_link(int dc_id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from " + table_name_invoice_item_manager, null);
+        Cursor res = db.rawQuery("select * from " + table_name_invoice_item_manager + " where " + COL_1_iim_dc_id + "='" + dc_id + "'", null);
 
         return res;
 

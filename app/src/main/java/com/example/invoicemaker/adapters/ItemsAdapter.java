@@ -74,19 +74,29 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
 
         holder.addItem.setOnClickListener(v -> {
 
-            Log.d(TAG, "onBindViewHolder: " + invoiceDB.getRows_invoice_items_by_invoiceId(Constants.DCReferenceKey, data.get(position).getIi_id()));
+            Cursor c = invoiceDB.getRows_invoice_items_by_invoiceId(Constants.DCReferenceKey, data.get(position).getIi_id());
 
-//            boolean result = invoiceDB.insert_invoice_items_link_details(Constants.DCReferenceKey, data.get(position).getIi_id());
-//
-//            if (result) {
-//                Toast.makeText(context, "Item added successfully.", Toast.LENGTH_SHORT).show();
-//
-//            } else {
-//                Toast.makeText(context, "Failed to save item", Toast.LENGTH_SHORT).show();
-//            }
+            if (c.getCount() > 0) {
+                while (c.moveToNext()) {
+                    if (c.getInt(0) > 0) {
+                        Toast.makeText(context, "Item already added to this invoice.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+            }
+
+            boolean result = invoiceDB.insert_invoice_items_link_details(Constants.DCReferenceKey, data.get(position).getIi_id());
+
+            if (result) {
+                Toast.makeText(context, "Item added successfully.", Toast.LENGTH_SHORT).show();
+
+            } else {
+                Toast.makeText(context, "Failed to save item", Toast.LENGTH_SHORT).show();
+            }
         });
 
         holder.deleteItem.setOnClickListener(v -> {
+            invoiceDB.delete_invoice_item_link_by_itemId(data.get(position).getIi_id());
             invoiceDB.delete_invoice_item_OneRow(data.get(position).getIi_id());
             data.remove(position);
             notifyDataSetChanged();
