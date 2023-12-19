@@ -26,6 +26,7 @@ public class SingleItemActivity extends AppCompatActivity {
     Button save_next_btn;
     InvoiceDB invoiceDB;
     TextView toolbarHeader;
+    int itemId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public class SingleItemActivity extends AppCompatActivity {
             save_next_btn.setText("Update");
             toolbarHeader.setText("Update Item");
 
+            itemId = getIntent().getIntExtra("itemId", 0);
             name.setText(getIntent().getStringExtra("itemName"));
             price.setText(getIntent().getStringExtra("itemPrice"));
             quantity.setText(getIntent().getStringExtra("itemQuantity"));
@@ -58,6 +60,8 @@ public class SingleItemActivity extends AppCompatActivity {
             discount.setText(getIntent().getStringExtra("itemDiscount"));
             tax.setText(getIntent().getStringExtra("itemTax"));
         }
+
+        Log.d(TAG, "savePersonalDetails: "+itemId);
 
         save_next_btn.setOnClickListener(view -> {
 
@@ -100,7 +104,7 @@ public class SingleItemActivity extends AppCompatActivity {
 
         } else {
 
-            result = invoiceDB.update_invoice_item_details(Constants.ItemID,
+            result = invoiceDB.update_invoice_item_details(Integer.valueOf(itemId),
                     name.getText().toString(), price.getText().toString(), quantity.getText().toString(),
                     unit.getText().toString(), discount.getText().toString(), tax.getText().toString());
 

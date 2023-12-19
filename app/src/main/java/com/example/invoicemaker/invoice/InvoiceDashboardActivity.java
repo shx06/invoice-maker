@@ -266,25 +266,20 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 
         Cursor m_cur = invoiceDB.getRows_invoice_items_link(Constants.DCReferenceKey);
 
-        double netItemsPrice, totalItemsPrice = 0.0, totalItemsDiscount = 0.0;
-
         if (m_cur.getCount() > 0) {
             while (m_cur.moveToNext()) {
 
-//                totalItemsPrice += Double.parseDouble(m_cur.getString(3)) * Double.parseDouble(m_cur.getString(4));
-//                totalItemsDiscount += Double.parseDouble(m_cur.getString(6));
-
                 dataItemsList.add(new SingleItemInvoiceLinkedModel(m_cur.getInt(0), m_cur.getInt(1), m_cur.getInt(2)));
             }
-
-            netItemsPrice = totalItemsPrice - (totalItemsDiscount * 100);
-
-            subTotal.setText(("$ " + netItemsPrice));
 
         }
         m_cur.close();
 
         ItemsRecyclerView();
+    }
+
+    public void updateInvoiceFromAdapter(double value) {
+        subTotal.setText(("$ " + value));
     }
 
 

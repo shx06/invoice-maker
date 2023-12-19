@@ -104,8 +104,8 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
 
         holder.editItem.setOnClickListener(v -> {
             Constants.Single_Item_Active = true;
-            Constants.ItemID = data.get(position).getIi_id();
             Intent intent = new Intent(context, SingleItemActivity.class);
+            intent.putExtra("itemId", data.get(position).getIi_id());
             intent.putExtra("itemName", data.get(position).getItemName());
             intent.putExtra("itemPrice", data.get(position).getItemPrice());
             intent.putExtra("itemQuantity", data.get(position).getItemQuantity());

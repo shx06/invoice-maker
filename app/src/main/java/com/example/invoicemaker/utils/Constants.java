@@ -10,7 +10,6 @@ public class Constants {
 
     public static int DCReferenceKey;
     public static int InvoiceReferenceKey = -1;
-    public static int ItemID = 0;
 
     public static boolean Insertion_Update_Flag = true; // true for insertion -  false for update
 

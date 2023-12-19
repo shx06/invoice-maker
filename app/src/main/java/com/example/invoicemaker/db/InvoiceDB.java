@@ -670,7 +670,7 @@ public class InvoiceDB extends SQLiteOpenHelper {
 
     public void delete_invoice_item_link_by_itemId(int item_id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(table_name_currency, COL_2_iim_invoice_item_id + " = ?", new String[]{String.valueOf(item_id)});
+        db.delete(table_name_invoice_item_manager, COL_2_iim_invoice_item_id + " = ?", new String[]{String.valueOf(item_id)});
         db.close();
     }
 
