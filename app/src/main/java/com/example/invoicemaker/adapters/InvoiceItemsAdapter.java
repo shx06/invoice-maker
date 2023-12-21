@@ -66,10 +66,13 @@ public class InvoiceItemsAdapter extends RecyclerView.Adapter<InvoiceItemsAdapte
                 Log.d(TAG, "onBindViewHolder: 66-> " + (totalItemDiscount / 100) * totalItemPrice);
                 Log.d(TAG, "onBindViewHolder: 67-> " + totalItemPrice);
 
-                netItemPrice = (((totalItemTax / 100) * totalItemPrice) - ((totalItemDiscount / 100) * totalItemPrice)) + totalItemPrice;
+                double extra = (((Double.parseDouble(cur.getString(7)) / 100) * totalItemPrice) - ((Double.parseDouble(cur.getString(6)) / 100) * totalItemPrice));
+
+                netItemPrice = extra + totalItemPrice;
                 netItemsPrice += netItemPrice;
-//                Log.d(TAG, "onBindViewHolder: 70-> " + data.get(position).getInvoice_item_id() + "-> " + netItemPrice);
-//                Log.d(TAG, "onBindViewHolder: 71-> " + data.get(position).getInvoice_item_id() + "-> " + netItemPrice);
+                Log.d(TAG, "onBindViewHolder: 70-> " + extra);
+                Log.d(TAG, "onBindViewHolder: 71-> " + totalItemPrice);
+                Log.d(TAG, "onBindViewHolder: 72-> " + netItemsPrice);
             }
         }
 

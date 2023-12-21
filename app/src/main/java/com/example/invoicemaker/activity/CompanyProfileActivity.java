@@ -1,5 +1,7 @@
 package com.example.invoicemaker.activity;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -106,7 +109,10 @@ public class CompanyProfileActivity extends AppCompatActivity {
     private boolean savePersonalDetails() {
         boolean result;
 
-        if (Constants.Insertion_Update_Flag && !(Constants.Company_profile_Active)) {
+        Log.d(TAG, "savePersonalDetails: 113 "+Constants.Company_profile_Active);
+        Log.d(TAG, "savePersonalDetails: 114 "+Constants.DCReferenceKey);
+
+        if (!(Constants.Company_profile_Active)) {
 
             result = invoiceDB.insert_company_details(Constants.DCReferenceKey,
                     companyName.getText().toString(), companyEmail.getText().toString(), companyPhone.getText().toString(),

@@ -123,7 +123,7 @@ public class InvoiceInfoActivity extends AppCompatActivity {
     private boolean savePersonalDetails() {
         boolean result;
 
-        if (Constants.Insertion_Update_Flag && !(Constants.Invoice_info_Active)) {
+        if (!(Constants.Invoice_info_Active)) {
 
             result = invoiceDB.insert_invoice_info_details(Constants.DCReferenceKey,
                     invoiceName.getText().toString(), invoiceNo.getText().toString(), invoiceCreatedDate.getText().toString(),

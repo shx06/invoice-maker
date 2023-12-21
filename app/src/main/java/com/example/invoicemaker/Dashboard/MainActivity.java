@@ -155,20 +155,38 @@ public class MainActivity extends AppCompatActivity {
 
     private void createInvoiceLauncher() {
 
-        Intent g = new Intent(MainActivity.this, InvoiceDashboardActivity.class);
-        Constants.Insertion_Update_Flag = true;
+        boolean result = invoiceDB.insertData_data_controller("System", Constants.DefaultFlag);
+        if (result) {
 
-        Constants.DCReferenceKey = 0;
-        Constants.InvoiceReferenceKey = 0;
+            Toast.makeText(this, "Data manger Active", Toast.LENGTH_SHORT).show();
+
+            Cursor cur = invoiceDB.getLastRow_data_controller();
+            if (cur.getCount() > 0) {
+
+                while (cur.moveToNext()) {
+                    Constants.DCReferenceKey = cur.getInt(0);
+                }
+
+                Intent g = new Intent(MainActivity.this, InvoiceDashboardActivity.class);
+                Constants.Insertion_Update_Flag = true;
+
+//                Constants.DCReferenceKey = 0;
+//                Constants.InvoiceReferenceKey = 0;
 
 
-        Constants.Invoice_info_Active = false;
-        Constants.Company_profile_Active = false;
-        Constants.Client_Active = false;
+                Constants.ReLoaderActivator = true;
+                startActivity(g);
 
 
-        Constants.ReLoaderActivator = true;
-        startActivity(g);
+                cur.close();
+            }
+
+
+            Constants.CreateInvoiceKey = Constants.DCReferenceKey;
+
+        } else {
+            Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
+        }
 
 
     }
@@ -178,14 +196,11 @@ public class MainActivity extends AppCompatActivity {
         Constants.DCReferenceKey = dc_id;
         Constants.InvoiceReferenceKey = invoiceId;
 
+        Constants.TotalInvoicePrice = 0;
+        Constants.FinalInvoiceDiscount = 0;
+
         Intent g = new Intent(MainActivity.this, InvoiceDashboardActivity.class);
         Constants.Insertion_Update_Flag = false;
-
-
-        Constants.Invoice_info_Active = true;
-        Constants.Company_profile_Active = true;
-        Constants.Client_Active = true;
-        Constants.itemsActive = true;
 
         Constants.ReLoaderActivator = true;
         startActivity(g);

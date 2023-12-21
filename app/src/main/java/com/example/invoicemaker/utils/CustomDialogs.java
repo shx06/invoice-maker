@@ -1,8 +1,11 @@
 package com.example.invoicemaker.utils;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.invoicemaker.R;
 import com.example.invoicemaker.adapters.CurrencyAdapter;
 import com.example.invoicemaker.db.InvoiceDB;
+import com.example.invoicemaker.invoice.InvoiceDashboardActivity;
 import com.example.invoicemaker.model.CurrencyModel;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -89,6 +93,21 @@ public class CustomDialogs {
                     while (cur.moveToNext()) {
 
                         result = invoiceDB.update_discount_details(Constants.DCReferenceKey, discountType[0], inputField.getText().toString());
+
+
+                        Log.d(TAG, "fetchInvoiceData: 98 " + Double.parseDouble(inputField.getText().toString()));
+                        Log.d(TAG, "fetchInvoiceData: 99 " + Constants.TotalInvoicePrice);
+
+                        if (discountType[0].equals(StaticConstants.DISCOUNT_PERCENTAGE)) {
+                            Constants.FinalInvoiceDiscount = Double.parseDouble(inputField.getText().toString()) * Constants.TotalInvoicePrice / 100;
+                        } else {
+                            Constants.FinalInvoiceDiscount = Double.parseDouble(inputField.getText().toString());
+                        }
+
+                        Log.d(TAG, "fetchInvoiceData: 99 " + Constants.FinalInvoiceDiscount);
+
+
+                        ((InvoiceDashboardActivity) context).updateInvoiceFinalAmount();
 
                         if (result) {
                             dialog.dismiss();

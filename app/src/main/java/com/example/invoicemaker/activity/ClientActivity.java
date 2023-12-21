@@ -20,6 +20,7 @@ public class ClientActivity extends AppCompatActivity {
     Button save_next_btn;
     InvoiceDB invoiceDB;
     TextView toolbarHeader;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,8 +31,6 @@ public class ClientActivity extends AppCompatActivity {
         ImageView closeActivity = findViewById(R.id.close_activity);
         closeActivity.setOnClickListener(v -> finish());
         // new testing to push
-
-
 
 
         //checking
@@ -67,7 +66,7 @@ public class ClientActivity extends AppCompatActivity {
     private boolean savePersonalDetails() {
         boolean result;
 
-        if (Constants.Insertion_Update_Flag && !(Constants.Client_Active)) {
+        if (!(Constants.Client_Active)) {
 
             result = invoiceDB.insert_client_details(Constants.DCReferenceKey,
                     clientName.getText().toString(), clientEmail.getText().toString(), clientBillingAddress1.getText().toString(),

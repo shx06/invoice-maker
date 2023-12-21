@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -55,8 +57,6 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 
     AppCompatButton btn_save;
 
-    double value = 0.0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,31 +75,6 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
         ////****************** Data manger  -------------------------->
         invoiceDB = new InvoiceDB(getApplicationContext());
 
-        if (Constants.Insertion_Update_Flag) {
-
-            boolean result = invoiceDB.insertData_data_controller("System", Constants.DefaultFlag);
-            if (result) {
-
-                Toast.makeText(this, "Data manger Active", Toast.LENGTH_SHORT).show();
-
-                Cursor cur = invoiceDB.getLastRow_data_controller();
-                if (cur.getCount() > 0) {
-
-                    while (cur.moveToNext()) {
-                        Constants.DCReferenceKey = cur.getInt(0);
-                    }
-
-                    cur.close();
-                }
-
-
-                Constants.CreateInvoiceKey = Constants.DCReferenceKey;
-
-            } else {
-                Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
-            }
-
-        }
         ////****************** Data manger  -------------------------->
 
 
@@ -204,66 +179,84 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
     private void fetchInvoiceData() {
 
         //   get invoice data -------------------------------------------------------------------------
-            Cursor curInvInfo = invoiceDB.getRows_invoice_info(Constants.DCReferenceKey);
 
-            if (curInvInfo.getCount() > 0) {
-                while (curInvInfo.moveToNext()) {
-                    invoiceName.setText(curInvInfo.getString(2));
-                    invoiceCreatedDate.setText(curInvInfo.getString(4));
-                    invoiceDueDate.setText(curInvInfo.getString(6));
-                }
+        Constants.Invoice_info_Active = false;
 
+        Cursor curInvInfo = invoiceDB.getRows_invoice_info(Constants.DCReferenceKey);
 
+        if (curInvInfo.getCount() > 0) {
+            Constants.Invoice_info_Active = true;
+            while (curInvInfo.moveToNext()) {
+                invoiceName.setText(curInvInfo.getString(2));
+                invoiceCreatedDate.setText(curInvInfo.getString(4));
+                invoiceDueDate.setText(curInvInfo.getString(6));
             }
 
-            curInvInfo.close();
+
+        }
+
+        curInvInfo.close();
+
 
         //   get company data -------------------------------------------------------------------------
 
         Cursor curComp = invoiceDB.getRows_company(Constants.DCReferenceKey);
 
-            if (curComp.getCount() > 0) {
-                companyReplacable.setVisibility(View.GONE);
-                companyDataLayout.setVisibility(View.VISIBLE);
+        Constants.Company_profile_Active = false;
+
+        if (curComp.getCount() > 0) {
+            Constants.Company_profile_Active = true;
+            companyReplacable.setVisibility(View.GONE);
+            companyDataLayout.setVisibility(View.VISIBLE);
 
 
-                while (curComp.moveToNext()) {
-                    companyName.setText(curComp.getString(2));
-                    companyAddress.setText(curComp.getString(5));
-                    companyWebsite.setText(curComp.getString(7));
-                }
-
-
+            while (curComp.moveToNext()) {
+                companyName.setText(curComp.getString(2));
+                companyAddress.setText(curComp.getString(5));
+                companyWebsite.setText(curComp.getString(7));
             }
 
-            curComp.close();
+
+        }
+
+        curComp.close();
 
 
-            //   get client data -------------------------------------------------------------------------
+        //   get client data -------------------------------------------------------------------------
 
-            Cursor curClient = invoiceDB.getRows_client(Constants.DCReferenceKey);
+        Constants.Client_Active = false;
 
-            if (curClient.getCount() > 0) {
-                clientReplacable.setVisibility(View.GONE);
-                clientDataLayout.setVisibility(View.VISIBLE);
+        Cursor curClient = invoiceDB.getRows_client(Constants.DCReferenceKey);
 
-
-                while (curClient.moveToNext()) {
-                    clientName.setText(curClient.getString(2));
-                    clientAdd1.setText(curClient.getString(5));
-                    clientAdd2.setText(curClient.getString(6));
-                }
+        if (curClient.getCount() > 0) {
+            clientReplacable.setVisibility(View.GONE);
+            clientDataLayout.setVisibility(View.VISIBLE);
+            Constants.Client_Active = true;
 
 
+            while (curClient.moveToNext()) {
+                clientName.setText(curClient.getString(2));
+                clientAdd1.setText(curClient.getString(5));
+                clientAdd2.setText(curClient.getString(6));
             }
 
-            curClient.close();
+
+        }
+
+        curClient.close();
+
+
+        // items data --------------------------------------------------------------------
+
+
+        Constants.itemsActive = false;
 
         dataItemsList = new ArrayList<>();
 
         Cursor couItems = invoiceDB.getRows_invoice_items_link(Constants.DCReferenceKey);
 
         if (couItems.getCount() > 0) {
+            Constants.itemsActive = false;
             while (couItems.moveToNext()) {
 
                 dataItemsList.add(new SingleItemInvoiceLinkedModel(couItems.getInt(0), couItems.getInt(1), couItems.getInt(2)));
@@ -274,34 +267,52 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 
         ItemsRecyclerView();
 
-
+        String discType = null;
+        Double finalDiscount = 0.0;
 
         Cursor curDiscount = invoiceDB.getRows_invoice_discount_by_dcId(Constants.DCReferenceKey);
 
-        value = Constants.TotalInvoicePrice;
-
-        Log.d(TAG, "fetchInvoiceData: "+value);
 
         if (curDiscount.getCount() > 0) {
-            System.out.println("row_counted " + curDiscount.getCount());
-
             while (curDiscount.moveToNext()) {
                 if (curDiscount.getString(2) != null) {
-                    if (curDiscount.getString(2).equals(StaticConstants.DISCOUNT_PERCENTAGE)) {
-                        value -= curDiscount.getDouble(3) / value * 1000;
-                    } else {
-                        value -= curDiscount.getDouble(3);
-                    }
-                    finalAmt.setText("$ " + new DecimalFormat("##.##").format(value));
+                    discType = curDiscount.getString(2);
+                    finalDiscount = curDiscount.getDouble(3);
                 }
             }
         }
 
         curDiscount.close();
 
+        final Handler handler = new Handler(Looper.getMainLooper());
+        String finalDiscType = discType;
+        Double finalDisc = finalDiscount;
+        handler.postDelayed(() -> {
+            updateInvoiceFinalDiscount(finalDiscType, finalDisc);
+            updateInvoiceFinalAmount();
+        }, 300);
+
+    }
+
+    private void updateInvoiceFinalDiscount(String finalDiscType, Double finalDisc) {
+        if (finalDiscType != null && finalDiscType.equals(StaticConstants.DISCOUNT_PERCENTAGE)) {
+            Constants.FinalInvoiceDiscount = finalDisc * Constants.TotalInvoicePrice / 100;
+
+        } else {
+            Constants.FinalInvoiceDiscount = finalDisc;
+        }
+    }
+
+    public void updateInvoiceFinalAmount() {
+
+        Log.d(TAG, "called : updateInvoiceFinalAmount");
+
+        finalAmt.setText("$ " + new DecimalFormat("##.##").format(Constants.TotalInvoicePrice - Constants.FinalInvoiceDiscount));
+
     }
 
     public void updateInvoiceFromAdapter() {
+        Log.d(TAG, "called : updateInvoiceFromAdapter");
 
         subTotal.setText("$ " + new DecimalFormat("##.##").format(Constants.TotalInvoicePrice));
     }
