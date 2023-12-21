@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.invoicemaker.R;
 
+import com.example.invoicemaker.activity.TemplateSelectionActivity;
 import com.example.invoicemaker.model.SelectTemplateModel;
 
 import java.util.List;
@@ -66,7 +67,7 @@ public class SelectTemplateAdapter extends RecyclerView.Adapter<SelectTemplateAd
 
         void ClickItem(int position) {
             itemView.setOnClickListener(v -> {
-                //((TemplateSelectionActivity) context).TemplateSelection(selectTemplateList.get(position).getTemplateName());
+                ((TemplateSelectionActivity) context).TemplateSelection(selectTemplateList.get(position).getTemplate_id());
             });
         }
     }

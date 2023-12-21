@@ -3,12 +3,12 @@ package com.example.invoicemaker.model;
 public class SelectTemplateModel {
 
     int Image;
-    String templateName;
+    String template_id;
 
 
-    public SelectTemplateModel(int image, String templateName) {
+    public SelectTemplateModel(int image, String template_id) {
         this.Image = image;
-        this.templateName = templateName;
+        this.template_id = template_id;
     }
 
     public int getImage() {
@@ -19,11 +19,11 @@ public class SelectTemplateModel {
         Image = image;
     }
 
-    public String getTemplateName() {
-        return templateName;
+    public String getTemplate_id() {
+        return template_id;
     }
 
-    public void setTemplateName(String templateName) {
-        this.templateName = templateName;
+    public void setTemplate_id(String template_id) {
+        this.template_id = template_id;
     }
 }
