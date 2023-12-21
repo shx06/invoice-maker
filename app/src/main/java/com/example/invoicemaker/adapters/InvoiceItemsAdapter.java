@@ -73,7 +73,9 @@ public class InvoiceItemsAdapter extends RecyclerView.Adapter<InvoiceItemsAdapte
             }
         }
 
-        ((InvoiceDashboardActivity) context).updateInvoiceFromAdapter(netItemsPrice);
+        Constants.TotalInvoicePrice = netItemsPrice;
+
+        ((InvoiceDashboardActivity) context).updateInvoiceFromAdapter();
 
         cur.close();
 

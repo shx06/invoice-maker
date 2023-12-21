@@ -55,6 +55,8 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 
     AppCompatButton btn_save;
 
+    double value = 0.0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -200,105 +202,108 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
     }
 
     private void fetchInvoiceData() {
-        if (Constants.Invoice_info_Active) {
 
-            Cursor cur = invoiceDB.getRows_invoice_info(Constants.DCReferenceKey);
+        //   get invoice data -------------------------------------------------------------------------
+            Cursor curInvInfo = invoiceDB.getRows_invoice_info(Constants.DCReferenceKey);
 
-            if (cur.getCount() > 0) {
-                while (cur.moveToNext()) {
-                    invoiceName.setText(cur.getString(2));
-                    invoiceCreatedDate.setText(cur.getString(4));
-                    invoiceDueDate.setText(cur.getString(6));
+            if (curInvInfo.getCount() > 0) {
+                while (curInvInfo.moveToNext()) {
+                    invoiceName.setText(curInvInfo.getString(2));
+                    invoiceCreatedDate.setText(curInvInfo.getString(4));
+                    invoiceDueDate.setText(curInvInfo.getString(6));
                 }
 
 
             }
 
-            cur.close();
-        }
+            curInvInfo.close();
 
-        if (Constants.Company_profile_Active) {
+        //   get company data -------------------------------------------------------------------------
 
-            Cursor cur = invoiceDB.getRows_company(Constants.DCReferenceKey);
+        Cursor curComp = invoiceDB.getRows_company(Constants.DCReferenceKey);
 
-            if (cur.getCount() > 0) {
+            if (curComp.getCount() > 0) {
                 companyReplacable.setVisibility(View.GONE);
                 companyDataLayout.setVisibility(View.VISIBLE);
 
 
-                while (cur.moveToNext()) {
-                    companyName.setText(cur.getString(2));
-                    companyAddress.setText(cur.getString(5));
-                    companyWebsite.setText(cur.getString(7));
+                while (curComp.moveToNext()) {
+                    companyName.setText(curComp.getString(2));
+                    companyAddress.setText(curComp.getString(5));
+                    companyWebsite.setText(curComp.getString(7));
                 }
 
 
             }
 
-            cur.close();
+            curComp.close();
 
-        }
 
-        if (Constants.Client_Active) {
+            //   get client data -------------------------------------------------------------------------
 
-            Cursor cur = invoiceDB.getRows_client(Constants.DCReferenceKey);
+            Cursor curClient = invoiceDB.getRows_client(Constants.DCReferenceKey);
 
-            if (cur.getCount() > 0) {
-                System.out.println("row_counted " + cur.getCount());
+            if (curClient.getCount() > 0) {
                 clientReplacable.setVisibility(View.GONE);
                 clientDataLayout.setVisibility(View.VISIBLE);
 
 
-                while (cur.moveToNext()) {
-                    clientName.setText(cur.getString(2));
-                    clientAdd1.setText(cur.getString(5));
-                    clientAdd2.setText(cur.getString(6));
+                while (curClient.moveToNext()) {
+                    clientName.setText(curClient.getString(2));
+                    clientAdd1.setText(curClient.getString(5));
+                    clientAdd2.setText(curClient.getString(6));
                 }
 
 
             }
 
-            cur.close();
-        }
+            curClient.close();
 
         dataItemsList = new ArrayList<>();
 
-        Cursor m_cur = invoiceDB.getRows_invoice_items_link(Constants.DCReferenceKey);
+        Cursor couItems = invoiceDB.getRows_invoice_items_link(Constants.DCReferenceKey);
 
-        if (m_cur.getCount() > 0) {
-            while (m_cur.moveToNext()) {
+        if (couItems.getCount() > 0) {
+            while (couItems.moveToNext()) {
 
-                dataItemsList.add(new SingleItemInvoiceLinkedModel(m_cur.getInt(0), m_cur.getInt(1), m_cur.getInt(2)));
+                dataItemsList.add(new SingleItemInvoiceLinkedModel(couItems.getInt(0), couItems.getInt(1), couItems.getInt(2)));
             }
 
         }
-        m_cur.close();
+        couItems.close();
 
         ItemsRecyclerView();
-    }
 
-    public void updateInvoiceFromAdapter(double value) {
 
-        Cursor cur = invoiceDB.getRows_invoice_discount_by_dcId(Constants.DCReferenceKey);
 
-        if (cur.getCount() > 0) {
-            System.out.println("row_counted " + cur.getCount());
+        Cursor curDiscount = invoiceDB.getRows_invoice_discount_by_dcId(Constants.DCReferenceKey);
 
-            while (cur.moveToNext()) {
-                if (cur.getString(2) != null) {
-                    if (cur.getString(2).equals(StaticConstants.DISCOUNT_PERCENTAGE)) {
-                        value -= cur.getDouble(3) / value * 1000;
+        value = Constants.TotalInvoicePrice;
+
+        Log.d(TAG, "fetchInvoiceData: "+value);
+
+        if (curDiscount.getCount() > 0) {
+            System.out.println("row_counted " + curDiscount.getCount());
+
+            while (curDiscount.moveToNext()) {
+                if (curDiscount.getString(2) != null) {
+                    if (curDiscount.getString(2).equals(StaticConstants.DISCOUNT_PERCENTAGE)) {
+                        value -= curDiscount.getDouble(3) / value * 1000;
                     } else {
-                        value -= cur.getDouble(3);
+                        value -= curDiscount.getDouble(3);
                     }
                     finalAmt.setText("$ " + new DecimalFormat("##.##").format(value));
                 }
             }
         }
 
-        cur.close();
+        curDiscount.close();
 
-        subTotal.setText("$ " + new DecimalFormat("##.##").format(value));
+    }
+
+    public void updateInvoiceFromAdapter() {
+
+        subTotal.setText("$ " + new DecimalFormat("##.##").format(Constants.TotalInvoicePrice));
     }
 
 

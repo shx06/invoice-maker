@@ -1,22 +1,21 @@
 package com.example.invoicemaker.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.Manifest;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.invoicemaker.R;
 import com.example.invoicemaker.adapters.SelectTemplateAdapter;
 import com.example.invoicemaker.model.SelectTemplateModel;
-import com.example.invoicemaker.utils.FinalStaticConstants;
+import com.example.invoicemaker.utils.StaticConstants;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -49,7 +48,7 @@ public class TemplateSelectionActivity extends AppCompatActivity {
         recycler_view = findViewById(R.id.recycler_view);
 
 
-        selectTemplateList.add(new SelectTemplateModel(R.drawable.ic_upload_image, FinalStaticConstants.TEMPLATE_1));
+        selectTemplateList.add(new SelectTemplateModel(R.drawable.ic_upload_image, StaticConstants.TEMPLATE_1));
 
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(TemplateSelectionActivity.this, 2, GridLayoutManager.VERTICAL, false);

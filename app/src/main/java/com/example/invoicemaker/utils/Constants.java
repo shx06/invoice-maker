@@ -24,4 +24,6 @@ public class Constants {
 
     public static int CreateInvoiceKey = -1;
 
+    public static double TotalInvoicePrice = 0.0;
+
 }
