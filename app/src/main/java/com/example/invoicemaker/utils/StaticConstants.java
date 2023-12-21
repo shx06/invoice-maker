@@ -1,6 +1,6 @@
 package com.example.invoicemaker.utils;
 
-public class FinalStaticConstants {
+public class StaticConstants {
     public static final String SCREEN_TYPE = "screenType";
     public static final String HEADER_SCREEN = "Invoice Info";
     public static final String BUSINESS_SCREEN = "Business Info";

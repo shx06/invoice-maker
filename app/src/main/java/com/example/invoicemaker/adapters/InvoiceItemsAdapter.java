@@ -78,7 +78,7 @@ public class InvoiceItemsAdapter extends RecyclerView.Adapter<InvoiceItemsAdapte
         cur.close();
 
         holder.deleteItem.setOnClickListener(v -> {
-            invoiceDB.delete_invoice_item_link_by_itemId(data.get(position).getInvoice_item_id());
+            invoiceDB.delete_invoice_item_link_by_id(data.get(position).getIim_id());
             data.remove(position);
             notifyDataSetChanged();
         });

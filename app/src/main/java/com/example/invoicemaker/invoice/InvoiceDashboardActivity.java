@@ -30,7 +30,9 @@ import com.example.invoicemaker.model.SingleItemInvoiceLinkedModel;
 import com.example.invoicemaker.model.SingleItemModel;
 import com.example.invoicemaker.utils.Constants;
 import com.example.invoicemaker.utils.CustomDialogs;
+import com.example.invoicemaker.utils.StaticConstants;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +42,7 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
             discountLayout, currencyLayout, termsLayout, companyDataLayout, clientDataLayout;
 
     TextView feedBack, invoiceName, invoiceDueDate, invoiceCreatedDate, companyReplacable, clientReplacable,
-            companyName, companyWebsite, companyAddress, clientName, clientAdd1, clientAdd2, subTotal;
+            companyName, companyWebsite, companyAddress, clientName, clientAdd1, clientAdd2, subTotal, finalAmt;
 
     RecyclerView itemsDataRecyclerView;
     InvoiceItemsAdapter itemsAdapter;
@@ -64,6 +66,8 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
         closeActivity.setOnClickListener(v -> finish());
 
         btn_save = findViewById(R.id.btn_save);
+
+        handleElements();
 
 
         ////****************** Data manger  -------------------------->
@@ -103,15 +107,9 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 
         customDialogs = new CustomDialogs(InvoiceDashboardActivity.this);
 
-        handleElements();
-
         headerLayout.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), InvoiceInfoActivity.class);
             startActivity(intent);
-
-            /*Intent intent = new Intent(getApplicationContext(), DisplayLayoutsActivity.class);
-            intent.putExtra(FinalStaticConstants.SCREEN_TYPE, FinalStaticConstants.HEADER_SCREEN);
-            startActivity(intent);*/
         });
 
         businessLayout.setOnClickListener(v -> {
@@ -163,6 +161,7 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 
     private void handleElements() {
         subTotal = findViewById(R.id.sub_total);
+        finalAmt = findViewById(R.id.final_amount);
 
         companyReplacable = findViewById(R.id.company_replacable);
         clientReplacable = findViewById(R.id.client_replacable);
@@ -279,7 +278,27 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
     }
 
     public void updateInvoiceFromAdapter(double value) {
-        subTotal.setText(("$ " + value));
+
+        Cursor cur = invoiceDB.getRows_invoice_discount_by_dcId(Constants.DCReferenceKey);
+
+        if (cur.getCount() > 0) {
+            System.out.println("row_counted " + cur.getCount());
+
+            while (cur.moveToNext()) {
+                if (cur.getString(2) != null) {
+                    if (cur.getString(2).equals(StaticConstants.DISCOUNT_PERCENTAGE)) {
+                        value -= cur.getDouble(3) / value * 1000;
+                    } else {
+                        value -= cur.getDouble(3);
+                    }
+                    finalAmt.setText("$ " + new DecimalFormat("##.##").format(value));
+                }
+            }
+        }
+
+        cur.close();
+
+        subTotal.setText("$ " + new DecimalFormat("##.##").format(value));
     }
 
 

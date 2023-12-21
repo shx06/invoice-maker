@@ -50,7 +50,6 @@ public class InvoiceDB extends SQLiteOpenHelper {
     public static final String COL_9_ii_paid_amount = "paid_amount";
 
 
-
     /////////////////////---------Language Info------------------>>
     public static final String table_name_language_info = "language_info";
     public static final String COL_0_li_id = "ii_id";
@@ -105,7 +104,6 @@ public class InvoiceDB extends SQLiteOpenHelper {
     public static final String COL_0_iim = "iim_id";
     public static final String COL_1_iim_dc_id = "dc_id";
     public static final String COL_2_iim_invoice_item_id = "invoice_item_id";
-
 
 
     /////////////////////--------------------------->>
@@ -209,6 +207,14 @@ public class InvoiceDB extends SQLiteOpenHelper {
                 COL_0_iim + " integer primary key autoincrement, " +
                 COL_1_iim_dc_id + " integer, " +
                 COL_2_iim_invoice_item_id + " integer" +
+
+                ")");
+
+        db.execSQL("create table " + table_name_discount_item + "(" +
+                COL_0_di_id + " integer primary key autoincrement, " +
+                COL_1_di_dc_id + " integer, " +
+                COL_2_di_type + " text, " +
+                COL_3_di_discount_value + " text" +
 
                 ")");
 
@@ -581,7 +587,6 @@ public class InvoiceDB extends SQLiteOpenHelper {
     }
 
 
-
     /////////////////////---------Currency------------------>>
 
     public boolean insert_currency_details(int dc_id, String countryName, String countryCurrency,
@@ -646,8 +651,6 @@ public class InvoiceDB extends SQLiteOpenHelper {
     }
 
 
-
-
     /////////////////////---------Invoice Items link handler------------------>>
 
     public boolean insert_invoice_items_link_details(int dc_id, int invoice_item_id) {
@@ -674,6 +677,12 @@ public class InvoiceDB extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void delete_invoice_item_link_by_id(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(table_name_invoice_item_manager, COL_0_iim + " = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
 
     public Cursor getRows_invoice_items_link(int dc_id) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -692,6 +701,50 @@ public class InvoiceDB extends SQLiteOpenHelper {
                 " AND " + COL_2_iim_invoice_item_id + " = " + invoice_item_id;
 
         Cursor res = db.rawQuery(query, null);
+
+        return res;
+    }
+
+    /////////////////////---------Invoice discount------------------>>
+
+    public boolean insert_discount_details(int dc_id, String discountType, String discountValue) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+
+        contentValues.put(COL_1_di_dc_id, dc_id);
+        contentValues.put(COL_2_di_type, discountType);
+        contentValues.put(COL_3_di_discount_value, discountValue);
+
+
+        long result = db.insert(table_name_discount_item, null, contentValues);
+
+
+        return result != -1;
+
+    }
+
+
+    public boolean update_discount_details(int dc_id, String discountType, String discountValue) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+
+        contentValues.put(COL_2_di_type, discountType);
+        contentValues.put(COL_3_di_discount_value, discountValue);
+
+
+        long result = db.update(table_name_discount_item, contentValues, " " + COL_1_di_dc_id + " = ?", new String[]{String.valueOf(dc_id)});
+
+        return result != -1;
+    }
+
+    public Cursor getRows_invoice_discount_by_dcId(int dc_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor res = db.rawQuery("select * from " + table_name_discount_item + " where " + COL_1_di_dc_id + "='" + dc_id + "'", null);
 
         return res;
     }

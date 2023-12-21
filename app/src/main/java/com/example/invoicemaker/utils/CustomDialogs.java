@@ -2,6 +2,7 @@ package com.example.invoicemaker.utils;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.database.Cursor;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -46,7 +47,8 @@ public class CustomDialogs {
         AppCompatButton cancel = dialog.findViewById(R.id.btn_cancel);
         AppCompatButton save = dialog.findViewById(R.id.btn_save);
 
-        String[] optionsList = {"Percentage", "Amount"};
+        String[] optionsList = {StaticConstants.DISCOUNT_PERCENTAGE, StaticConstants.DISCOUNT_AMOUNT};
+        final String[] discountType = {null};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context,
                 android.R.layout.simple_spinner_item, optionsList);
@@ -56,7 +58,12 @@ public class CustomDialogs {
         optionsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(context, optionsList[position], Toast.LENGTH_SHORT).show();
+                discountType[0] = optionsList[position];
+                if (optionsList[position].equals(StaticConstants.DISCOUNT_PERCENTAGE)) {
+                    inputField.setText("0.0");
+                } else {
+                    inputField.setText("0.0");
+                }
             }
 
             @Override
@@ -68,6 +75,41 @@ public class CustomDialogs {
 
         save.setOnClickListener(v2 -> {
             if (inputField.getText() != null && inputField.getText().length() > 0) {
+
+                invoiceDB = new InvoiceDB(context);
+
+
+                Cursor cur = invoiceDB.getRows_invoice_discount_by_dcId(Constants.DCReferenceKey);
+
+                boolean result;
+
+                if (cur.getCount() > 0) {
+                    System.out.println("row_counted invoice " + cur.getCount());
+
+                    while (cur.moveToNext()) {
+
+                        result = invoiceDB.update_discount_details(Constants.DCReferenceKey, discountType[0], inputField.getText().toString());
+
+                        if (result) {
+                            dialog.dismiss();
+                        } else {
+                            Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                } else {
+
+                    result = invoiceDB.insert_discount_details(Constants.DCReferenceKey, discountType[0], inputField.getText().toString());
+
+                    if (result) {
+                        dialog.dismiss();
+                    } else {
+                        Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                cur.close();
+
                 dialog.dismiss();
             } else {
                 Toast.makeText(context, "Please input discount amount.", Toast.LENGTH_SHORT).show();
