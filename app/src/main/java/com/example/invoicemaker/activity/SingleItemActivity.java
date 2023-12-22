@@ -4,6 +4,7 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -36,7 +37,7 @@ public class SingleItemActivity extends AppCompatActivity {
         toolbarHeader = findViewById(R.id.toolbar_title);
         toolbarHeader.setText("New Item");
         ImageView closeActivity = findViewById(R.id.close_activity);
-        closeActivity.setOnClickListener(v-> finish());
+        closeActivity.setOnClickListener(v -> finish());
 
         name = findViewById(R.id.item_name);
         price = findViewById(R.id.item_price);
@@ -60,8 +61,6 @@ public class SingleItemActivity extends AppCompatActivity {
             discount.setText(getIntent().getStringExtra("itemDiscount"));
             tax.setText(getIntent().getStringExtra("itemTax"));
         }
-
-        Log.d(TAG, "savePersonalDetails: "+itemId);
 
         save_next_btn.setOnClickListener(view -> {
 
@@ -89,11 +88,33 @@ public class SingleItemActivity extends AppCompatActivity {
 
 
             if (result) {
+
+                if (Constants.IsInvoiceItem) {
+
+                    Cursor cursor = invoiceDB.get_last_insertedRows_invoice_items();
+
+                    if (cursor.moveToFirst()) {
+
+                        String dataColumn1 = cursor.getString(cursor.getColumnIndex("ii_id"));
+
+                        boolean result2 = invoiceDB.insert_invoice_items_link_details(Constants.DCReferenceKey, Integer.valueOf(dataColumn1));
+
+                        if (result2) {
+                            Toast.makeText(this, "Item added successfully.", Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            Toast.makeText(this, "Failed to save item", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    cursor.close();
+
+                }
+
                 Constants.Invoice_item_Active = true;
                 boolean u_result = invoiceDB.update_data_controller(Constants.DCReferenceKey, Constants.Flag);
                 if (u_result) {
-                    System.out.println("saved");
-//                     Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
+
                 } else {
                     Toast.makeText(this, "Failed to Save", Toast.LENGTH_SHORT).show();
                 }

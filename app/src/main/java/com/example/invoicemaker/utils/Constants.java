@@ -19,6 +19,7 @@ public class Constants {
     public static boolean Invoice_item_Active = false;
     public static boolean Client_Active = false;
     public static boolean itemsActive = false;
+    public static boolean IsInvoiceItem = false;
     public static boolean Single_Item_Active = false;
 
 

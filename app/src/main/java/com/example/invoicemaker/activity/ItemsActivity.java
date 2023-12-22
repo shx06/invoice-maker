@@ -51,8 +51,12 @@ public class ItemsActivity extends AppCompatActivity {
         invoiceDB = new InvoiceDB(getApplicationContext());
 
         newItemLayout.setOnClickListener(v -> {
+            Log.d(TAG, "onCreate: "+Constants.IsInvoiceItem);
             Constants.Single_Item_Active = false;
             startActivity(new Intent(getApplicationContext(), SingleItemActivity.class));
+            if(Constants.IsInvoiceItem) {
+                finish();
+            }
         });
 
         FetchDataAndSet();

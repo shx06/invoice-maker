@@ -8,9 +8,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.example.invoicemaker.model.SingleItemModel;
+import com.example.invoicemaker.utils.Constants;
 import com.google.gson.Gson;
 
 public class InvoiceDB extends SQLiteOpenHelper {
@@ -703,6 +706,19 @@ public class InvoiceDB extends SQLiteOpenHelper {
         Cursor res = db.rawQuery(query, null);
 
         return res;
+    }
+
+    public Cursor get_last_insertedRows_invoice_items() {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Log.d(TAG, "get_last_insertedRows_invoice_items: 715 ");
+
+
+        String query = "SELECT * FROM " + table_name_invoice_item + " WHERE " + COL_0_invoice_item_id + " = last_insert_rowid()";
+        Cursor cursor = db.rawQuery(query, null);
+
+        return cursor;
     }
 
     /////////////////////---------Invoice discount------------------>>

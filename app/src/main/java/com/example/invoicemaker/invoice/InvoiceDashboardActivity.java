@@ -99,11 +99,6 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        itemsLayout.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), ItemsActivity.class);
-            startActivity(intent);
-        });
-
         termsLayout.setOnClickListener(v -> {
         });
 
@@ -172,6 +167,7 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
         feedBack = findViewById(R.id.add_feedback);
 
         itemsLayout.setOnClickListener(v -> {
+            Constants.IsInvoiceItem = true;
             startActivity(new Intent(getApplicationContext(), ItemsActivity.class));
         });
     }
@@ -304,16 +300,11 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
     }
 
     public void updateInvoiceFinalAmount() {
-
-        Log.d(TAG, "called : updateInvoiceFinalAmount");
-
         finalAmt.setText("$ " + new DecimalFormat("##.##").format(Constants.TotalInvoicePrice - Constants.FinalInvoiceDiscount));
 
     }
 
     public void updateInvoiceFromAdapter() {
-        Log.d(TAG, "called : updateInvoiceFromAdapter");
-
         subTotal.setText("$ " + new DecimalFormat("##.##").format(Constants.TotalInvoicePrice));
     }
 
