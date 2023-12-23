@@ -3,6 +3,7 @@ package com.example.invoicemaker.adapters;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.invoicemaker.Dashboard.DashboardDataRecyclerView;
@@ -96,10 +98,29 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
         });
 
         holder.deleteItem.setOnClickListener(v -> {
-            invoiceDB.delete_invoice_item_link_by_itemId(data.get(position).getIi_id());
-            invoiceDB.delete_invoice_item_OneRow(data.get(position).getIi_id());
-            data.remove(position);
-            notifyDataSetChanged();
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+            builder.setMessage("Are you sure you want to delete this item ?");
+            builder.setTitle("Alert !");
+            builder.setCancelable(false);
+
+            builder.setPositiveButton("Yes", (DialogInterface.OnClickListener) (dialog, which) -> {
+
+                invoiceDB.delete_invoice_item_link_by_itemId(data.get(position).getIi_id());
+                invoiceDB.delete_invoice_item_OneRow(data.get(position).getIi_id());
+                data.remove(position);
+                notifyDataSetChanged();
+
+                dialog.cancel();
+            });
+
+            builder.setNegativeButton("Cancel", (DialogInterface.OnClickListener) (dialog, which) -> {
+                dialog.cancel();
+            });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
         });
 
         holder.editItem.setOnClickListener(v -> {

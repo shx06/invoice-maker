@@ -3,6 +3,7 @@ package com.example.invoicemaker.Dashboard;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +23,7 @@ import com.example.invoicemaker.R;
 import com.example.invoicemaker.db.InvoiceDB;
 import com.example.invoicemaker.invoice.InvoiceDashboardActivity;
 import com.example.invoicemaker.model.DataControllerModel;
+import com.example.invoicemaker.utils.Constants;
 import com.google.gson.Gson;
 
 
@@ -78,6 +81,45 @@ public class DashboardDataRecyclerView extends RecyclerView.Adapter<DashboardDat
 
         holder.edit.setOnClickListener(v -> {
             ((MainActivity)context).forEdit(data.get(position).getDc_id(), invoiceId);
+        });
+
+        holder.delete.setOnClickListener(v -> {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+            // Set the message show for the Alert time
+            builder.setMessage("Are you sure you want to delete this invoice?");
+
+            // Set Alert Title
+            builder.setTitle("Alert !");
+
+            builder.setCancelable(false);
+
+            builder.setPositiveButton("Delete", (DialogInterface.OnClickListener) (dialog, which) -> {
+
+                invoiceDB.delete_company_OneRow(data.get(position).getDc_id());
+                invoiceDB.delete_client_OneRow(data.get(position).getDc_id());
+                invoiceDB.delete_invoice_item_link_by_dcId(data.get(position).getDc_id());
+                invoiceDB.delete_currency_OneRow(data.get(position).getDc_id());
+                invoiceDB.delete_discount_by_dcId(data.get(position).getDc_id());
+
+
+                invoiceDB.delete_invoice_info_OneRow(data.get(position).getDc_id());
+                invoiceDB.delete_data_controller_OneRow(data.get(position).getDc_id());
+                data.remove(position);
+                notifyDataSetChanged();
+
+            });
+
+            builder.setNegativeButton("Cancel", (DialogInterface.OnClickListener) (dialog, which) -> {
+                dialog.cancel();
+            });
+
+            // Create the Alert dialog
+            AlertDialog alertDialog = builder.create();
+            // Show the Alert Dialog box
+            alertDialog.show();
+
         });
 
     }

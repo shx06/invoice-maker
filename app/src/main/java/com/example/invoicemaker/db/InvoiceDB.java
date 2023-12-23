@@ -564,10 +564,8 @@ public class InvoiceDB extends SQLiteOpenHelper {
         long result = db.delete(table_name_invoice_item, " " + COL_0_invoice_item_id + " = ?", new String[]{String.valueOf(ii_id)});
         if (result == -1) {
             return false;
-
         } else {
             return true;
-
         }
     }
 
@@ -686,6 +684,12 @@ public class InvoiceDB extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void delete_invoice_item_link_by_dcId(int dc_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(table_name_invoice_item_manager, COL_1_iim_dc_id + " = ?", new String[]{String.valueOf(dc_id)});
+        db.close();
+    }
+
 
     public Cursor getRows_invoice_items_link(int dc_id) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -764,4 +768,12 @@ public class InvoiceDB extends SQLiteOpenHelper {
 
         return res;
     }
+
+    public void delete_discount_by_dcId(int dc_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(table_name_discount_item, COL_1_di_dc_id + " = ?", new String[]{String.valueOf(dc_id)});
+        db.close();
+    }
+
+
 }

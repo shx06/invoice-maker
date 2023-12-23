@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -33,7 +35,9 @@ import java.util.Calendar;
 
 public class InvoiceInfoActivity extends AppCompatActivity {
 
-    TextInputEditText invoiceName, invoiceNo, invoiceCreatedDate, invoiceDueDate, invoicePO;
+    TextInputEditText invoiceName, invoiceNo, invoicePO;
+
+    TextView invoiceCreatedDate, invoiceDueDate;
     Spinner invoiceDueTerms;
     int day, month, year;
     Button save_next_btn;
@@ -84,8 +88,10 @@ public class InvoiceInfoActivity extends AppCompatActivity {
             month = calendar.get(Calendar.MONTH);
             year = calendar.get(Calendar.YEAR);
 
-            DatePickerDialog datePickerDialog = new DatePickerDialog(getApplicationContext(), (view12, year, month, dayOfMonth) ->
-                    invoiceCreatedDate.setText(SimpleDateFormat.getDateInstance().format(calendar.getTime())), year, month, day);
+            DatePickerDialog datePickerDialog = new DatePickerDialog(InvoiceInfoActivity.this, (datePicker, y, m, d) -> {
+                int m1 = m + 1;
+                invoiceCreatedDate.setText(d + "/" + m1 + "/" + y);
+            }, year, month, day);
             datePickerDialog.show();
         });
 
@@ -94,7 +100,9 @@ public class InvoiceInfoActivity extends AppCompatActivity {
             month = calendar.get(Calendar.MONTH);
             year = calendar.get(Calendar.YEAR);
 
-            DatePickerDialog datePickerDialog = new DatePickerDialog(getApplicationContext(), (view1, year, month, dayOfMonth) -> invoiceDueDate.setText(SimpleDateFormat.getDateInstance().format(calendar.getTime())), year, month, day);
+            DatePickerDialog datePickerDialog = new DatePickerDialog(InvoiceInfoActivity.this, (datePicker, y, m, d) -> {
+                int m1 = m + 1;
+                invoiceDueDate.setText(d + "/" + m1 + "/" + y); }, year, month, day);
             datePickerDialog.show();
         });
 

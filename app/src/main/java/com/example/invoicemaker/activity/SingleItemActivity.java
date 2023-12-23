@@ -95,16 +95,22 @@ public class SingleItemActivity extends AppCompatActivity {
 
                     if (cursor.moveToFirst()) {
 
-                        String dataColumn1 = cursor.getString(cursor.getColumnIndex("ii_id"));
+                        try {
 
-                        boolean result2 = invoiceDB.insert_invoice_items_link_details(Constants.DCReferenceKey, Integer.valueOf(dataColumn1));
+                            String dataColumn1 = cursor.getString(cursor.getColumnIndex("ii_id"));
 
-                        if (result2) {
-                            Toast.makeText(this, "Item added successfully.", Toast.LENGTH_SHORT).show();
+                            boolean result2 = invoiceDB.insert_invoice_items_link_details(Constants.DCReferenceKey, Integer.valueOf(dataColumn1));
 
-                        } else {
-                            Toast.makeText(this, "Failed to save item", Toast.LENGTH_SHORT).show();
+                            if (result2) {
+                                Toast.makeText(this, "Item added successfully.", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Toast.makeText(this, "Failed to save item", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(this, "Failed to add item: -> " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
+
                     }
 
                     cursor.close();

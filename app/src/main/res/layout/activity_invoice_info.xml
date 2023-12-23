@@ -53,17 +53,20 @@
                 android:layout_marginTop="@dimen/_8sdp"
                 android:text="Created on*" />
 
-            <com.google.android.material.textfield.TextInputEditText
+            <TextView
                 android:id="@+id/invoice_created_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_solid_grey_shadow_round_corner"
                 android:padding="@dimen/_5sdp"
-                android:text="01/01/2023" />
+                android:text="01/01/2000"
+                android:textSize="@dimen/_13ssp"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:text="Due terms" />
 
@@ -71,6 +74,7 @@
                 android:id="@+id/invoice_due_terms"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:visibility="gone"
                 android:background="@drawable/background_solid_grey_shadow_round_corner"
                 android:padding="@dimen/_5sdp" />
 
@@ -80,13 +84,15 @@
                 android:layout_marginTop="@dimen/_8sdp"
                 android:text="Due date" />
 
-            <com.google.android.material.textfield.TextInputEditText
+            <TextView
                 android:id="@+id/invoice_due_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_solid_grey_shadow_round_corner"
                 android:padding="@dimen/_5sdp"
-                android:text="01/02/2023" />
+                android:textSize="@dimen/_13ssp"
+                android:textColor="@color/black"
+                android:text="31/01/2000" />
 
             <TextView
                 android:layout_width="wrap_content"
