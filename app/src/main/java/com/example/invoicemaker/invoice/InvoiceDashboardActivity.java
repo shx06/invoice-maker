@@ -38,7 +38,7 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
             discountLayout, currencyLayout, termsLayout, companyDataLayout, clientDataLayout;
 
     TextView feedBack, invoiceName, invoiceDueDate, invoiceCreatedDate, companyReplacable, clientReplacable,
-            companyName, companyWebsite, companyAddress, clientName, clientAdd1, clientAdd2, subTotal, finalAmt;
+            companyName, companyWebsite, companyAddress, clientName, clientAdd1, clientAdd2, subTotal, discountAmount, finalAmt;
 
     RecyclerView itemsDataRecyclerView;
     InvoiceItemsAdapter itemsAdapter;
@@ -125,48 +125,7 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
         fetchInvoiceData();
     }
 
-    private void handleElements() {
-        subTotal = findViewById(R.id.sub_total);
-        finalAmt = findViewById(R.id.final_amount);
-
-        companyReplacable = findViewById(R.id.company_replacable);
-        clientReplacable = findViewById(R.id.client_replacable);
-
-        invoiceName = findViewById(R.id.invoice_title);
-        invoiceDueDate = findViewById(R.id.invoice_due_date);
-        invoiceCreatedDate = findViewById(R.id.invoice_created_Date);
-        companyName = findViewById(R.id.company_name);
-        companyAddress = findViewById(R.id.company_address);
-        companyWebsite = findViewById(R.id.company_website);
-
-        clientName = findViewById(R.id.client_name);
-        clientAdd1 = findViewById(R.id.client_add1);
-        clientAdd2 = findViewById(R.id.client_add2);
-
-        itemsDataRecyclerView = findViewById(R.id.items_list);
-
-        headerLayout = findViewById(R.id.invoice_header_layout);
-        businessLayout = findViewById(R.id.add_business_layout);
-        clientLayout = findViewById(R.id.add_client_layout);
-        itemsLayout = findViewById(R.id.add_item_layout);
-        discountLayout = findViewById(R.id.discount_layout);
-        currencyLayout = findViewById(R.id.currency_layout);
-        termsLayout = findViewById(R.id.terms_conditions_layout);
-        companyDataLayout = findViewById(R.id.company_data_layout);
-        clientDataLayout = findViewById(R.id.client_data_layout);
-//        taxLayout = findViewById(R.id.tax_layout);
-//        shippingLayout = findViewById(R.id.shipping_layout);
-//        paymentLayout = findViewById(R.id.payment_methods_layout);
-//        attachmentLayout = findViewById(R.id.attachment_layout);
-        feedBack = findViewById(R.id.add_feedback);
-
-        itemsLayout.setOnClickListener(v -> {
-            Constants.IsInvoiceItem = true;
-            startActivity(new Intent(getApplicationContext(), ItemsActivity.class));
-        });
-    }
-
-    private void fetchInvoiceData() {
+    public void fetchInvoiceData() {
 
         //   get invoice data -------------------------------------------------------------------------
 
@@ -257,51 +216,84 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 
         ItemsRecyclerView();
 
-        Double finalDiscount = 0.0;
-
         Cursor curDiscount = invoiceDB.getRows_invoice_discount_by_dcId(Constants.DCReferenceKey);
 
 
         if (curDiscount.getCount() > 0) {
             while (curDiscount.moveToNext()) {
+
                 if (curDiscount.getString(2) != null) {
                     Constants.FinalInvoiceDiscountType = curDiscount.getString(2);
-                    finalDiscount = curDiscount.getDouble(3);
+                    Constants.SelectedInvoiceDiscount = curDiscount.getDouble(3);
                 }
             }
         }
 
         curDiscount.close();
 
+        // currency data --------------------------------------------------------------------
+
+        Cursor curCurrency = invoiceDB.getRows_currency(Constants.DCReferenceKey);
+
+
+        if (curCurrency.getCount() > 0) {
+            while (curCurrency.moveToNext()) {
+
+                if (curCurrency.getString(3) != null) {
+                    Constants.InvoiceCurrencySymbol = curCurrency.getString(3);
+                } else {
+                    Constants.InvoiceCurrencySymbol = "$";
+                }
+            }
+        } else {
+            Constants.InvoiceCurrencySymbol = "$";
+        }
+
+        curCurrency.close();
+
         final Handler handler = new Handler(Looper.getMainLooper());
-        Double finalDisc = finalDiscount;
         handler.postDelayed(() -> {
-            updateInvoiceFinalDiscount(finalDisc);
-            updateInvoiceFinalDiscount(finalDisc);
+            updateInvoiceFinalDiscount();
             updateInvoiceFinalAmount();
         }, 300);
 
     }
 
-    private void updateInvoiceFinalDiscount(Double finalDisc) {
-        if (Constants.FinalInvoiceDiscountType != null && Constants.FinalInvoiceDiscountType.equals(StaticConstants.DISCOUNT_PERCENTAGE)) {
-            Constants.FinalInvoiceDiscount = finalDisc * Constants.TotalInvoicePrice / 100;
+    public void handleDiscount() {
 
-        } else {
-            Constants.FinalInvoiceDiscount = finalDisc;
+
+        if (Constants.FinalInvoiceDiscountType != null) {
+
+            discountAmount.setVisibility(View.VISIBLE);
+            if (Constants.FinalInvoiceDiscountType.equals(StaticConstants.DISCOUNT_PERCENTAGE)) {
+                discountAmount.setText(Constants.SelectedInvoiceDiscount + "%");
+            } else {
+                discountAmount.setText(Constants.InvoiceCurrencySymbol + " " + Constants.SelectedInvoiceDiscount);
+            }
         }
     }
 
     public void updateInvoiceFinalAmount() {
-        if(Constants.FinalInvoiceDiscount > 0) {
-            finalAmt.setText("$ " + new DecimalFormat("##.##").format(Constants.TotalInvoicePrice - Constants.FinalInvoiceDiscount));
+        if (Constants.FinalInvoiceDiscount > 0) {
+            finalAmt.setText(Constants.InvoiceCurrencySymbol + " " + new DecimalFormat("##.##").format(Constants.TotalInvoicePrice - Constants.FinalInvoiceDiscount));
         } else {
-            finalAmt.setText("$ " + new DecimalFormat("##.##").format(Constants.TotalInvoicePrice));
+            finalAmt.setText(Constants.InvoiceCurrencySymbol + " " + new DecimalFormat("##.##").format(Constants.TotalInvoicePrice));
+        }
+
+        handleDiscount();
+    }
+
+    private void updateInvoiceFinalDiscount() {
+        if (Constants.FinalInvoiceDiscountType != null && Constants.FinalInvoiceDiscountType.equals(StaticConstants.DISCOUNT_PERCENTAGE)) {
+            Constants.FinalInvoiceDiscount = Constants.SelectedInvoiceDiscount * Constants.TotalInvoicePrice / 100;
+
+        } else {
+            Constants.FinalInvoiceDiscount = Constants.SelectedInvoiceDiscount;
         }
     }
 
     public void updateInvoiceFromAdapter() {
-        subTotal.setText("$ " + new DecimalFormat("##.##").format(Constants.TotalInvoicePrice));
+        subTotal.setText(Constants.InvoiceCurrencySymbol + " " + new DecimalFormat("##.##").format(Constants.TotalInvoicePrice));
     }
 
 
@@ -309,6 +301,48 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
         itemsAdapter = new InvoiceItemsAdapter(dataItemsList, this);
         itemsDataRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true));
         itemsDataRecyclerView.setAdapter(itemsAdapter);
+    }
+
+    private void handleElements() {
+        subTotal = findViewById(R.id.sub_total);
+        finalAmt = findViewById(R.id.final_amount);
+
+        companyReplacable = findViewById(R.id.company_replacable);
+        clientReplacable = findViewById(R.id.client_replacable);
+
+        invoiceName = findViewById(R.id.invoice_title);
+        invoiceDueDate = findViewById(R.id.invoice_due_date);
+        invoiceCreatedDate = findViewById(R.id.invoice_created_Date);
+        companyName = findViewById(R.id.company_name);
+        companyAddress = findViewById(R.id.company_address);
+        companyWebsite = findViewById(R.id.company_website);
+        discountAmount = findViewById(R.id.discount_val);
+
+        clientName = findViewById(R.id.client_name);
+        clientAdd1 = findViewById(R.id.client_add1);
+        clientAdd2 = findViewById(R.id.client_add2);
+
+        itemsDataRecyclerView = findViewById(R.id.items_list);
+
+        headerLayout = findViewById(R.id.invoice_header_layout);
+        businessLayout = findViewById(R.id.add_business_layout);
+        clientLayout = findViewById(R.id.add_client_layout);
+        itemsLayout = findViewById(R.id.add_item_layout);
+        discountLayout = findViewById(R.id.discount_layout);
+        currencyLayout = findViewById(R.id.currency_layout);
+        termsLayout = findViewById(R.id.terms_conditions_layout);
+        companyDataLayout = findViewById(R.id.company_data_layout);
+        clientDataLayout = findViewById(R.id.client_data_layout);
+//        taxLayout = findViewById(R.id.tax_layout);
+//        shippingLayout = findViewById(R.id.shipping_layout);
+//        paymentLayout = findViewById(R.id.payment_methods_layout);
+//        attachmentLayout = findViewById(R.id.attachment_layout);
+        feedBack = findViewById(R.id.add_feedback);
+
+        itemsLayout.setOnClickListener(v -> {
+            Constants.IsInvoiceItem = true;
+            startActivity(new Intent(getApplicationContext(), ItemsActivity.class));
+        });
     }
 
     @Override

@@ -27,6 +27,9 @@ public class Constants {
 
     public static double TotalInvoicePrice = 0.0;
     public static double FinalInvoiceDiscount = 0.0;
+    public static double SelectedInvoiceDiscount = 0.0;
     public static String FinalInvoiceDiscountType = null;
+
+    public static String InvoiceCurrencySymbol = null;
 
 }

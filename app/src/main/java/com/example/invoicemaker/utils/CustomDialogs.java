@@ -42,7 +42,7 @@ public class CustomDialogs {
     public void displayDiscountDialog() {
         dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_discount_layout);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(false);
 
         EditText inputField = dialog.findViewById(R.id.discount_input_area);
@@ -56,11 +56,10 @@ public class CustomDialogs {
                 android.R.layout.simple_spinner_item, optionsList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         optionsSpinner.setAdapter(adapter);
-        inputField.setText("sldfjhs");
 
-        if(Constants.FinalInvoiceDiscountType != null) {
-            Log.d(TAG, "displayDiscountDialog: "+Constants.FinalInvoiceDiscount);
-            if (Constants.FinalInvoiceDiscountType.equals(StaticConstants.DISCOUNT_PERCENTAGE)) optionsSpinner.setSelection(0);
+        if (Constants.FinalInvoiceDiscountType != null) {
+            if (Constants.FinalInvoiceDiscountType.equals(StaticConstants.DISCOUNT_PERCENTAGE))
+                optionsSpinner.setSelection(0);
             else optionsSpinner.setSelection(1);
         }
 
@@ -68,10 +67,15 @@ public class CustomDialogs {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Constants.FinalInvoiceDiscountType = optionsList[position];
-                if (optionsList[position].equals(StaticConstants.DISCOUNT_PERCENTAGE)) {
-                    inputField.setText("0.0");
+
+                if (Constants.FinalInvoiceDiscountType != null) {
+                    inputField.setText(String.valueOf(Constants.SelectedInvoiceDiscount));
                 } else {
-                    inputField.setText("0.0");
+                    if (optionsList[position].equals(StaticConstants.DISCOUNT_PERCENTAGE)) {
+                        inputField.setHint("0.0%");
+                    } else {
+                        inputField.setHint(Constants.InvoiceCurrencySymbol + " 0.0");
+                    }
                 }
             }
 
@@ -99,15 +103,13 @@ public class CustomDialogs {
 
                         result = invoiceDB.update_discount_details(Constants.DCReferenceKey, Constants.FinalInvoiceDiscountType, inputField.getText().toString());
 
+                        Constants.SelectedInvoiceDiscount = Double.valueOf(inputField.getText().toString());
 
                         if (Constants.FinalInvoiceDiscountType.equals(StaticConstants.DISCOUNT_PERCENTAGE)) {
                             Constants.FinalInvoiceDiscount = Double.parseDouble(inputField.getText().toString()) * Constants.TotalInvoicePrice / 100;
                         } else {
                             Constants.FinalInvoiceDiscount = Double.parseDouble(inputField.getText().toString());
                         }
-
-                        Log.d(TAG, "fetchInvoiceData: 99 " + Constants.FinalInvoiceDiscount);
-
 
                         ((InvoiceDashboardActivity) context).updateInvoiceFinalAmount();
 
@@ -133,7 +135,7 @@ public class CustomDialogs {
 
                 dialog.dismiss();
             } else {
-                Toast.makeText(context, "Please input discount amount.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Please input discount amount. Put zero for no discount.", Toast.LENGTH_SHORT).show();
             }
         });
 
