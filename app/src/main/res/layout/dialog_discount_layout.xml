@@ -21,10 +21,10 @@
         android:orientation="horizontal"
         android:padding="@dimen/_4sdp">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <EditText
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:id="@+id/input_area"
+            android:id="@+id/discount_input_area"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_6sdp"
             android:background="@drawable/background_solid_white_round"

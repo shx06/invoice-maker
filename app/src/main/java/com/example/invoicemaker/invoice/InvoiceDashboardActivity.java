@@ -1,7 +1,5 @@
 package com.example.invoicemaker.invoice;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,12 +10,10 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.invoicemaker.R;
 import com.example.invoicemaker.activity.ClientActivity;
@@ -26,10 +22,8 @@ import com.example.invoicemaker.activity.InvoiceInfoActivity;
 import com.example.invoicemaker.activity.ItemsActivity;
 import com.example.invoicemaker.activity.TemplateSelectionActivity;
 import com.example.invoicemaker.adapters.InvoiceItemsAdapter;
-import com.example.invoicemaker.adapters.ItemsAdapter;
 import com.example.invoicemaker.db.InvoiceDB;
 import com.example.invoicemaker.model.SingleItemInvoiceLinkedModel;
-import com.example.invoicemaker.model.SingleItemModel;
 import com.example.invoicemaker.utils.Constants;
 import com.example.invoicemaker.utils.CustomDialogs;
 import com.example.invoicemaker.utils.StaticConstants;
@@ -263,7 +257,6 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 
         ItemsRecyclerView();
 
-        String discType = null;
         Double finalDiscount = 0.0;
 
         Cursor curDiscount = invoiceDB.getRows_invoice_discount_by_dcId(Constants.DCReferenceKey);
@@ -272,7 +265,7 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
         if (curDiscount.getCount() > 0) {
             while (curDiscount.moveToNext()) {
                 if (curDiscount.getString(2) != null) {
-                    discType = curDiscount.getString(2);
+                    Constants.FinalInvoiceDiscountType = curDiscount.getString(2);
                     finalDiscount = curDiscount.getDouble(3);
                 }
             }
@@ -281,17 +274,17 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
         curDiscount.close();
 
         final Handler handler = new Handler(Looper.getMainLooper());
-        String finalDiscType = discType;
         Double finalDisc = finalDiscount;
         handler.postDelayed(() -> {
-            updateInvoiceFinalDiscount(finalDiscType, finalDisc);
+            updateInvoiceFinalDiscount(finalDisc);
+            updateInvoiceFinalDiscount(finalDisc);
             updateInvoiceFinalAmount();
         }, 300);
 
     }
 
-    private void updateInvoiceFinalDiscount(String finalDiscType, Double finalDisc) {
-        if (finalDiscType != null && finalDiscType.equals(StaticConstants.DISCOUNT_PERCENTAGE)) {
+    private void updateInvoiceFinalDiscount(Double finalDisc) {
+        if (Constants.FinalInvoiceDiscountType != null && Constants.FinalInvoiceDiscountType.equals(StaticConstants.DISCOUNT_PERCENTAGE)) {
             Constants.FinalInvoiceDiscount = finalDisc * Constants.TotalInvoicePrice / 100;
 
         } else {
@@ -300,8 +293,11 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
     }
 
     public void updateInvoiceFinalAmount() {
-        finalAmt.setText("$ " + new DecimalFormat("##.##").format(Constants.TotalInvoicePrice - Constants.FinalInvoiceDiscount));
-
+        if(Constants.FinalInvoiceDiscount > 0) {
+            finalAmt.setText("$ " + new DecimalFormat("##.##").format(Constants.TotalInvoicePrice - Constants.FinalInvoiceDiscount));
+        } else {
+            finalAmt.setText("$ " + new DecimalFormat("##.##").format(Constants.TotalInvoicePrice));
+        }
     }
 
     public void updateInvoiceFromAdapter() {
