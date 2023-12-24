@@ -68,6 +68,11 @@ public class TemplateSelectionActivity extends AppCompatActivity {
 
     void FetchDataForInvoiceCreation(int dc_id) {
 
+        // todo : fetch all the data and store into a static variable used class
+        //  which already created keep all static variable inside that : Class "InvoiceHelper"
+        //  that we used in invoiceTemplates.
+
+
 
     }
 
@@ -75,7 +80,8 @@ public class TemplateSelectionActivity extends AppCompatActivity {
 
         Intent go = new Intent(TemplateSelectionActivity.this, ViewPDFPreviewActivity.class);
         go.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        go.putExtra("SelectedTemplate", selected_template);
+        go.putExtra("fromWhereToCome", StaticConstants.FromWhereToCome);
+        go.putExtra("selected_template", selected_template);
         startActivity(go);
 
 

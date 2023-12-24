@@ -12,6 +12,9 @@ public class StaticConstants {
     public static final String DISCOUNT_AMOUNT = "Amount";
 
 
-
     public static final String TEMPLATE_1 = "TEMPLATE_ONE";
+
+
+
+    public static final String FromWhereToCome = "TemplateSelectionActivity.java";
 }
