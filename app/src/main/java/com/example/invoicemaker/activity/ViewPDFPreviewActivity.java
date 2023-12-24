@@ -8,6 +8,8 @@ import com.example.invoicemaker.R;
 
 public class ViewPDFPreviewActivity extends AppCompatActivity {
 
+    // ok
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
