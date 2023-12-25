@@ -26,6 +26,7 @@
             android:layout_weight="1"
             android:id="@+id/discount_input_area"
             android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
             android:layout_marginHorizontal="@dimen/_6sdp"
             android:background="@drawable/background_solid_white_round"
             android:hint="0.00"

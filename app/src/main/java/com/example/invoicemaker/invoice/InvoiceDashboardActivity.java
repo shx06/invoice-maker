@@ -38,7 +38,7 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
             discountLayout, currencyLayout, termsLayout, companyDataLayout, clientDataLayout;
 
     TextView feedBack, invoiceName, invoiceDueDate, invoiceCreatedDate, companyReplacable, clientReplacable,
-            companyName, companyWebsite, companyAddress, clientName, clientAdd1, clientAdd2, subTotal, discountAmount, finalAmt;
+            companyName, companyWebsite, companyAddress, clientName, clientAdd1, clientAdd2, subTotal, discountAmount, discountPercent, finalAmt;
 
     RecyclerView itemsDataRecyclerView;
     InvoiceItemsAdapter itemsAdapter;
@@ -242,11 +242,11 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
                 if (curCurrency.getString(3) != null) {
                     Constants.InvoiceCurrencySymbol = curCurrency.getString(3);
                 } else {
-                    Constants.InvoiceCurrencySymbol = "$";
+                    Constants.InvoiceCurrencySymbol = "\u20b9";
                 }
             }
         } else {
-            Constants.InvoiceCurrencySymbol = "$";
+            Constants.InvoiceCurrencySymbol = "\u20b9";
         }
 
         curCurrency.close();
@@ -266,8 +266,11 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 
             discountAmount.setVisibility(View.VISIBLE);
             if (Constants.FinalInvoiceDiscountType.equals(StaticConstants.DISCOUNT_PERCENTAGE)) {
-                discountAmount.setText(Constants.SelectedInvoiceDiscount + "%");
+                discountAmount.setText(Constants.InvoiceCurrencySymbol + " " + new DecimalFormat("##.##").format(Double.valueOf(Constants.SelectedInvoiceDiscount) / 100 * Double.valueOf(Constants.TotalInvoicePrice)));
+                discountPercent.setVisibility(View.VISIBLE);
+                discountPercent.setText(Constants.SelectedInvoiceDiscount + "%");
             } else {
+                discountPercent.setVisibility(View.GONE);
                 discountAmount.setText(Constants.InvoiceCurrencySymbol + " " + Constants.SelectedInvoiceDiscount);
             }
         }
@@ -317,6 +320,7 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
         companyAddress = findViewById(R.id.company_address);
         companyWebsite = findViewById(R.id.company_website);
         discountAmount = findViewById(R.id.discount_val);
+        discountPercent = findViewById(R.id.disp_percent);
 
         clientName = findViewById(R.id.client_name);
         clientAdd1 = findViewById(R.id.client_add1);

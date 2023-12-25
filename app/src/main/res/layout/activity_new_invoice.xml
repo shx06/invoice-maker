@@ -372,20 +372,35 @@
                                 android:layout_weight="1"
                                 android:orientation="vertical">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Discount"
-                                    android:textColor="@color/black_90"
-                                    android:textSize="@dimen/_14ssp"
-                                    android:textStyle="bold" />
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_weight="1"
+                                        android:layout_height="wrap_content"
+                                        android:text="Discount"
+                                        android:textColor="@color/black_90"
+                                        android:textSize="@dimen/_14ssp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:id="@+id/discount_val"
+                                        android:textColor="@color/black"
+                                        android:text="$ 100.00" />
+                                </LinearLayout>
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:id="@+id/discount_val"
                                     android:textColor="@color/black"
-                                    android:text="$ 100.00"
+                                    android:text="%"
+                                    android:id="@+id/disp_percent"
                                     android:textSize="@dimen/_11ssp"
                                     android:visibility="gone" />
                             </LinearLayout>

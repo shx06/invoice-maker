@@ -91,7 +91,6 @@ public class CustomDialogs {
 
                 invoiceDB = new InvoiceDB(context);
 
-
                 Cursor cur = invoiceDB.getRows_invoice_discount_by_dcId(Constants.DCReferenceKey);
 
                 boolean result;
@@ -146,7 +145,6 @@ public class CustomDialogs {
     public void displayCurrencyDialog() {
         dialog = new Dialog(context);
         dialog.setContentView(R.layout.language_list_layout);
-        dialog.getWindow().setBackgroundDrawable(context.getDrawable(R.drawable.background_solid_white_round));
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(false);
 

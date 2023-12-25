@@ -27,7 +27,7 @@ import java.util.List;
 
 public class InvoiceItemsAdapter extends RecyclerView.Adapter<InvoiceItemsAdapter.ViewHolder> {
 
-    private List<SingleItemInvoiceLinkedModel> data;
+    private final List<SingleItemInvoiceLinkedModel> data;
     private Context context;
     InvoiceDB invoiceDB;
     double netItemsPrice = 0.0;
@@ -54,32 +54,32 @@ public class InvoiceItemsAdapter extends RecyclerView.Adapter<InvoiceItemsAdapte
 
         if (cur.getCount() > 0) {
 
-            double netItemPrice = 0.0, totalItemPrice = 0.0, netDiscount = 0.0, netTax = 0.0;
+            double netItemPrice = 0.0, totalItemPrice = 0.0;
 
             while (cur.moveToNext()) {
                 holder.itemName.setText(cur.getString(2));
-                holder.itemQuantity.setText("Quantity:      " + cur.getString(4));
-                holder.itemPrice.setText("Price:           " + cur.getString(3));
+                holder.itemPrice.setText(cur.getString(4) + " X " + Constants.InvoiceCurrencySymbol + cur.getString(3));
 
                 totalItemPrice = Double.parseDouble(cur.getString(3)) * Double.parseDouble(cur.getString(4));
 
                 double extra = (((Double.parseDouble(cur.getString(7)) / 100) * totalItemPrice) - ((Double.parseDouble(cur.getString(6)) / 100) * totalItemPrice));
 
-
-                if (!cur.getString(6).equals("0.0")) {
-                    holder.itemDiscount.setVisibility(View.VISIBLE);
-                    holder.itemDiscount.setText("Discount:    " + cur.getString(6));
-                }
-
-                if (!cur.getString(7).equals("0.0")) {
-                    holder.itemTax.setVisibility(View.VISIBLE);
-                    holder.itemTax.setText("Tax:            " + cur.getString(7));
-                }
-
-                holder.itemFinalPrice.setText("Total:          " + new DecimalFormat("##.##").format(Float.valueOf(cur.getString(3)) * Float.valueOf(cur.getString(4)) + extra));
-
                 netItemPrice = extra + totalItemPrice;
                 netItemsPrice += netItemPrice;
+
+                if(cur.getString(6) != null && Double.valueOf(cur.getString(6)) > 0) {
+                    holder.invoiceDiscountText.setVisibility(View.VISIBLE);
+                    holder.itemDiscount.setVisibility(View.VISIBLE);
+                    holder.itemDiscount.setText("- " + Constants.InvoiceCurrencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(cur.getString(6)) / 100 * totalItemPrice));
+                }
+
+                if(cur.getString(7) != null && Double.valueOf(cur.getString(7)) > 0) {
+                    holder.invoiceTaxText.setVisibility(View.VISIBLE);
+                    holder.itemTax.setVisibility(View.VISIBLE);
+                    holder.itemTax.setText("+ " + Constants.InvoiceCurrencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(cur.getString(7)) / 100 * totalItemPrice));
+                }
+
+                holder.itemFinalPrice.setText(new DecimalFormat("##.##").format(netItemPrice));
             }
         }
 
@@ -124,18 +124,19 @@ public class InvoiceItemsAdapter extends RecyclerView.Adapter<InvoiceItemsAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView itemName, itemQuantity, itemPrice, itemDiscount, itemTax, itemFinalPrice;
+        TextView itemName, itemPrice, itemDiscount, itemTax, itemFinalPrice, invoiceTaxText, invoiceDiscountText;
         ImageView editItem, deleteItem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             itemName = itemView.findViewById(R.id.item_name);
-            itemQuantity = itemView.findViewById(R.id.item_quantity_price);
-            itemPrice = itemView.findViewById(R.id.item_total_price);
+            itemPrice = itemView.findViewById(R.id.item_price);
             itemDiscount = itemView.findViewById(R.id.item_discount);
+            invoiceDiscountText = itemView.findViewById(R.id.discount_text);
             itemTax = itemView.findViewById(R.id.item_tax);
             itemFinalPrice = itemView.findViewById(R.id.item_final_price);
+            invoiceTaxText = itemView.findViewById(R.id.tax_text);
 
             editItem = itemView.findViewById(R.id.edit_item);
             deleteItem = itemView.findViewById(R.id.delete_item);
