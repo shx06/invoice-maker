@@ -30,6 +30,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
     List<CurrencyModel> data;
     Context context;
     String positionIndicator;
+    int cPosition;
     InvoiceDB invoiceDB;
 
 
@@ -56,34 +57,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
 
         holder.itemLayout.setOnClickListener(v -> {
             positionIndicator = data.get(position).getCountry_name();
-
-            Cursor cur = invoiceDB.getRows_currency(Constants.DCReferenceKey);
-
-            if (cur.getCount() > 0) {
-                while (cur.moveToNext()) {
-
-                    boolean result = invoiceDB.update_currency_details(Constants.DCReferenceKey,
-                            data.get(position).getCountry_name(), data.get(position).getCurrency_symbol(), data.get(position).getCountry_symbol());
-
-
-                    if (!result) {
-                        Toast.makeText(context, "Failed to update language", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-            } else {
-                boolean result = invoiceDB.insert_currency_details(Constants.DCReferenceKey,
-                        data.get(position).getCountry_name(), data.get(position).getCurrency_symbol(), data.get(position).getCountry_symbol());
-
-
-                if (!result) {
-                    Toast.makeText(context, "Failed to set language!!!", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-
-            cur.close();
-
+            cPosition = position;
             notifyDataSetChanged();
         });
 
@@ -119,5 +93,34 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
             itemLayout = itemView.findViewById(R.id.item_layout);
             indicator = itemView.findViewById(R.id.indicator);
         }
+    }
+
+    public void handleCurrency() {
+
+        Cursor cur = invoiceDB.getRows_currency(Constants.DCReferenceKey);
+
+        if (cur.getCount() > 0) {
+            while (cur.moveToNext()) {
+
+                boolean result = invoiceDB.update_currency_details(Constants.DCReferenceKey,
+                        data.get(cPosition).getCountry_name(), data.get(cPosition).getCurrency_symbol(), data.get(cPosition).getCountry_symbol());
+
+                if (!result) {
+                    Toast.makeText(context, "Failed to update language", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        } else {
+            boolean result = invoiceDB.insert_currency_details(Constants.DCReferenceKey,
+                    data.get(cPosition).getCountry_name(), data.get(cPosition).getCurrency_symbol(), data.get(cPosition).getCountry_symbol());
+
+
+            if (!result) {
+                Toast.makeText(context, "Failed to set language!!!", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
+        cur.close();
     }
 }

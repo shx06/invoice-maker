@@ -578,6 +578,14 @@ public class InvoiceDB extends SQLiteOpenHelper {
 
     }
 
+    public Cursor getRows_invoice_item_byDcId(int dc_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from " + table_name_invoice_item + " where " + COL_1_invoice_item_dc_id + "='" + dc_id + "'", null);
+
+        return res;
+
+    }
+
 
     public Cursor getAllRows_invoice_item() {
         SQLiteDatabase db = this.getReadableDatabase();

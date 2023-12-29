@@ -21,10 +21,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.invoicemaker.R;
+import com.example.invoicemaker.templates.InvoiceHelper;
 import com.example.invoicemaker.templates.InvoiceTemplates;
 import com.example.invoicemaker.utils.StaticConstants;
 
 import com.github.barteksc.pdfviewer.PDFView;
+import com.google.gson.Gson;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
@@ -40,6 +42,8 @@ import java.util.Locale;
 
 
 public class ViewPDFPreviewActivity extends AppCompatActivity {
+
+    private static String TAG = "ViewPDFActivity";
 
     String pdfPath, pdfFileName;
     File pdfFilePath;
@@ -249,6 +253,7 @@ public class ViewPDFPreviewActivity extends AppCompatActivity {
         switch (selected_template) {
             case StaticConstants.TEMPLATE_1:
                 invoiceTemplates.invoiceTemplate_1(document);
+                Log.d(TAG, "InvoiceCreation:  " + new Gson().toJson(InvoiceHelper.itemsList));
                 break;
 
 

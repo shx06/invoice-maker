@@ -34,5 +34,14 @@
             android:textAllCaps="true"
             android:text="close"
             android:id="@+id/cancel" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="true"
+            android:textColor="@color/theme_blue"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:text="Save"
+            android:id="@+id/save" />
     </LinearLayout>
 </LinearLayout>

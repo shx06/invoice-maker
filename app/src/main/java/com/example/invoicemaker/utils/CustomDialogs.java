@@ -152,6 +152,7 @@ public class CustomDialogs {
 
         RecyclerView languageRecyclerView = dialog.findViewById(R.id.language_list_recycler_view);
         TextView cancel = dialog.findViewById(R.id.cancel);
+        TextView save = dialog.findViewById(R.id.save);
 
         List<CurrencyModel> list = new ArrayList<>();
         list.add(new CurrencyModel("India", "\u20b9", "ind"));
@@ -163,6 +164,13 @@ public class CustomDialogs {
         languageRecyclerView.setAdapter(currencyAdapter);
 
         cancel.setOnClickListener(v -> dialog.dismiss());
+
+        save.setOnClickListener(v -> {
+            currencyAdapter.handleCurrency();
+            dialog.dismiss();
+            ((InvoiceDashboardActivity) context).fetchInvoiceData();
+        });
+
         dialog.show();
     }
 

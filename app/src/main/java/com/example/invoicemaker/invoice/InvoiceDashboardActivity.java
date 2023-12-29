@@ -30,6 +30,7 @@ import com.example.invoicemaker.utils.StaticConstants;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class InvoiceDashboardActivity extends AppCompatActivity {
@@ -201,6 +202,7 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
         Constants.itemsActive = false;
 
         dataItemsList = new ArrayList<>();
+//        dataItemsList = Arrays.asList(new SingleItemInvoiceLinkedModel[]{});
 
         Cursor couItems = invoiceDB.getRows_invoice_items_link(Constants.DCReferenceKey);
 
@@ -215,6 +217,10 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
         couItems.close();
 
         ItemsRecyclerView();
+
+
+        // items discount --------------------------------------------------------------------
+
 
         Cursor curDiscount = invoiceDB.getRows_invoice_discount_by_dcId(Constants.DCReferenceKey);
 
