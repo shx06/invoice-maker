@@ -1,10 +1,17 @@
 package com.example.invoicemaker.templates;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.app.Activity;
 import android.content.Context;
 import android.sax.Element;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
 
+import com.example.invoicemaker.utils.Constants;
+import com.example.invoicemaker.utils.StaticConstants;
+import com.google.gson.Gson;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -21,6 +28,7 @@ import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 public class InvoiceTemplates {
 
@@ -45,13 +53,13 @@ public class InvoiceTemplates {
         Table tableHeader = new Table(tableCol1);
         tableHeader.addCell(new Cell(3, 1).add(new Paragraph("INVOICE").setBold().setFontSize(45f)).setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE));
         tableHeader.addCell(new Cell().add(new Paragraph("INVOICE#").setBold().setFontSize(19f)).setBorder(Border.NO_BORDER));
-        tableHeader.addCell(new Cell().add(new Paragraph("INV00001").setTextAlignment(TextAlignment.CENTER).setFontSize(19f)).setBorder(Border.NO_BORDER));
+        tableHeader.addCell(new Cell().add(new Paragraph(InvoiceHelper.invNo).setTextAlignment(TextAlignment.CENTER).setFontSize(19f)).setBorder(Border.NO_BORDER));
 
         tableHeader.addCell(new Cell().add(new Paragraph("CREATE DATE").setBold().setFontSize(19f)).setBorder(Border.NO_BORDER));
-        tableHeader.addCell(new Cell().add(new Paragraph("22/12/2023").setTextAlignment(TextAlignment.CENTER).setFontSize(19f)).setBorder(Border.NO_BORDER));
+        tableHeader.addCell(new Cell().add(new Paragraph(InvoiceHelper.invCreatedDate).setTextAlignment(TextAlignment.CENTER).setFontSize(19f)).setBorder(Border.NO_BORDER));
 
         tableHeader.addCell(new Cell().add(new Paragraph("DUE DATE").setBold().setFontSize(19f)).setBorder(Border.NO_BORDER));
-        tableHeader.addCell(new Cell().add(new Paragraph("29/12/2023").setTextAlignment(TextAlignment.CENTER).setFontSize(19f)).setBorder(Border.NO_BORDER));
+        tableHeader.addCell(new Cell().add(new Paragraph(InvoiceHelper.invDueDate).setTextAlignment(TextAlignment.CENTER).setFontSize(19f)).setBorder(Border.NO_BORDER));
 
         ILineDrawer solidLine = new SolidLine();
         LineSeparator hrLine = new LineSeparator(solidLine).setOpacity(0.5f).setMarginTop(20f).setMarginBottom(15f);
@@ -76,53 +84,67 @@ public class InvoiceTemplates {
         tableUserDetails.addCell(new Cell().add(new Paragraph("website2").setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
 
         ILineDrawer dashedLine = new DashedLine();
-        LineSeparator hrLineDashed = new LineSeparator(solidLine).setOpacity(0.5f);
+        LineSeparator hrLineDashed = new LineSeparator(dashedLine).setOpacity(0.5f);
 
         float[] tableCol3 = {140f, 44f, 84f, 104f, 104f, 84f};
         Table tableDataDetailsHead = new Table(tableCol3);
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("DESCRIPTION").setBold()).setBorder(Border.NO_BORDER));
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("ITEM").setBold()).setBorder(Border.NO_BORDER));
         tableDataDetailsHead.addCell(new Cell().add(new Paragraph("QTY").setBold()).setBorder(Border.NO_BORDER));
         tableDataDetailsHead.addCell(new Cell().add(new Paragraph("PRICE").setBold()).setBorder(Border.NO_BORDER));
         tableDataDetailsHead.addCell(new Cell().add(new Paragraph("DISCOUNT").setBold()).setBorder(Border.NO_BORDER));
         tableDataDetailsHead.addCell(new Cell().add(new Paragraph("TAX").setBold()).setBorder(Border.NO_BORDER));
         tableDataDetailsHead.addCell(new Cell().add(new Paragraph("AMOUNT").setBold()).setBorder(Border.NO_BORDER));
 
-        Table tableDataDetailsBody = new Table(tableCol3);
-        tableDataDetailsBody.addCell(new Cell().add(new Paragraph("Default description")).setBorder(Border.NO_BORDER));
-        tableDataDetailsBody.addCell(new Cell().add(new Paragraph("1")).setBorder(Border.NO_BORDER));
-        tableDataDetailsBody.addCell(new Cell().add(new Paragraph("Rs. 880.00")).setBorder(Border.NO_BORDER));
-        tableDataDetailsBody.addCell(new Cell().add(new Paragraph("-Rs. 100.00")).setBorder(Border.NO_BORDER));
-        tableDataDetailsBody.addCell(new Cell().add(new Paragraph("Rs. 500.00(25%)")).setBorder(Border.NO_BORDER));
-        tableDataDetailsBody.addCell(new Cell().add(new Paragraph("Rs. 1280.00")).setBorder(Border.NO_BORDER));
 
-        tableDataDetailsBody.addCell(new Cell().add(new Paragraph("Default description2")).setBorder(Border.NO_BORDER));
-        tableDataDetailsBody.addCell(new Cell().add(new Paragraph("1")).setBorder(Border.NO_BORDER));
-        tableDataDetailsBody.addCell(new Cell().add(new Paragraph("Rs. 880.00")).setBorder(Border.NO_BORDER));
-        tableDataDetailsBody.addCell(new Cell().add(new Paragraph("-Rs. 100.00")).setBorder(Border.NO_BORDER));
-        tableDataDetailsBody.addCell(new Cell().add(new Paragraph("Rs. 500.00(25%)")).setBorder(Border.NO_BORDER));
-        tableDataDetailsBody.addCell(new Cell().add(new Paragraph("Rs. 1280.00")).setBorder(Border.NO_BORDER));
+        Table tableDataDetailsBody = new Table(tableCol3).setMarginTop(10f);
 
-        Table tableDataDetailsCalculation = new Table(tableCol3).setMarginTop(10f);
+        for (int i = 0; i < InvoiceHelper.itemsList.size(); i++) {
+            tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemName())).setBorder(Border.NO_BORDER));
+            tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemQuantity())).setBorder(Border.NO_BORDER));
+            tableDataDetailsBody.addCell(new Cell().add(new Paragraph(Constants.InvoiceCurrencySymbol + " " + InvoiceHelper.itemsList.get(i).getItemPrice())).setBorder(Border.NO_BORDER));
+
+            double totalItemPrice = Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemQuantity()) * Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemPrice());
+
+            double extra = (((Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100) * totalItemPrice) - ((Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100) * totalItemPrice));
+
+            double netItemPrice = extra + totalItemPrice;
+
+            tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + Constants.InvoiceCurrencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice))).setBorder(Border.NO_BORDER));
+            tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + Constants.InvoiceCurrencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice))).setBorder(Border.NO_BORDER));
+            tableDataDetailsBody.addCell(new Cell().add(new Paragraph(Constants.InvoiceCurrencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice))).setBorder(Border.NO_BORDER));
+        }
+
+        Table tableDataDetailsCalculation = new Table(tableCol3).setMarginTop(5f);
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("SUBTOTAL").setBold()).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("Rs. 2560.00")).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(Constants.InvoiceCurrencySymbol + " " + new DecimalFormat("##.##").format(Constants.TotalInvoicePrice))).setBorder(Border.NO_BORDER));
 
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("DISCOUNT").setBold()).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("Rs. 256.00(10%)")).setBorder(Border.NO_BORDER));
+
+        if (Constants.FinalInvoiceDiscountType.equals(StaticConstants.DISCOUNT_PERCENTAGE)) {
+            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph('-' + Constants.InvoiceCurrencySymbol + " " + new DecimalFormat("##.##").format(Double.valueOf(Constants.SelectedInvoiceDiscount) / 100 * Double.valueOf(Constants.TotalInvoicePrice)))).setBorder(Border.NO_BORDER));
+        } else {
+            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph('-' + Constants.InvoiceCurrencySymbol + " " + Constants.SelectedInvoiceDiscount)).setBorder(Border.NO_BORDER));
+        }
 
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("TOTAL").setBold()).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("Rs. 2240.00")).setBorder(Border.NO_BORDER));
+
+        if (Constants.FinalInvoiceDiscount > 0) {
+            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(Constants.InvoiceCurrencySymbol + " " + new DecimalFormat("##.##").format(Constants.TotalInvoicePrice - Constants.FinalInvoiceDiscount))).setBorder(Border.NO_BORDER));
+        } else {
+            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(Constants.InvoiceCurrencySymbol + " " + new DecimalFormat("##.##").format(Constants.TotalInvoicePrice))).setBorder(Border.NO_BORDER));
+        }
 
 
         document.add(tableHeader);

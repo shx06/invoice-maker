@@ -8,6 +8,13 @@ import java.util.ArrayList;
 public class InvoiceHelper {
 
     // todo : keep here only that variable which used for creation of Invoice.
+
+    public static String invTitle;
+    public static String invNo;
+    public static String invCreatedDate;
+    public static String invDueDate;
+    public static String invDueTerm;
+    public static String invoicePo;
     public static String compName;
     public static String compEmail;
     public static String compPhone;
@@ -25,12 +32,6 @@ public class InvoiceHelper {
     public static String clientDetails;
     public static String discountType;
     public static double discountValue;
-    public static String invTitle;
-    public static String invNo;
-    public static String invCreatedDate;
-    public static String invDueDate;
-    public static String invDueTerm;
-    public static String invoicePo;
     public static ArrayList<SingleItemModel> itemsList = new ArrayList<>();
 
     public static String countryName;

@@ -131,13 +131,10 @@ public class TemplateSelectionActivity extends AppCompatActivity {
 
         Cursor couItems = invoiceDB.getRows_invoice_item_byDcId(Constants.DCReferenceKey);
         if (couItems.getCount() > 0) {
-//            ArrayList<SingleItemModel> itemsList = new ArrayList<>();
+            InvoiceHelper.itemsList.clear();
             while (couItems.moveToNext()) {
-//                Log.d(TAG, "FetchDataForInvoiceCreation: " + couItems.getString(3));
                 InvoiceHelper.itemsList.add(new SingleItemModel(couItems.getInt(0), couItems.getInt(1), couItems.getString(2), couItems.getString(3), couItems.getString(4), couItems.getString(5), couItems.getString(6), couItems.getString(7)));
-//                itemsList.add(new SingleItemModel(curClient.getInt(0), curClient.getInt(1), curClient.getString(2), curClient.getString(3), curClient.getString(4), curClient.getString(5), curClient.getString(6), curClient.getString(7)));
             }
-//            InvoiceHelper.itemsList = itemsList;
         }
         couItems.close();
 
