@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
     List<DataControllerModel> dataControllerList;
 
+    TextView new_business;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         nav = findViewById(R.id.nav_menu);
 
 
+
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
@@ -77,19 +80,20 @@ public class MainActivity extends AppCompatActivity {
         nav.setNavigationItemSelectedListener(item -> {
 
             if (item.getItemId() == R.id.report) {
-                Toast.makeText(this, "reports", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "feature coming soon", Toast.LENGTH_SHORT).show();
                 drawerLayout.closeDrawer(GravityCompat.START);
             } else if (item.getItemId() == R.id.sync) {
-                Toast.makeText(this, "sync", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "feature coming soon", Toast.LENGTH_SHORT).show();
                 drawerLayout.closeDrawer(GravityCompat.START);
             } else if (item.getItemId() == R.id.import_export) {
-                startActivity(new Intent(getApplicationContext(), ImportExportActivity.class));
+                // startActivity(new Intent(getApplicationContext(), ImportExportActivity.class));
+                Toast.makeText(this, "feature coming soon", Toast.LENGTH_SHORT).show();
                 drawerLayout.closeDrawer(GravityCompat.START);
             } else if (item.getItemId() == R.id.feedback) {
-                Toast.makeText(this, "feedback", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "feature coming soon", Toast.LENGTH_SHORT).show();
                 drawerLayout.closeDrawer(GravityCompat.START);
             } else if (item.getItemId() == R.id.settings) {
-                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "feature coming soon", Toast.LENGTH_SHORT).show();
                 drawerLayout.closeDrawer(GravityCompat.START);
             }
             return true;
@@ -112,6 +116,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         DashBoardRecyclerView();
+
+
+
+
 
 
     }

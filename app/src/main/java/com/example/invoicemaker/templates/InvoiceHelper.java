@@ -9,6 +9,8 @@ public class InvoiceHelper {
 
     // todo : keep here only that variable which used for creation of Invoice.
 
+
+    //  todo : Table 1
     public static String invTitle;
     public static String invNo;
     public static String invCreatedDate;
@@ -17,6 +19,8 @@ public class InvoiceHelper {
     public static String invoicePo;
     public static String compName;
     public static String compEmail;
+
+    // table 2
     public static String compPhone;
     public static String compAdd1;
     public static String compAdd2;

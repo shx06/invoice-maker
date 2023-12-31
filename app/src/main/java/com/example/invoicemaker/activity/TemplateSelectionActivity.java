@@ -40,9 +40,7 @@ import java.util.List;
 public class TemplateSelectionActivity extends AppCompatActivity {
 
     RecyclerView recycler_view;
-
     List<SelectTemplateModel> selectTemplateList = new ArrayList<>();
-
     SelectTemplateAdapter selectTemplateAdapter;
     InvoiceDB invoiceDB;
 
@@ -163,7 +161,6 @@ public class TemplateSelectionActivity extends AppCompatActivity {
     }
 
     public void TemplateSelection(String selected_template) {
-
         Intent go = new Intent(TemplateSelectionActivity.this, ViewPDFPreviewActivity.class);
         go.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         go.putExtra("fromWhereToCome", StaticConstants.FromWhereToCome);
