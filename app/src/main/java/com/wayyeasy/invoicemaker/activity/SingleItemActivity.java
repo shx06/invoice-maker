@@ -4,11 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.wayyeasy.invoicemaker.R;
 import com.wayyeasy.invoicemaker.db.InvoiceDB;
 import com.wayyeasy.invoicemaker.utils.Constants;
@@ -17,6 +20,7 @@ import com.google.android.material.textfield.TextInputEditText;
 public class SingleItemActivity extends AppCompatActivity {
 
     TextInputEditText name, price, quantity, unit, discount, tax;
+    TextInputLayout nameLayout, priceLayout, quantityLayout;
     Button save_next_btn;
     InvoiceDB invoiceDB;
     TextView toolbarHeader;
@@ -32,13 +36,7 @@ public class SingleItemActivity extends AppCompatActivity {
         ImageView closeActivity = findViewById(R.id.close_activity);
         closeActivity.setOnClickListener(v -> finish());
 
-        name = findViewById(R.id.item_name);
-        price = findViewById(R.id.item_price);
-        quantity = findViewById(R.id.item_quantity);
-        unit = findViewById(R.id.item_unit);
-        discount = findViewById(R.id.item_discount);
-        tax = findViewById(R.id.item_tax);
-        save_next_btn = findViewById(R.id.save_next_btn);
+        ViewHandler();
 
         invoiceDB = new InvoiceDB(getApplicationContext());
 
@@ -55,12 +53,51 @@ public class SingleItemActivity extends AppCompatActivity {
             tax.setText(getIntent().getStringExtra("itemTax"));
         }
 
+        name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence == null) {
+                    quantityLayout.setHelperText("Item quantity is required");
+                    quantityLayout.requestFocus();
+                } else {
+                    quantityLayout.setHelperText("");
+
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         save_next_btn.setOnClickListener(view -> {
 
             boolean result = false;
 
-            result = savePersonalDetails();
+            if(name != null && name.length() > 0) {
+                if(price != null && price.length() > 0) {
+                    if(quantity != null && quantity.length() > 0) {
 
+                        result = savePersonalDetails();
+
+                    } else {
+                        quantityLayout.setHelperText("Item quantity is required");
+                        quantityLayout.requestFocus();
+                    }
+                } else {
+                    priceLayout.setHelperText("Item price is required");
+                    priceLayout.requestFocus();
+                }
+            } else {
+                nameLayout.setHelperText("Item name is required");
+                nameLayout.requestFocus();
+            }
 
             if (result) {
                 finish();
@@ -139,5 +176,20 @@ public class SingleItemActivity extends AppCompatActivity {
         }
 
         return result;
+    }
+
+    private void ViewHandler() {
+
+        name = findViewById(R.id.item_name);
+        price = findViewById(R.id.item_price);
+        quantity = findViewById(R.id.item_quantity);
+        unit = findViewById(R.id.item_unit);
+        discount = findViewById(R.id.item_discount);
+        tax = findViewById(R.id.item_tax);
+        save_next_btn = findViewById(R.id.save_next_btn);
+
+        nameLayout = findViewById(R.id.item_name_layout);
+        priceLayout = findViewById(R.id.item_price_layout);
+        quantityLayout = findViewById(R.id.item_quantity_layout);
     }
 }

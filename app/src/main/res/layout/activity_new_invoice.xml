@@ -544,6 +544,7 @@
                     android:layout_marginHorizontal="@dimen/_20sdp"
                     android:layout_marginTop="@dimen/_20sdp"
                     android:gravity="center_horizontal"
+                    android:visibility="gone"
                     android:text="Tell us your advice about this page"
                     android:textColor="@color/black" />
 
@@ -553,6 +554,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/_5sdp"
+                    android:visibility="gone"
                     android:text="GIVE FEEDBACK"
                     android:textColor="@color/theme_blue" />
             </LinearLayout>

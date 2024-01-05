@@ -32,13 +32,19 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:text="Item Name*" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/item_name"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/item_name_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/background_solid_grey_shadow_round_corner"
-                    android:hint="Enter Item Name"
-                    android:padding="@dimen/_5sdp" />
+                    app:helperTextTextColor="@color/red"
+                    app:endIconMode="clear_text"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/item_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -46,14 +52,19 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:text="Item Price ($)*" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/item_price"
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/item_price_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:background="@drawable/background_solid_grey_shadow_round_corner"
-                    android:padding="@dimen/_5sdp"
-                    android:hint="0.00" />
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/item_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -61,14 +72,18 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:text="Item Quantity" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/item_quantity"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/item_quantity_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/background_solid_grey_shadow_round_corner"
-                    android:inputType="numberDecimal"
-                    android:padding="@dimen/_5sdp"
-                    android:hint="1.00" />
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/item_quantity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -76,13 +91,16 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:text="Unit of Measure" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/item_unit"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/background_solid_grey_shadow_round_corner"
-                    android:padding="@dimen/_5sdp"
-                    android:hint="None" />
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/item_unit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -90,14 +108,18 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:text="Discount (in percentage)" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/item_discount"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/item_discount_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/background_solid_grey_shadow_round_corner"
-                    android:inputType="numberDecimal"
-                    android:padding="@dimen/_5sdp"
-                    android:text="0.0"/>
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/item_discount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -105,15 +127,18 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:text="Tax Rate (in percentage)" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/item_tax"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/item_tax_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:background="@drawable/background_solid_grey_shadow_round_corner"
-                    android:padding="@dimen/_5sdp"
-                    android:text="0.0" />
+                    android:layout_height="wrap_content">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/item_tax"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:id="@+id/save_next_btn"
@@ -122,8 +147,8 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:background="@color/theme_blue"
-                    android:textColor="@color/white"
-                    android:text="Save" />
+                    android:text="Save"
+                    android:textColor="@color/white" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

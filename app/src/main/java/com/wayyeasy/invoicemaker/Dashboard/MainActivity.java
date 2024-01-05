@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
                     int dc_id = m_cur.getInt(0);
                     invoiceDB.delete_data_controller_OneRow(dc_id);
                     invoiceDB.delete_currency_OneRow(dc_id);
+                    invoiceDB.delete_discount_by_dcId(dc_id);
 
                 } else {
 

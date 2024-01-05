@@ -69,19 +69,44 @@ public class InvoiceTemplates {
         tableUserDetails.addCell(new Cell().add(new Paragraph("FROM").setBold().setFontSize(19f)).setBorder(Border.NO_BORDER));
         tableUserDetails.addCell(new Cell().add(new Paragraph("BILL TO").setBold().setFontSize(19f)).setBorder(Border.NO_BORDER));
 
-        tableUserDetails.addCell(new Cell().add(new Paragraph("Sam Tech").setFontSize(18f).setMarginTop(-7f)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("billing address").setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("billing address two").setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("5265856585").setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("ok@gmail.com").setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("website").setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
+        if (InvoiceHelper.compName != null && !(TextUtils.isEmpty(InvoiceHelper.compName))) {
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.compName).setFontSize(18f).setMarginTop(-7f)).setBorder(Border.NO_BORDER));
+        }
+        if (InvoiceHelper.compAdd1 != null && !(TextUtils.isEmpty(InvoiceHelper.compAdd1))) {
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.compAdd1).setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
+        }
+        if (InvoiceHelper.compAdd2 != null && !(TextUtils.isEmpty(InvoiceHelper.compAdd2))) {
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.compAdd2).setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
+        }
+        if (InvoiceHelper.compPhone != null && !(TextUtils.isEmpty(InvoiceHelper.compPhone))) {
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.compPhone).setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
+        }
+        if (InvoiceHelper.compEmail != null && !(TextUtils.isEmpty(InvoiceHelper.compEmail))) {
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.compEmail).setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
+        }
+        if (InvoiceHelper.compWebsite != null && !(TextUtils.isEmpty(InvoiceHelper.compWebsite))) {
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.compWebsite).setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
+        }
 
-        tableUserDetails.addCell(new Cell().add(new Paragraph("Sam Tech").setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("12345").setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("12345").setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("5265856585").setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("ok2@gmail.com").setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("website2").setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
+
+        if (InvoiceHelper.clientName != null && !(TextUtils.isEmpty(InvoiceHelper.clientName))) {
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientName).setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
+        }
+        if (InvoiceHelper.clientBilAddress1 != null && !(TextUtils.isEmpty(InvoiceHelper.clientBilAddress1))) {
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientBilAddress1).setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
+        }
+        if (InvoiceHelper.clientBilAddress2 != null && !(TextUtils.isEmpty(InvoiceHelper.clientBilAddress2))) {
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientBilAddress2).setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
+        }
+        if (InvoiceHelper.clientShipAddress1 != null && !(TextUtils.isEmpty(InvoiceHelper.clientShipAddress1))) {
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientShipAddress1).setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
+        }
+        if (InvoiceHelper.clientPhone != null && !(TextUtils.isEmpty(InvoiceHelper.clientPhone))) {
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientPhone).setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
+        }
+        if (InvoiceHelper.clientEmail != null && !(TextUtils.isEmpty(InvoiceHelper.clientEmail))) {
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientEmail).setMarginTop(-7f).setFontSize(18f)).setBorder(Border.NO_BORDER));
+        }
 
         ILineDrawer dashedLine = new DashedLine();
         LineSeparator hrLineDashed = new LineSeparator(dashedLine).setOpacity(0.5f);
@@ -95,8 +120,7 @@ public class InvoiceTemplates {
         tableDataDetailsHead.addCell(new Cell().add(new Paragraph("TAX").setBold()).setBorder(Border.NO_BORDER));
         tableDataDetailsHead.addCell(new Cell().add(new Paragraph("AMOUNT").setBold()).setBorder(Border.NO_BORDER));
 
-
-        Table tableDataDetailsBody = new Table(tableCol3).setMarginTop(10f);
+        Table tableDataDetailsBody = new Table(tableCol3).setMarginTop(20f);
 
         for (int i = 0; i < InvoiceHelper.itemsList.size(); i++) {
             tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemName())).setBorder(Border.NO_BORDER));
@@ -134,7 +158,6 @@ public class InvoiceTemplates {
             } else {
                 tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph('-' + InvoiceHelper.countrySymbol + " " + Constants.SelectedInvoiceDiscount)).setBorder(Border.NO_BORDER));
             }
-
         }
 
 
