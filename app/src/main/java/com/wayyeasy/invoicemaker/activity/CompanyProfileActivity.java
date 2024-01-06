@@ -27,6 +27,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.Objects;
 
 public class CompanyProfileActivity extends AppCompatActivity {
 
@@ -118,14 +119,19 @@ public class CompanyProfileActivity extends AppCompatActivity {
     private boolean savePersonalDetails() {
         boolean result;
 
-        Log.d(TAG, "savePersonalDetails: 113 "+Constants.Company_profile_Active);
-        Log.d(TAG, "savePersonalDetails: 114 "+Constants.DCReferenceKey);
+        String name = Objects.requireNonNull(companyName.getText().toString());
+        String email = Objects.requireNonNull(companyEmail.getText().toString());
+        String add1 = Objects.requireNonNull(companyAddress1.getText().toString());
+        String add2 = Objects.requireNonNull(companyAddress2.getText().toString());
+        String website = Objects.requireNonNull(companyWebsite.getText().toString());
+        String phone = Objects.requireNonNull(companyPhone.getText().toString());
+
 
         if (!(Constants.Company_profile_Active)) {
 
             result = invoiceDB.insert_company_details(Constants.DCReferenceKey,
-                    companyName.getText().toString(), companyEmail.getText().toString(), companyPhone.getText().toString(),
-                    companyAddress1.getText().toString(), companyAddress2.getText().toString(), companyWebsite.getText().toString(), bytesOfCompanyImage);
+                    checkNullEmpty(name), checkNullEmpty(email), checkNullEmpty(phone), checkNullEmpty(add1),
+                    checkNullEmpty(add2), checkNullEmpty(website), bytesOfCompanyImage);
 
 
             if (result) {
@@ -147,8 +153,8 @@ public class CompanyProfileActivity extends AppCompatActivity {
 
 
             result = invoiceDB.update_company_details(Constants.DCReferenceKey,
-                    companyName.getText().toString(), companyEmail.getText().toString(), companyPhone.getText().toString(),
-                    companyAddress1.getText().toString(), companyAddress2.getText().toString(), companyWebsite.getText().toString(), bytesOfCompanyImage);
+                    checkNullEmpty(name), checkNullEmpty(email), checkNullEmpty(phone), checkNullEmpty(add1),
+                    checkNullEmpty(add2), checkNullEmpty(website), bytesOfCompanyImage);
 
             if (result) {
                 //  Toast.makeText(CreateBioDataPDActivity.this, "Updated", Toast.LENGTH_SHORT).show();
@@ -198,5 +204,12 @@ public class CompanyProfileActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    public String checkNullEmpty(String input) {
+        if(input == null && input.isEmpty()) {
+            return "";
+        }
+        return input;
     }
 }

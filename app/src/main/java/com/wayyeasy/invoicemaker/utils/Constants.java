@@ -3,7 +3,6 @@ package com.wayyeasy.invoicemaker.utils;
 public class Constants {
 
     public static boolean ReLoaderActivator = false;
-
     public static final int DefaultFlag = 0;
 
     public static final int Flag = 1;

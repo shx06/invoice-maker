@@ -84,6 +84,7 @@ public class CustomDialogs {
         });
 
         save.setOnClickListener(v2 -> {
+
             if (inputField.getText() != null && inputField.getText().length() > 0) {
 
                 invoiceDB = new InvoiceDB(context);
@@ -106,8 +107,6 @@ public class CustomDialogs {
                         } else {
                             Constants.FinalInvoiceDiscount = Double.parseDouble(inputField.getText().toString());
                         }
-
-                        ((InvoiceDashboardActivity) context).updateInvoiceFinalAmount();
 
                         if (result) {
                             dialog.dismiss();
@@ -133,6 +132,8 @@ public class CustomDialogs {
             } else {
                 Toast.makeText(context, "Please input discount amount. Put zero for no discount.", Toast.LENGTH_SHORT).show();
             }
+
+            ((InvoiceDashboardActivity) context).fetchInvoiceData();
         });
 
         cancel.setOnClickListener(v3 -> dialog.dismiss());

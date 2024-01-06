@@ -66,7 +66,7 @@ InvoiceTemplates {
         LineSeparator hrLine = new LineSeparator(solidLine).setOpacity(0.5f).setMarginTop(20f).setMarginBottom(15f);
 
         float[] tableCol2 = {280f, 280f};
-        Table tableUserDetails = new Table(tableCol2);
+        Table tableUserDetails = new Table(tableCol2).setMarginBottom(10f);
         tableUserDetails.addCell(new Cell().add(new Paragraph("FROM").setBold().setFontSize(19f)).setBorder(Border.NO_BORDER));
         tableUserDetails.addCell(new Cell().add(new Paragraph("BILL TO").setBold().setFontSize(19f)).setBorder(Border.NO_BORDER));
 
@@ -178,7 +178,7 @@ InvoiceTemplates {
         document.add(tableHeader);
         document.add(hrLine);
         document.add(tableUserDetails);
-        document.add(hrLineDashed).setTopMargin(15f);
+        document.add(hrLineDashed);
         document.add(tableDataDetailsHead);
         document.add(hrLineDashed);
         document.add(tableDataDetailsBody);

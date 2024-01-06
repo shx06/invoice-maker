@@ -66,7 +66,7 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 
         handleElements();
 
-        Random r = new Random( System.currentTimeMillis());
+        Random r = new Random(System.currentTimeMillis());
         Constants.InvoiceName = String.valueOf(10 + r.nextInt(20));
 
         invoiceName.setText("INV0000" + Constants.InvoiceName);
@@ -127,7 +127,9 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 //            customDialogs.displayShippingDialog();
 //        });
 
-        fetchInvoiceData();
+        if (Constants.Insertion_Update_Flag) {
+            fetchInvoiceData();
+        }
     }
 
     public void fetchInvoiceData() {
@@ -245,7 +247,6 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 
         Cursor curCurrency = invoiceDB.getRows_currency(Constants.DCReferenceKey);
 
-
         if (curCurrency.getCount() > 0) {
             while (curCurrency.moveToNext()) {
 
@@ -266,7 +267,6 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
             updateInvoiceFinalDiscount();
             updateInvoiceFinalAmount();
         }, 300);
-
     }
 
     public void handleDiscount() {

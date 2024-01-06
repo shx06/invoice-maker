@@ -63,14 +63,6 @@ public class SingleItemActivity extends AppCompatActivity {
                 if (price != null && price.length() > 0) {
                     if (quantity != null && quantity.length() > 0) {
 
-                        if(!(discount != null && discount.length() > 0)) {
-                            discount.setText("0");
-                        }
-
-                        if(!(tax != null && tax.length() > 0)) {
-                            tax.setText("0");
-                        }
-
                         result = savePersonalDetails();
 
                     } else {
@@ -156,7 +148,7 @@ public class SingleItemActivity extends AppCompatActivity {
 
         } else {
 
-            result = invoiceDB.insert_invoice_item_details(Integer.valueOf(itemId),
+            result = invoiceDB.update_invoice_item_details(Integer.valueOf(itemId),
                     Name, checkNullEmpty(Price), checkNullEmpty(Quantity),
                     Unit, checkNullEmpty(Discount), checkNullEmpty(Tax));
 

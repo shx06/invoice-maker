@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
         nav = findViewById(R.id.nav_menu);
 
 
-
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
@@ -115,10 +114,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         DashBoardRecyclerView();
-
-
-
-
 
 
     }
@@ -182,9 +177,13 @@ public class MainActivity extends AppCompatActivity {
 //                Constants.InvoiceReferenceKey = 0;
 
 
+                Constants.FinalInvoiceDiscountType = null;
+                Constants.FinalInvoiceDiscount = 0;
+                Constants.TotalInvoicePrice = 0;
+                Constants.SelectedInvoiceDiscount = 0;
+
                 Constants.ReLoaderActivator = true;
                 startActivity(g);
-
 
                 cur.close();
             }

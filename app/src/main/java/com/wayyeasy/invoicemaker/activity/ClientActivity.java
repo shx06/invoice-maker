@@ -15,6 +15,8 @@ import com.wayyeasy.invoicemaker.db.InvoiceDB;
 import com.wayyeasy.invoicemaker.utils.Constants;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.Objects;
+
 public class ClientActivity extends AppCompatActivity {
 
     TextInputEditText clientName, clientEmail, clientBillingAddress1, clientBillingAddress2, clientShippingAddress1, clientShippingAddress2, clientPhone, clientDetails;
@@ -63,10 +65,6 @@ public class ClientActivity extends AppCompatActivity {
                 clientNameLayout.setHelperText("Please enter client name.");
                 clientName.requestFocus();
             }
-
-
-
-
             if (result) {
                 finish();
             }
@@ -77,12 +75,20 @@ public class ClientActivity extends AppCompatActivity {
     private boolean savePersonalDetails() {
         boolean result;
 
+        String name = Objects.requireNonNull(clientName.getText().toString());
+        String email = Objects.requireNonNull(clientEmail.getText().toString());
+        String bilAdd1 = Objects.requireNonNull(clientBillingAddress1.getText().toString());
+        String bilAdd2 = Objects.requireNonNull(clientBillingAddress2.getText().toString());
+        String shipAdd1 = Objects.requireNonNull(clientShippingAddress1.getText().toString());
+        String shipAdd2 = Objects.requireNonNull(clientShippingAddress2.getText().toString());
+        String phone = Objects.requireNonNull(clientPhone.getText().toString());
+        String details = Objects.requireNonNull(clientDetails.getText().toString());
+
         if (!(Constants.Client_Active)) {
 
-            result = invoiceDB.insert_client_details(Constants.DCReferenceKey,
-                    clientName.getText().toString(), clientEmail.getText().toString(), clientBillingAddress1.getText().toString(),
-                    clientBillingAddress2.getText().toString(), clientShippingAddress1.getText().toString(),
-                    clientShippingAddress2.getText().toString(), clientPhone.getText().toString(), clientDetails.getText().toString());
+            result = invoiceDB.insert_client_details(Constants.DCReferenceKey, checkNullEmpty(name),
+                    checkNullEmpty(email), checkNullEmpty(phone), checkNullEmpty(bilAdd1), checkNullEmpty(bilAdd2),
+                    checkNullEmpty(shipAdd1), checkNullEmpty(shipAdd2), checkNullEmpty(details));
 
 
             if (result) {
@@ -103,10 +109,9 @@ public class ClientActivity extends AppCompatActivity {
         } else {
 
 
-            result = invoiceDB.update_client_details(Constants.DCReferenceKey,
-                    clientName.getText().toString(), clientEmail.getText().toString(), clientPhone.getText().toString(),
-                    clientBillingAddress1.getText().toString(), clientBillingAddress2.getText().toString(),
-                    clientShippingAddress1.getText().toString(), clientShippingAddress2.getText().toString(), clientDetails.getText().toString());
+            result = invoiceDB.update_client_details(Constants.DCReferenceKey, checkNullEmpty(name),
+                    checkNullEmpty(email), checkNullEmpty(phone), checkNullEmpty(bilAdd1), checkNullEmpty(bilAdd2),
+                    checkNullEmpty(shipAdd1), checkNullEmpty(shipAdd2), checkNullEmpty(details));
 
             if (result) {
                 //  Toast.makeText(CreateBioDataPDActivity.this, "Updated", Toast.LENGTH_SHORT).show();
@@ -152,5 +157,12 @@ public class ClientActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    public String checkNullEmpty(String input) {
+        if(input == null && input.isEmpty()) {
+            return "";
+        }
+        return input;
     }
 }
