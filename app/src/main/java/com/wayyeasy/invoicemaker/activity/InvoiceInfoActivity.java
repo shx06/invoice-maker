@@ -21,12 +21,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.wayyeasy.invoicemaker.R;
 import com.wayyeasy.invoicemaker.db.InvoiceDB;
 import com.wayyeasy.invoicemaker.utils.Constants;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Calendar;
+import java.util.Random;
 
 
 public class InvoiceInfoActivity extends AppCompatActivity {
@@ -59,6 +61,8 @@ public class InvoiceInfoActivity extends AppCompatActivity {
         invoiceDueDate = findViewById(R.id.invoice_due_date);
         invoicePO = findViewById(R.id.p_o);
         save_next_btn = findViewById(R.id.save_next_btn);
+
+        invoiceNo.setText("INV0000" + Constants.InvoiceName);
 
         invoiceDB = new InvoiceDB(getApplicationContext());
 

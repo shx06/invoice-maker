@@ -31,6 +31,7 @@ import com.wayyeasy.invoicemaker.utils.StaticConstants;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class InvoiceDashboardActivity extends AppCompatActivity {
 
@@ -65,6 +66,10 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 
         handleElements();
 
+        Random r = new Random( System.currentTimeMillis());
+        Constants.InvoiceName = String.valueOf(10 + r.nextInt(20));
+
+        invoiceName.setText("INV0000" + Constants.InvoiceName);
 
         ////****************** Data manger  -------------------------->
         invoiceDB = new InvoiceDB(getApplicationContext());

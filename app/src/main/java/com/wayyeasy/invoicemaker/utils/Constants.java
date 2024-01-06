@@ -23,6 +23,7 @@ public class Constants {
     public static boolean Single_Item_Active = false;
 
 
+    public static String InvoiceName;
     public static int CreateInvoiceKey = -1;
 
     public static double TotalInvoicePrice = 0.0;
