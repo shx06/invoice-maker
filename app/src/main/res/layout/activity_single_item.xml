@@ -57,6 +57,8 @@
                     android:id="@+id/item_price_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
+                    app:helperTextTextColor="@color/red"
+                    app:endIconMode="clear_text"
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -76,6 +78,8 @@
                     android:id="@+id/item_quantity_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
+                    app:helperTextTextColor="@color/red"
+                    app:endIconMode="clear_text"
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.textfield.TextInputEditText

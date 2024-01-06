@@ -41,13 +41,21 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:text="Business name*" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/company_name"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/company_name_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_solid_grey_shadow_round_corner"
-                    android:hint="Enter business name"
-                    android:padding="@dimen/_5sdp" />
+                    app:endIconMode="clear_text"
+                    app:helperTextTextColor="@color/red">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/company_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -55,13 +63,19 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:text="Email address" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/company_email"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_solid_grey_shadow_round_corner"
-                    android:hint="Enter business email address"
-                    android:padding="@dimen/_5sdp" />
+                    app:endIconMode="clear_text"
+                    app:helperTextTextColor="@color/red">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/company_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -69,13 +83,19 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:text="Phone" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/company_phone"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_solid_grey_shadow_round_corner"
-                    android:hint="Enter business phone number"
-                    android:padding="@dimen/_5sdp" />
+                    app:endIconMode="clear_text"
+                    app:helperTextTextColor="@color/red">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/company_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -83,22 +103,36 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:text="Billing address" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/company_address_1"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_solid_grey_shadow_round_corner"
-                    android:hint="Enter address line 1"
-                    android:padding="@dimen/_5sdp" />
+                    app:endIconMode="clear_text"
+                    app:placeholderText="Enter address line 1"
+                    app:helperTextTextColor="@color/red">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/company_address_2"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/company_address_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/client_name_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:background="@drawable/background_solid_grey_shadow_round_corner"
-                    android:hint="Enter address line 2"
-                    android:padding="@dimen/_5sdp" />
+                    app:endIconMode="clear_text"
+                    app:placeholderText="Enter address line 2"
+                    app:helperTextTextColor="@color/red">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/company_address_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -106,13 +140,19 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:text="Business website" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/company_website"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_solid_grey_shadow_round_corner"
-                    android:hint="Enter business website"
-                    android:padding="@dimen/_5sdp" />
+                    app:endIconMode="clear_text"
+                    app:helperTextTextColor="@color/red">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/company_website"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:id="@+id/save_next_btn"

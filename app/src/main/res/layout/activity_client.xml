@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".activity.ClientActivity"
-        android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".activity.ClientActivity"
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
 
@@ -25,13 +26,20 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:text="Client name*" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/client_name"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/client_name_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_solid_grey_shadow_round_corner"
-                    android:hint="Enter client name"
-                    android:padding="@dimen/_5sdp" />
+                    app:endIconMode="clear_text"
+                    app:helperTextTextColor="@color/red">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/client_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -39,13 +47,19 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:text="Email address" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/client_email"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_solid_grey_shadow_round_corner"
-                    android:hint="Enter client email address"
-                    android:padding="@dimen/_5sdp" />
+                    app:endIconMode="clear_text"
+                    app:helperTextTextColor="@color/red">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/client_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -53,13 +67,20 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:text="Phone" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/client_phone"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/item_price_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/background_solid_grey_shadow_round_corner"
-                    android:hint="Enter client phone number"
-                    android:padding="@dimen/_5sdp" />
+                    app:helperTextTextColor="@color/red"
+                    app:endIconMode="clear_text"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/client_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -67,22 +88,35 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:text="Billing address" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/client_billing_address_1"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
+                    app:helperTextTextColor="@color/red"
+                    app:endIconMode="clear_text"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_solid_grey_shadow_round_corner"
-                    android:hint="Enter address line 1"
-                    android:padding="@dimen/_5sdp" />
+                    app:placeholderText="Address line 1">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/client_billing_address_2"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/client_billing_address_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
+                    app:helperTextTextColor="@color/red"
+                    app:endIconMode="clear_text"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_solid_grey_shadow_round_corner"
-                    android:hint="Enter address line 2"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:padding="@dimen/_5sdp" />
+                    app:placeholderText="Address line 2">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/client_billing_address_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -90,22 +124,35 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:text="Shipping address" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/client_shipping_address_1"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/background_solid_grey_shadow_round_corner"
-                    android:hint="Enter address line 1"
-                    android:padding="@dimen/_5sdp" />
+                    app:helperTextTextColor="@color/red"
+                    app:endIconMode="clear_text"
+                    app:placeholderText="Address line 1"
+                    android:layout_height="wrap_content">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/client_shipping_address_2"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/client_shipping_address_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/background_solid_grey_shadow_round_corner"
-                    android:hint="Enter address line 2"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:padding="@dimen/_5sdp" />
+                    app:helperTextTextColor="@color/red"
+                    app:endIconMode="clear_text"
+                    app:placeholderText="Address line 2"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/client_shipping_address_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -113,16 +160,20 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:text="Client Details (Not show on invoice)" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/client_details"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:lines="3"
-                    android:gravity="top"
-                    android:background="@drawable/background_solid_grey_shadow_round_corner"
-                    android:hint="Enter client details"
-                    android:padding="@dimen/_5sdp" />
+                    app:helperTextTextColor="@color/red"
+                    app:endIconMode="clear_text"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/client_details"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:lines="3"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:id="@+id/save_next_btn"

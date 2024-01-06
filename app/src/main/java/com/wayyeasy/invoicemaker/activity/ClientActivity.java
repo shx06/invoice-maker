@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.wayyeasy.invoicemaker.R;
 import com.wayyeasy.invoicemaker.db.InvoiceDB;
 import com.wayyeasy.invoicemaker.utils.Constants;
@@ -17,6 +18,7 @@ import com.google.android.material.textfield.TextInputEditText;
 public class ClientActivity extends AppCompatActivity {
 
     TextInputEditText clientName, clientEmail, clientBillingAddress1, clientBillingAddress2, clientShippingAddress1, clientShippingAddress2, clientPhone, clientDetails;
+    TextInputLayout clientNameLayout;
     Button save_next_btn;
     InvoiceDB invoiceDB;
     TextView toolbarHeader;
@@ -45,6 +47,8 @@ public class ClientActivity extends AppCompatActivity {
         clientDetails = findViewById(R.id.client_details);
         save_next_btn = findViewById(R.id.save_next_btn);
 
+        clientNameLayout = findViewById(R.id.client_name_layout);
+
         invoiceDB = new InvoiceDB(getApplicationContext());
 
         FetchDataAndSet();
@@ -53,7 +57,14 @@ public class ClientActivity extends AppCompatActivity {
 
             boolean result = false;
 
-            result = savePersonalDetails();
+            if(clientName != null && clientName.length() > 0) {
+                result = savePersonalDetails();
+            } else {
+                clientNameLayout.setHelperText("Please enter client name.");
+                clientName.requestFocus();
+            }
+
+
 
 
             if (result) {

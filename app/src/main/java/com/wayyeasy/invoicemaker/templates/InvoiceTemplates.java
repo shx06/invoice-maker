@@ -23,7 +23,8 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Objects;
 
-public class InvoiceTemplates {
+public class
+InvoiceTemplates {
 
     Context context;
     Activity activity;

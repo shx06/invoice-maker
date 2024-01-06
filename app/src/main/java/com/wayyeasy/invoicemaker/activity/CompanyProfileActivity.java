@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.wayyeasy.invoicemaker.R;
 import com.wayyeasy.invoicemaker.db.InvoiceDB;
 import com.wayyeasy.invoicemaker.utils.Constants;
@@ -30,6 +31,7 @@ import java.io.InputStream;
 public class CompanyProfileActivity extends AppCompatActivity {
 
     TextInputEditText companyName, companyEmail, companyAddress1, companyAddress2, companyPhone, companyWebsite;
+    TextInputLayout companyNameLayout;
     ImageView companyImage;
     byte[] bytesOfCompanyImage;
     Button save_next_btn;
@@ -54,6 +56,8 @@ public class CompanyProfileActivity extends AppCompatActivity {
         save_next_btn = findViewById(R.id.save_next_btn);
         companyImage = findViewById(R.id.company_image);
 
+        companyNameLayout = findViewById(R.id.company_name_layout);
+
         invoiceDB = new InvoiceDB(getApplicationContext());
 
         FetchDataAndSet();
@@ -62,7 +66,12 @@ public class CompanyProfileActivity extends AppCompatActivity {
 
             boolean result = false;
 
-            result = savePersonalDetails();
+            if(companyName != null && companyName.length() > 0) {
+                result = savePersonalDetails();
+            } else {
+                companyNameLayout.setHelperText("Please enter company name.");
+                companyNameLayout.requestFocus();
+            }
 
 
             if (result) {

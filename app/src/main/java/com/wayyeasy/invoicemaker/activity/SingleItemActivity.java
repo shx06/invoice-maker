@@ -53,29 +53,6 @@ public class SingleItemActivity extends AppCompatActivity {
             tax.setText(getIntent().getStringExtra("itemTax"));
         }
 
-        name.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence == null) {
-                    quantityLayout.setHelperText("Item quantity is required");
-                    quantityLayout.requestFocus();
-                } else {
-                    quantityLayout.setHelperText("");
-
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
         save_next_btn.setOnClickListener(view -> {
 
             boolean result = false;
@@ -83,6 +60,14 @@ public class SingleItemActivity extends AppCompatActivity {
             if(name != null && name.length() > 0) {
                 if(price != null && price.length() > 0) {
                     if(quantity != null && quantity.length() > 0) {
+
+                        if(!(discount != null && discount.length() > 0)) {
+                            discount.setText("0");
+                        }
+
+                        if(!(tax != null && tax.length() > 0)) {
+                            tax.setText("0");
+                        }
 
                         result = savePersonalDetails();
 
