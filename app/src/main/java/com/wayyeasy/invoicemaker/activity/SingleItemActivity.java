@@ -17,6 +17,8 @@ import com.wayyeasy.invoicemaker.db.InvoiceDB;
 import com.wayyeasy.invoicemaker.utils.Constants;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.Objects;
+
 public class SingleItemActivity extends AppCompatActivity {
 
     TextInputEditText name, price, quantity, unit, discount, tax;
@@ -57,9 +59,9 @@ public class SingleItemActivity extends AppCompatActivity {
 
             boolean result = false;
 
-            if(name != null && name.length() > 0) {
-                if(price != null && price.length() > 0) {
-                    if(quantity != null && quantity.length() > 0) {
+            if (name != null && name.length() > 0) {
+                if (price != null && price.length() > 0) {
+                    if (quantity != null && quantity.length() > 0) {
 
                         if(!(discount != null && discount.length() > 0)) {
                             discount.setText("0");
@@ -95,11 +97,20 @@ public class SingleItemActivity extends AppCompatActivity {
 
         boolean result;
 
+
+        String Name = Objects.requireNonNull(name.getText()).toString();
+        String Price = Objects.requireNonNull(price.getText()).toString();
+        String Quantity = Objects.requireNonNull(quantity.getText()).toString();
+        String Unit = Objects.requireNonNull(unit.getText()).toString();
+        String Discount = Objects.requireNonNull(discount.getText()).toString();
+        String Tax = Objects.requireNonNull(tax.getText()).toString();
+
+
         if (!(Constants.Single_Item_Active)) {
 
             result = invoiceDB.insert_invoice_item_details(Constants.DCReferenceKey,
-                    name.getText().toString(), price.getText().toString(), quantity.getText().toString(),
-                    unit.getText().toString(), discount.getText().toString(), tax.getText().toString());
+                    Name, checkNullEmpty(Price), checkNullEmpty(Quantity),
+                    Unit, checkNullEmpty(Discount), checkNullEmpty(Tax));
 
 
             if (result) {
@@ -111,7 +122,6 @@ public class SingleItemActivity extends AppCompatActivity {
                     if (cursor.moveToFirst()) {
 
                         try {
-
                             String dataColumn1 = cursor.getString(cursor.getColumnIndex("ii_id"));
 
                             boolean result2 = invoiceDB.insert_invoice_items_link_details(Constants.DCReferenceKey, Integer.valueOf(dataColumn1));
@@ -146,9 +156,9 @@ public class SingleItemActivity extends AppCompatActivity {
 
         } else {
 
-            result = invoiceDB.update_invoice_item_details(Integer.valueOf(itemId),
-                    name.getText().toString(), price.getText().toString(), quantity.getText().toString(),
-                    unit.getText().toString(), discount.getText().toString(), tax.getText().toString());
+            result = invoiceDB.insert_invoice_item_details(Integer.valueOf(itemId),
+                    Name, checkNullEmpty(Price), checkNullEmpty(Quantity),
+                    Unit, checkNullEmpty(Discount), checkNullEmpty(Tax));
 
             if (result) {
                 //  Toast.makeText(CreateBioDataPDActivity.this, "Updated", Toast.LENGTH_SHORT).show();
@@ -177,4 +187,14 @@ public class SingleItemActivity extends AppCompatActivity {
         priceLayout = findViewById(R.id.item_price_layout);
         quantityLayout = findViewById(R.id.item_quantity_layout);
     }
+
+    public String checkNullEmpty(String input) {
+        if (input == null || input.isEmpty()) {
+            return "0";
+        } else {
+            return input;
+        }
+    }
+
+
 }
