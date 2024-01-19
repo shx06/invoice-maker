@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Currency"
-        android:textColor="@color/theme_blue"
+        android:textColor="@color/theme"
         android:textStyle="bold"
         android:textSize="@dimen/_13ssp"
         android:layout_marginBottom="@dimen/_7sdp" />
@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAllCaps="true"
-            android:textColor="@color/theme_blue"
+            android:textColor="@color/theme"
             android:layout_marginLeft="@dimen/_10sdp"
             android:text="Save"
             android:id="@+id/save" />

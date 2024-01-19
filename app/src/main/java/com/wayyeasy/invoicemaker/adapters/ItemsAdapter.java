@@ -135,7 +135,8 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView itemName, itemQuantity, itemPrice, editItem, deleteItem, addItem;
+        TextView itemName, itemQuantity, itemPrice;
+        LinearLayout editItem, deleteItem, addItem;
         ImageView handleDisplay;
         LinearLayout actionLayout, mainLayout;
 

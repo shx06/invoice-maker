@@ -160,7 +160,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:background="@color/theme_blue"
+                    android:background="@color/theme"
                     android:textColor="@color/white"
                     android:text="Save" />
             </LinearLayout>

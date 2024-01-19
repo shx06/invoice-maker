@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -122,7 +123,7 @@ public class InvoiceItemsAdapter extends RecyclerView.Adapter<InvoiceItemsAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView itemName, itemPrice, itemDiscount, itemTax, itemFinalPrice, invoiceTaxText, invoiceDiscountText;
-        ImageView editItem, deleteItem;
+        LinearLayout editItem, deleteItem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

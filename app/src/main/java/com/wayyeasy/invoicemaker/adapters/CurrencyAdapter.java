@@ -57,10 +57,10 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
 
         if(data.get(position).getCountry_name().equals(positionIndicator)) {
             holder.itemLayout.setBackgroundColor(context.getResources().getColor(R.color.light_grey));
-            holder.countryName.setTextColor(context.getResources().getColor(R.color.theme_blue));
-            holder.countryCurrency.setTextColor(context.getResources().getColor(R.color.theme_blue));
-            holder.countrySymbol.setTextColor(context.getResources().getColor(R.color.theme_blue));
-            holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.theme_blue));
+            holder.countryName.setTextColor(context.getResources().getColor(R.color.theme_light));
+            holder.countryCurrency.setTextColor(context.getResources().getColor(R.color.theme_light));
+            holder.countrySymbol.setTextColor(context.getResources().getColor(R.color.theme_light));
+            holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.theme_light));
         }else {
             holder.itemLayout.setBackgroundColor(context.getResources().getColor(R.color.white));
             holder.countryName.setTextColor(context.getResources().getColor(R.color.black));

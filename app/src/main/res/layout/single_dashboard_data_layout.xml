@@ -94,7 +94,7 @@
                 android:layout_weight="1"
                 android:background="@color/transparent"
                 android:text="Edit"
-                android:textColor="@color/theme_blue" />
+                android:textColor="@color/theme" />
 
             <Button
                 android:id="@+id/delete"
@@ -103,7 +103,7 @@
                 android:layout_weight="1"
                 android:background="@color/transparent"
                 android:text="Delete"
-                android:textColor="@color/theme_blue" />
+                android:textColor="@color/theme" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

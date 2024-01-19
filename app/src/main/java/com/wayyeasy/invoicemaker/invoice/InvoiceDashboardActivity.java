@@ -143,7 +143,10 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
         if (curInvInfo.getCount() > 0) {
             Constants.Invoice_info_Active = true;
             while (curInvInfo.moveToNext()) {
-                invoiceName.setText(curInvInfo.getString(2));
+                if(curInvInfo.getString(2)!= null && curInvInfo.getString(2).length() > 0) {
+                    invoiceName.setText(curInvInfo.getString(2));
+                }
+                invoiceName.setText("INVOICE");
                 invoiceCreatedDate.setText(curInvInfo.getString(4));
                 invoiceDueDate.setText(curInvInfo.getString(6));
             }
@@ -167,9 +170,19 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 
 
             while (curComp.moveToNext()) {
+
                 companyName.setText(curComp.getString(2));
-                companyAddress.setText(curComp.getString(5));
-                companyWebsite.setText(curComp.getString(7));
+
+                if(curComp.getString(5) !=null && curComp.getString(5).length()>0) {
+                    companyAddress.setText(curComp.getString(5));
+                } else {
+                    companyAddress.setVisibility(View.GONE);
+                }
+                if(curComp.getString(7) !=null && curComp.getString(7).length()>0) {
+                    companyWebsite.setText(curComp.getString(7));
+                } else {
+                    companyWebsite.setVisibility(View.GONE);
+                }
             }
 
 
@@ -192,8 +205,17 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 
             while (curClient.moveToNext()) {
                 clientName.setText(curClient.getString(2));
-                clientAdd1.setText(curClient.getString(5));
-                clientAdd2.setText(curClient.getString(6));
+
+                if(curClient.getString(5) !=null && curClient.getString(5).length()>0) {
+                    clientAdd1.setText(curClient.getString(5));
+                } else {
+                    clientAdd1.setVisibility(View.GONE);
+                }
+                if(curClient.getString(6) !=null && curClient.getString(6).length()>0) {
+                    clientAdd2.setText(curClient.getString(6));
+                } else {
+                    clientAdd2.setVisibility(View.GONE);
+                }
             }
 
 
@@ -208,8 +230,6 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
         Constants.itemsActive = false;
 
         dataItemsList = new ArrayList<>();
-//        dataItemsList = Arrays.asList(new SingleItemInvoiceLinkedModel[]{});
-
         Cursor couItems = invoiceDB.getRows_invoice_items_link(Constants.DCReferenceKey);
 
         if (couItems.getCount() > 0) {

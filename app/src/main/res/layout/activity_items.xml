@@ -34,10 +34,10 @@
                 android:paddingLeft="@dimen/_6sdp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_16sdp"
                     android:background="@drawable/background_solid_black_circle"
-                    android:src="@drawable/ic_add" />
+                    android:src="@drawable/add" />
 
                 <TextView
                     android:layout_width="match_parent"
