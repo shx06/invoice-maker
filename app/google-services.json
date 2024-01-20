@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "112626791011",
+    "project_id": "invoice-maker-b6c83",
+    "storage_bucket": "invoice-maker-b6c83.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:112626791011:android:626bc5b1fc114902fdfe56",
+        "android_client_info": {
+          "package_name": "com.wayyeasy.invoicemaker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEbCqfg2tW7DoE8jyjbo0VJnULlfbSi5M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

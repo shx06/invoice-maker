@@ -1,16 +1,25 @@
 package com.wayyeasy.invoicemaker.Dashboard;
 
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.os.Handler;
+import android.util.Log;
+import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,79 +32,42 @@ import com.wayyeasy.invoicemaker.model.DataControllerModel;
 import com.wayyeasy.invoicemaker.utils.Constants;
 import com.google.android.material.navigation.NavigationView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    NavigationView nav;
     ActionBarDrawerToggle toggle;
     DrawerLayout drawerLayout;
     Toolbar toolbar;
     DashboardTopicsAdapter dashboardTopicsAdapter;
     DashboardDataRecyclerView dashboardDataRecyclerView;
-
-    TextView displayVersion;
     RecyclerView topicsRecyclerView, dataRecyclerView;
-
     InvoiceDB invoiceDB;
-
     List<DataControllerModel> dataControllerList;
-
-    TextView new_business;
+    LinearLayout nav_share_btn, nav_rate_us;
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        InitComponent();
 
         invoiceDB = new InvoiceDB(getApplicationContext());
+
+
+        navigationView.bringToFront();
+        DrawerToggle();
+        navigationView.setNavigationItemSelectedListener(this);
+
+
         FetchDataController();
-
-        displayVersion = findViewById(R.id.display_version);
-        topicsRecyclerView = findViewById(R.id.topic_recycler_view);
-        dataRecyclerView = findViewById(R.id.data_recycler_view);
-
-        try {
-            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            displayVersion.setText(pInfo.versionName);
-        } catch (PackageManager.NameNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-        toolbar = findViewById(R.id.toolbar);
-        drawerLayout = findViewById(R.id.drawer);
-        nav = findViewById(R.id.nav_menu);
-
-
-        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-
-        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));
-
-        nav.setNavigationItemSelectedListener(item -> {
-
-            if (item.getItemId() == R.id.report) {
-                Toast.makeText(this, "feature coming soon", Toast.LENGTH_SHORT).show();
-                drawerLayout.closeDrawer(GravityCompat.START);
-            } else if (item.getItemId() == R.id.sync) {
-                Toast.makeText(this, "feature coming soon", Toast.LENGTH_SHORT).show();
-                drawerLayout.closeDrawer(GravityCompat.START);
-            } else if (item.getItemId() == R.id.import_export) {
-                // startActivity(new Intent(getApplicationContext(), ImportExportActivity.class));
-                Toast.makeText(this, "feature coming soon", Toast.LENGTH_SHORT).show();
-                drawerLayout.closeDrawer(GravityCompat.START);
-            } else if (item.getItemId() == R.id.feedback) {
-                Toast.makeText(this, "feature coming soon", Toast.LENGTH_SHORT).show();
-                drawerLayout.closeDrawer(GravityCompat.START);
-            } else if (item.getItemId() == R.id.settings) {
-                Toast.makeText(this, "feature coming soon", Toast.LENGTH_SHORT).show();
-                drawerLayout.closeDrawer(GravityCompat.START);
-            }
-            return true;
-        });
 
         ArrayList<TopicsModel> topicsModels = new ArrayList<>();
         topicsModels.add(new TopicsModel("All"));
@@ -112,11 +84,37 @@ public class MainActivity extends AppCompatActivity {
             createInvoiceLauncher();
         });
 
+        CustomNavMenuClick();
 
         DashBoardRecyclerView();
 
 
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                throw new RuntimeException("Test Crash");
+            }
+        },2000);
+
+
+
     }
+
+    private void InitComponent() {
+
+        topicsRecyclerView = findViewById(R.id.topic_recycler_view);
+        dataRecyclerView = findViewById(R.id.data_recycler_view);
+        nav_share_btn = findViewById(R.id.nav_share_btn);
+        toolbar = findViewById(R.id.my_toolbar);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+
+        nav_rate_us = findViewById(R.id.nav_rate_us);
+
+
+    }
+
 
     private void DashBoardRecyclerView() {
         dashboardDataRecyclerView = new DashboardDataRecyclerView(dataControllerList, this);
@@ -161,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
         boolean result = invoiceDB.insertData_data_controller("System", Constants.DefaultFlag);
         if (result) {
 
-            Toast.makeText(this, "Data manger Active", Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(this, "Data manger Active", Toast.LENGTH_SHORT).show();
 
             Cursor cur = invoiceDB.getLastRow_data_controller();
             if (cur.getCount() > 0) {
@@ -213,6 +211,105 @@ public class MainActivity extends AppCompatActivity {
         startActivity(g);
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        drawerLayout.closeDrawers();
+        return true;
+    }
+
+
+    public void DrawerToggle() {
+
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        toggle.getDrawerArrowDrawable().setColor(ContextCompat.getColor(this, R.color.white));
+
+    }
+
+    private void CustomNavMenuClick() {
+
+        nav_rate_us.setOnClickListener(v -> {
+
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" +
+                        getPackageName() + "&hl=en")));
+
+            } catch (ActivityNotFoundException e) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName() + "&hl=en")));
+            }
+
+
+            drawerLayout.closeDrawers();
+        });
+
+
+        nav_share_btn.setOnClickListener(v -> {
+            shareApp();
+            drawerLayout.closeDrawers();
+
+        });
+
+
+    }
+
+    private void shareApp() {
+
+        Bitmap bitmap = BitmapFactory.decodeResource(MainActivity.this.getResources(), R.drawable.share_icon);
+
+        Intent shareApp = new Intent(Intent.ACTION_SEND);
+        shareApp.setType("image/jpeg");
+        Uri bmpUri;
+        bmpUri = saveImage(bitmap, getApplicationContext());
+        shareApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        shareApp.putExtra(Intent.EXTRA_STREAM, bmpUri);
+
+        String ShareBody = "Elevate your invoicing experience with our Invoice Maker app, where accuracy meets innovation. " + "\n" +
+                "https://play.google.com/store/apps/details?id=" + getPackageName() + "&hl=en";
+        String ShareSub = "Invoice Maker App";
+        shareApp.putExtra(Intent.EXTRA_SUBJECT, ShareSub);
+        shareApp.putExtra(Intent.EXTRA_TEXT, ShareBody);
+        startActivity(Intent.createChooser(shareApp, "Share Using"));
+
+
+    }
+
+    private static Uri saveImage(Bitmap image, Context context) {
+
+        File imageFolder = new File(context.getCacheDir(), "picture");
+        Uri uri = null;
+        try {
+            if (!imageFolder.exists()) {
+                try {
+                    boolean success = imageFolder.mkdirs();
+                    if (!success) {
+                        Toast.makeText(context, "Folder Creation Failed!! Contact support Team!.", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                }
+            }
+
+            File file = new File(imageFolder, "app_share_banner.jpg");
+
+            FileOutputStream stream = new FileOutputStream(file);
+            image.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            stream.flush();
+            stream.close();
+
+            uri = FileProvider.getUriForFile(Objects.requireNonNull(context.getApplicationContext()),
+                    context.getPackageName() + ".provider", file);
+        } catch (IOException e) {
+            Log.d("TAG", "Exception" + e.getMessage());
+        }
+
+
+        return uri;
+
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -236,5 +333,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
 
 }

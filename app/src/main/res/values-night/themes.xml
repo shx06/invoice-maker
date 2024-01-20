@@ -1,9 +1,27 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.InvoiceMaker" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <style name="Theme.InvoiceMaker" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
+
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/theme_light</item>
+        <item name="colorPrimaryVariant">@color/theme</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/theme_light</item>
+        <item name="colorSecondaryVariant">@color/theme_light</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <!-- Customize CardView Corners. -->
+
     </style>
 
-    <style name="Theme.InvoiceMaker" parent="Base.Theme.InvoiceMaker" />
+
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@android:color/white</item>
+    </style>
+
 </resources>
