@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.wayyeasy.invoicemaker.R;
 import com.wayyeasy.invoicemaker.adapters.CurrencyAdapter;
 import com.wayyeasy.invoicemaker.db.InvoiceDB;
-import com.wayyeasy.invoicemaker.invoice.InvoiceDashboardActivity;
+import com.wayyeasy.invoicemaker.activity.InvoiceDashboardActivity;
 import com.wayyeasy.invoicemaker.model.CurrencyModel;
 import com.google.android.material.textfield.TextInputEditText;
 

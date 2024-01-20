@@ -1,7 +1,9 @@
-package com.wayyeasy.invoicemaker;
+package com.wayyeasy.invoicemaker.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.wayyeasy.invoicemaker.R;
 
 public class ImportExportActivity extends AppCompatActivity {
 

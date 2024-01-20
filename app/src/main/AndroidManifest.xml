@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -20,6 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.InvoiceMaker"
         tools:targetApi="31">
+        <activity
+            android:name=".payment.RazorpayActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.ViewPDFPreviewActivity"
             android:exported="false" />
@@ -44,13 +46,13 @@
             android:name=".activity.InvoiceInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".invoice.InvoiceDashboardActivity"
+            android:name=".activity.InvoiceDashboardActivity"
             android:exported="false" />
         <activity
-            android:name=".ImportExportActivity"
+            android:name=".activity.ImportExportActivity"
             android:exported="false" />
         <activity
-            android:name=".Dashboard.MainActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -68,9 +70,14 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_path" />
         </provider>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <meta-data
+            android:name="com.razorpay.ApiKey"
+            android:value="rzp_test_7KrFQbs8Nh8C3S" />
 
     </application>
 

@@ -1,4 +1,4 @@
-package com.wayyeasy.invoicemaker.Dashboard;
+package com.wayyeasy.invoicemaker.model;
 
 public class DataModel {
     private String invoiceTitle, date, amtPaid, clientName, totalBill, billType;

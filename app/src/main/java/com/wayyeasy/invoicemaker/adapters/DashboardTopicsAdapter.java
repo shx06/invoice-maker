@@ -1,4 +1,4 @@
-package com.wayyeasy.invoicemaker.Dashboard;
+package com.wayyeasy.invoicemaker.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.wayyeasy.invoicemaker.model.TopicsModel;
 import com.wayyeasy.invoicemaker.R;
 import java.util.ArrayList;
 

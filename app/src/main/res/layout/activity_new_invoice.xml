@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/layout_background"
     android:orientation="vertical"
-    tools:context=".invoice.InvoiceDashboardActivity">
+    tools:context=".activity.InvoiceDashboardActivity">
 
     <include layout="@layout/toolbar" />
 

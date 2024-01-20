@@ -1,4 +1,4 @@
-package com.wayyeasy.invoicemaker.Dashboard;
+package com.wayyeasy.invoicemaker.model;
 
 public class TopicsModel {
     private String topicName;

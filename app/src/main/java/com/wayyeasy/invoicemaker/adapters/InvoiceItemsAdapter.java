@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.wayyeasy.invoicemaker.R;
 import com.wayyeasy.invoicemaker.activity.SingleItemActivity;
 import com.wayyeasy.invoicemaker.db.InvoiceDB;
-import com.wayyeasy.invoicemaker.invoice.InvoiceDashboardActivity;
+import com.wayyeasy.invoicemaker.activity.InvoiceDashboardActivity;
 import com.wayyeasy.invoicemaker.model.SingleItemInvoiceLinkedModel;
 import com.wayyeasy.invoicemaker.utils.Constants;
 

@@ -1,4 +1,4 @@
-package com.wayyeasy.invoicemaker.invoice;
+package com.wayyeasy.invoicemaker.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -16,11 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wayyeasy.invoicemaker.R;
-import com.wayyeasy.invoicemaker.activity.ClientActivity;
-import com.wayyeasy.invoicemaker.activity.CompanyProfileActivity;
-import com.wayyeasy.invoicemaker.activity.InvoiceInfoActivity;
-import com.wayyeasy.invoicemaker.activity.ItemsActivity;
-import com.wayyeasy.invoicemaker.activity.TemplateSelectionActivity;
 import com.wayyeasy.invoicemaker.adapters.InvoiceItemsAdapter;
 import com.wayyeasy.invoicemaker.db.InvoiceDB;
 import com.wayyeasy.invoicemaker.model.SingleItemInvoiceLinkedModel;

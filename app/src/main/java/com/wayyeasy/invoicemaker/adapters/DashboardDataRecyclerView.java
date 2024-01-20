@@ -1,4 +1,4 @@
-package com.wayyeasy.invoicemaker.Dashboard;
+package com.wayyeasy.invoicemaker.adapters;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,10 +15,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.wayyeasy.invoicemaker.MainActivity;
 import com.wayyeasy.invoicemaker.R;
 import com.wayyeasy.invoicemaker.db.InvoiceDB;
 import com.wayyeasy.invoicemaker.model.DataControllerModel;
-import com.wayyeasy.invoicemaker.utils.Constants;
 
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.wayyeasy.invoicemaker.Dashboard;
+package com.wayyeasy.invoicemaker;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
@@ -25,10 +24,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.wayyeasy.invoicemaker.R;
+import com.wayyeasy.invoicemaker.adapters.DashboardDataRecyclerView;
+import com.wayyeasy.invoicemaker.adapters.DashboardTopicsAdapter;
+import com.wayyeasy.invoicemaker.model.TopicsModel;
 import com.wayyeasy.invoicemaker.db.InvoiceDB;
-import com.wayyeasy.invoicemaker.invoice.InvoiceDashboardActivity;
+import com.wayyeasy.invoicemaker.activity.InvoiceDashboardActivity;
 import com.wayyeasy.invoicemaker.model.DataControllerModel;
+import com.wayyeasy.invoicemaker.payment.RazorpayActivity;
 import com.wayyeasy.invoicemaker.utils.Constants;
 import com.google.android.material.navigation.NavigationView;
 
@@ -82,21 +84,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         findViewById(R.id.create_invoice).setOnClickListener(v -> {
             createInvoiceLauncher();
+           // Intent go = new Intent(MainActivity.this, RazorpayActivity.class);
+           // startActivity(go);
+
         });
 
         CustomNavMenuClick();
 
         DashBoardRecyclerView();
-
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                throw new RuntimeException("Test Crash");
-            }
-        },2000);
-
 
 
     }
@@ -159,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         boolean result = invoiceDB.insertData_data_controller("System", Constants.DefaultFlag);
         if (result) {
 
-          //  Toast.makeText(this, "Data manger Active", Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(this, "Data manger Active", Toast.LENGTH_SHORT).show();
 
             Cursor cur = invoiceDB.getLastRow_data_controller();
             if (cur.getCount() > 0) {
