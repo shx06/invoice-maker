@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     RecyclerView topicsRecyclerView, dataRecyclerView;
     InvoiceDB invoiceDB;
     List<DataControllerModel> dataControllerList;
-    LinearLayout nav_share_btn, nav_rate_us;
+    LinearLayout nav_share_btn, nav_rate_us, no_data_layout;
     NavigationView navigationView;
 
     @Override
@@ -106,15 +107,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view);
 
         nav_rate_us = findViewById(R.id.nav_rate_us);
+        no_data_layout = findViewById(R.id.no_data_layout);
 
 
     }
 
 
     private void DashBoardRecyclerView() {
-        dashboardDataRecyclerView = new DashboardDataRecyclerView(dataControllerList, this);
-        dataRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true));
-        dataRecyclerView.setAdapter(dashboardDataRecyclerView);
+
+        if(dataControllerList != null && dataControllerList.size() > 0 ) {
+            no_data_layout.setVisibility(View.GONE);
+            dataRecyclerView.setVisibility(View.VISIBLE);
+            dashboardDataRecyclerView = new DashboardDataRecyclerView(dataControllerList, this);
+            dataRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true));
+            dataRecyclerView.setAdapter(dashboardDataRecyclerView);
+        } else {
+            dataRecyclerView.setVisibility(View.GONE);
+            no_data_layout.setVisibility(View.VISIBLE);
+        }
     }
 
     private void FetchDataController() {

@@ -125,9 +125,8 @@ public class DashboardDataRecyclerView extends RecyclerView.Adapter<DashboardDat
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView invoice_no, invoice_date, invoice_amt, invoice_client_name, invoice_total_bill, invoice_status;
+        TextView invoice_no, invoice_date, invoice_amt, invoice_client_name, invoice_total_bill, invoice_status, edit, delete;
         CardView cardView;
-        Button edit, delete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

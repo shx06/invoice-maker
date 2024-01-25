@@ -145,6 +145,40 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:id="@+id/no_data_layout"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Have a seat and relax"
+                            android:fontFamily="@font/roboto_bold"
+                            android:layout_gravity="center_horizontal"
+                            android:textColor="@color/black"
+                            android:layout_marginTop="40dp" />
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="-80dp"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/no_data"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Create invoice with less effort"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="-100dp"
+                            android:textColor="@color/black"
+                            android:textStyle="italic" />
+                    </LinearLayout>
+                    
+
+
                 </LinearLayout>
 
             </ScrollView>
