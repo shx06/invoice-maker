@@ -1,25 +1,21 @@
 package com.wayyeasy.invoicemaker.activity;
 
 import static android.service.controls.ControlsProviderService.TAG;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.wayyeasy.invoicemaker.R;
 import com.wayyeasy.invoicemaker.adapters.ItemsAdapter;
 import com.wayyeasy.invoicemaker.db.InvoiceDB;
 import com.wayyeasy.invoicemaker.model.SingleItemModel;
 import com.wayyeasy.invoicemaker.utils.Constants;
-
 import java.util.ArrayList;
 import java.util.List;
 

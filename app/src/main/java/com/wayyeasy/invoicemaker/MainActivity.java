@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void FetchDataController() {
+    public void FetchDataController() {
 
         dataControllerList = new ArrayList<>();
 

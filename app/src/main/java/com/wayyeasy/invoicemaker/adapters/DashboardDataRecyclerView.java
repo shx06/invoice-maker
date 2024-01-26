@@ -1,5 +1,6 @@
 package com.wayyeasy.invoicemaker.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -45,6 +47,7 @@ public class DashboardDataRecyclerView extends RecyclerView.Adapter<DashboardDat
         return new DashboardDataRecyclerView.ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull DashboardDataRecyclerView.ViewHolder holder, int position) {
 
@@ -54,14 +57,14 @@ public class DashboardDataRecyclerView extends RecyclerView.Adapter<DashboardDat
         if (p_cur_inv_info.getCount() > 0) {
             while (p_cur_inv_info.moveToNext()) {
                 invoiceId = p_cur_inv_info.getInt(0);
-                holder.invoice_no.setText(p_cur_inv_info.getString(3));
+                holder.invoice_no.setText(p_cur_inv_info.getString(2) + " ( " +p_cur_inv_info.getString(3) + " )");
                 holder.invoice_date.setText(p_cur_inv_info.getString(4));
             }
         }
 
         if (p_cur_inv_client.getCount() > 0) {
             while (p_cur_inv_client.moveToNext()) {
-                holder.invoice_client_name.setText(p_cur_inv_client.getString(2));
+                holder.client_name.setText(p_cur_inv_client.getString(2));
             }
         }
 
@@ -103,6 +106,8 @@ public class DashboardDataRecyclerView extends RecyclerView.Adapter<DashboardDat
                 data.remove(position);
                 notifyDataSetChanged();
 
+                ((MainActivity)context).FetchDataController();
+
             });
 
             builder.setNegativeButton("Cancel", (DialogInterface.OnClickListener) (dialog, which) -> {
@@ -125,17 +130,15 @@ public class DashboardDataRecyclerView extends RecyclerView.Adapter<DashboardDat
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView invoice_no, invoice_date, invoice_amt, invoice_client_name, invoice_total_bill, invoice_status, edit, delete;
+        TextView invoice_no, invoice_date, client_name;
+        LinearLayout edit, delete;
         CardView cardView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             invoice_no = itemView.findViewById(R.id.invoice_no);
             invoice_date = itemView.findViewById(R.id.date);
-            invoice_amt = itemView.findViewById(R.id.amount_paid);
-            invoice_client_name = itemView.findViewById(R.id.client);
-            invoice_total_bill = itemView.findViewById(R.id.total_bill);
-            invoice_status = itemView.findViewById(R.id.status);
+            client_name = itemView.findViewById(R.id.client_name);
 
             edit = itemView.findViewById(R.id.edit);
             delete = itemView.findViewById(R.id.delete);
