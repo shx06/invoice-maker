@@ -134,6 +134,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Cursor m_cur = invoiceDB.getAllData_data_controller();
 
         if (m_cur.getCount() > 0) {
+
+            no_data_layout.setVisibility(View.GONE);
+            dataRecyclerView.setVisibility(View.VISIBLE);
+
             while (m_cur.moveToNext()) {
                 int flag = m_cur.getInt(2);
 
@@ -154,6 +158,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
 
+        } else {
+            dataRecyclerView.setVisibility(View.GONE);
+            no_data_layout.setVisibility(View.VISIBLE);
         }
         m_cur.close();
     }
