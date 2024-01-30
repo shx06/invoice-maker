@@ -13,6 +13,7 @@ public class StaticConstants {
 
 
     public static final String TEMPLATE_1 = "TEMPLATE_ONE";
+    public static final String TEMPLATE_2 = "TEMPLATE_TWO";
 
 
 

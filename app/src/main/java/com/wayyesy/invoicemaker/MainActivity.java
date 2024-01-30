@@ -24,6 +24,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.wayyesy.invoicemaker.R;
 
 import com.wayyesy.invoicemaker.adapters.DashboardDataRecyclerView;
 import com.wayyesy.invoicemaker.adapters.DashboardTopicsAdapter;

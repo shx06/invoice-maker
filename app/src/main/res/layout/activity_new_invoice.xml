@@ -314,14 +314,22 @@
                                     app:tint="@color/white" />
 
                                 <TextView
-                                    android:layout_width="0dp"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/_5sdp"
-                                    android:layout_weight="1"
                                     android:text="Items"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/_13ssp"
                                     android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/_5sdp"
+                                    android:layout_weight="1"
+                                    android:text="(Add new item)"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/_13ssp" />
 
                                 <ImageView
                                     android:layout_width="wrap_content"
@@ -345,7 +353,7 @@
                             android:gravity="center"
                             android:orientation="horizontal"
                             android:paddingHorizontal="@dimen/_13sdp"
-                            android:paddingVertical="@dimen/_6sdp">
+                            android:paddingVertical="@dimen/_5sdp">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -453,7 +461,7 @@
                             android:layout_height="wrap_content"
                             android:background="@color/theme"
                             android:orientation="horizontal"
-                            android:paddingVertical="@dimen/_6sdp"
+                            android:paddingVertical="@dimen/_5sdp"
                             android:gravity="center">
 
                             <TextView

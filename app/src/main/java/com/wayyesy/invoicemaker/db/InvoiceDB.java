@@ -361,7 +361,7 @@ public class InvoiceDB extends SQLiteOpenHelper {
 
     public boolean insert_company_details(int dc_id, String name, String email,
                                           String phone, String add1,
-                                          String add2, String website, byte[] img) {
+                                          String add2, String website, byte[] img, String terms) {
 
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -387,7 +387,7 @@ public class InvoiceDB extends SQLiteOpenHelper {
 
     public boolean update_company_details(int dc_id, String name, String email,
                                           String phone, String add1,
-                                          String add2, String website, byte[] img) {
+                                          String add2, String website, byte[] img, String terms) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();

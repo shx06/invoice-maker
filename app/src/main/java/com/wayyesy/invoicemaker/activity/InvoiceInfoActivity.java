@@ -1,15 +1,10 @@
 package com.wayyesy.invoicemaker.activity;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
-
 import android.database.Cursor;
-
 import android.os.Bundle;
-
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,13 +14,10 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
 import com.wayyesy.invoicemaker.R;
 import com.wayyesy.invoicemaker.db.InvoiceDB;
 import com.wayyesy.invoicemaker.utils.Constants;
 import com.google.android.material.textfield.TextInputEditText;
-
 import java.util.Calendar;
 
 

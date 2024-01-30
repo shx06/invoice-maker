@@ -182,7 +182,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:background="@color/theme"
+                    android:backgroundTint="@color/theme"
+                    android:background="@drawable/background_hollow_theme_round"
                     android:textColor="@color/white"
                     android:text="Save" />
             </LinearLayout>

@@ -4,9 +4,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
-
-
 import android.content.ComponentName;
+import com.wayyesy.invoicemaker.R;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,19 +18,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.wayyesy.invoicemaker.R;
-import com.wayyesy.invoicemaker.templates.InvoiceHelper;
 import com.wayyesy.invoicemaker.templates.InvoiceTemplates;
 import com.wayyesy.invoicemaker.utils.StaticConstants;
-
 import com.github.barteksc.pdfviewer.PDFView;
-import com.google.gson.Gson;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
-
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -63,7 +55,7 @@ public class ViewPDFPreviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_pdfpreview);
 
         TextView toolbarHeader = findViewById(R.id.toolbar_title);
-        toolbarHeader.setText("Invoice Preview");
+        toolbarHeader.setText(R.string.invoice_preview);
         ImageView closeActivity = findViewById(R.id.close_activity);
         closeActivity.setOnClickListener(v -> finish());
 
@@ -253,9 +245,11 @@ public class ViewPDFPreviewActivity extends AppCompatActivity {
         switch (selected_template) {
             case StaticConstants.TEMPLATE_1:
                 invoiceTemplates.invoiceTemplate_1(document);
-                Log.d(TAG, "InvoiceCreation:  " + new Gson().toJson(InvoiceHelper.itemsList));
                 break;
 
+            case StaticConstants.TEMPLATE_2:
+                invoiceTemplates.invoiceTemplate_2(document, getResources());
+                break;
 
         }
 

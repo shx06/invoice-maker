@@ -28,7 +28,7 @@ import java.util.Objects;
 
 public class CompanyProfileActivity extends AppCompatActivity {
 
-    TextInputEditText companyName, companyEmail, companyAddress1, companyAddress2, companyPhone, companyWebsite;
+    TextInputEditText companyName, companyEmail, companyAddress1, companyAddress2, companyPhone, companyWebsite, termsConditions;
     TextInputLayout companyNameLayout;
     ImageView companyImage;
     byte[] bytesOfCompanyImage;
@@ -53,6 +53,7 @@ public class CompanyProfileActivity extends AppCompatActivity {
         companyWebsite = findViewById(R.id.company_website);
         save_next_btn = findViewById(R.id.save_next_btn);
         companyImage = findViewById(R.id.company_image);
+        termsConditions = findViewById(R.id.terms_conditions);
 
         companyNameLayout = findViewById(R.id.company_name_layout);
 
@@ -122,13 +123,14 @@ public class CompanyProfileActivity extends AppCompatActivity {
         String add2 = Objects.requireNonNull(companyAddress2.getText().toString());
         String website = Objects.requireNonNull(companyWebsite.getText().toString());
         String phone = Objects.requireNonNull(companyPhone.getText().toString());
+        String terms = Objects.requireNonNull(termsConditions.getText().toString());
 
 
         if (!(Constants.Company_profile_Active)) {
 
             result = invoiceDB.insert_company_details(Constants.DCReferenceKey,
                     checkNullEmpty(name), checkNullEmpty(email), checkNullEmpty(phone), checkNullEmpty(add1),
-                    checkNullEmpty(add2), checkNullEmpty(website), bytesOfCompanyImage);
+                    checkNullEmpty(add2), checkNullEmpty(website), bytesOfCompanyImage, checkNullEmpty(terms));
 
 
             if (result) {
@@ -151,7 +153,7 @@ public class CompanyProfileActivity extends AppCompatActivity {
 
             result = invoiceDB.update_company_details(Constants.DCReferenceKey,
                     checkNullEmpty(name), checkNullEmpty(email), checkNullEmpty(phone), checkNullEmpty(add1),
-                    checkNullEmpty(add2), checkNullEmpty(website), bytesOfCompanyImage);
+                    checkNullEmpty(add2), checkNullEmpty(website), bytesOfCompanyImage, checkNullEmpty(terms));
 
             if (result) {
                 //  Toast.makeText(CreateBioDataPDActivity.this, "Updated", Toast.LENGTH_SHORT).show();

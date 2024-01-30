@@ -153,7 +153,7 @@ public class CustomDialogs {
         TextView save = dialog.findViewById(R.id.save);
 
         List<CurrencyModel> list = new ArrayList<>();
-        list.add(new CurrencyModel("India", "\u20b9", "ind"));
+        list.add(new CurrencyModel("India", "Rs.", "ind"));
         list.add(new CurrencyModel("United States", "$", "usd"));
         list.add(new CurrencyModel("United Kingdom", "£", "uk"));
 
