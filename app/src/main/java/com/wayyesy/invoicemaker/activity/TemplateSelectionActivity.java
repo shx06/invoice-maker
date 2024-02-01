@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +18,7 @@ import com.wayyesy.invoicemaker.R;
 import com.wayyesy.invoicemaker.adapters.SelectTemplateAdapter;
 import com.wayyesy.invoicemaker.db.InvoiceDB;
 import com.wayyesy.invoicemaker.model.SelectTemplateModel;
+import com.wayyesy.invoicemaker.model.SingleItemInvoiceLinkedModel;
 import com.wayyesy.invoicemaker.model.SingleItemModel;
 import com.wayyesy.invoicemaker.templates.InvoiceHelper;
 import com.wayyesy.invoicemaker.utils.Constants;
@@ -28,6 +30,7 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +58,9 @@ public class TemplateSelectionActivity extends AppCompatActivity {
 
         selectTemplateList.add(new SelectTemplateModel(R.drawable.ic_upload_image, StaticConstants.TEMPLATE_1));
         selectTemplateList.add(new SelectTemplateModel(R.drawable.ic_upload_image, StaticConstants.TEMPLATE_2));
+        selectTemplateList.add(new SelectTemplateModel(R.drawable.ic_upload_image, StaticConstants.TEMPLATE_3));
+        selectTemplateList.add(new SelectTemplateModel(R.drawable.ic_upload_image, StaticConstants.TEMPLATE_4));
+        selectTemplateList.add(new SelectTemplateModel(R.drawable.ic_upload_image, StaticConstants.TEMPLATE_5));
 
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(TemplateSelectionActivity.this, 2, GridLayoutManager.VERTICAL, false);
@@ -65,6 +71,7 @@ public class TemplateSelectionActivity extends AppCompatActivity {
         permissionLooker();
 
         // here need to write the code to fetch all data and store into static variable
+        clearInvoiceHelperClass();
         FetchDataForInvoiceCreation(Constants.DCReferenceKey);
 
 
@@ -120,40 +127,131 @@ public class TemplateSelectionActivity extends AppCompatActivity {
         }
         curClient.close();
 
+
         // items data --------------------------------------------------------------------
 
-        Cursor couItems = invoiceDB.getRows_invoice_item_byDcId(Constants.DCReferenceKey);
-        if (couItems.getCount() > 0) {
-            InvoiceHelper.itemsList.clear();
-            while (couItems.moveToNext()) {
-                InvoiceHelper.itemsList.add(new SingleItemModel(couItems.getInt(0), couItems.getInt(1), couItems.getString(2), couItems.getString(3), couItems.getString(4), couItems.getString(5), couItems.getString(6), couItems.getString(7)));
+        List<SingleItemInvoiceLinkedModel> dataItemsList = new ArrayList<>();
+        Cursor countItems = invoiceDB.getRows_invoice_items_link(Constants.DCReferenceKey);
+
+        if (countItems.getCount() > 0) {
+            while (countItems.moveToNext()) {
+
+                dataItemsList.add(new SingleItemInvoiceLinkedModel(countItems.getInt(0), countItems.getInt(1), countItems.getInt(2)));
             }
+
         }
-        couItems.close();
+        countItems.close();
+
+        double netItemsPrice = 0.0;
+
+        for (int i = 0; i < dataItemsList.size(); i++) {
+            Cursor couItems = invoiceDB.getRows_invoice_item_byId(dataItemsList.get(i).getInvoice_item_id());
+
+            if (couItems.getCount() > 0) {
+
+                double netItemPrice = 0.0, totalItemPrice = 0.0;
+
+                while (couItems.moveToNext()) {
+                    InvoiceHelper.itemsList.add(new SingleItemModel(couItems.getInt(0), couItems.getInt(1),
+                            couItems.getString(2), couItems.getString(3), couItems.getString(4),
+                            couItems.getString(5), couItems.getString(6), couItems.getString(7)));
+
+                    totalItemPrice = Double.parseDouble(couItems.getString(3)) * Double.parseDouble(couItems.getString(4));
+
+                    double extra = (((Double.parseDouble(couItems.getString(7)) / 100) * totalItemPrice) - ((Double.parseDouble(couItems.getString(6)) / 100) * totalItemPrice));
+
+                    netItemPrice = extra + totalItemPrice;
+                    netItemsPrice += netItemPrice;
+                }
+            }
+
+            couItems.close();
+        }
+
+        InvoiceHelper.subTotal = netItemsPrice;
 
         // items discount --------------------------------------------------------------------
 
         Cursor curDiscount = invoiceDB.getRows_invoice_discount_by_dcId(Constants.DCReferenceKey);
         if (curDiscount.getCount() > 0) {
             while (curDiscount.moveToNext()) {
-                InvoiceHelper.discountType = curDiscount.getString(2);
-                InvoiceHelper.discountValue = curDiscount.getDouble(3);
+
+                if (curDiscount.getString(2) != null && curDiscount.getString(2).length() > 0) {
+
+                    if (curDiscount.getString(2).equals(StaticConstants.DISCOUNT_PERCENTAGE)) {
+                        InvoiceHelper.discount = Double.parseDouble(curDiscount.getString(3)) / 100 * InvoiceHelper.subTotal;
+                    } else {
+                        InvoiceHelper.discount = Double.parseDouble(curDiscount.getString(3));
+                    }
+                }
+
             }
         }
+
+
         curDiscount.close();
 
         // currency data --------------------------------------------------------------------
         Cursor curCurrency = invoiceDB.getRows_currency(dc_id);
         if (curCurrency.getCount() > 0) {
             while (curCurrency.moveToNext()) {
-                InvoiceHelper.countryName = curCurrency.getString(2);
-                InvoiceHelper.countrySymbol = curCurrency.getString(3);
-                InvoiceHelper.currencySymbol = curCurrency.getString(4);
+                if(curCurrency.getString(3)!=null && curCurrency.getString(3).length() > 0) {
+                    InvoiceHelper.currencySymbol = curCurrency.getString(3);
+                } else {
+                    InvoiceHelper.currencySymbol = "Rs.";
+                }
             }
+        } else {
+            InvoiceHelper.currencySymbol = "Rs.";
         }
         curCurrency.close();
 
+
+        InvoiceHelper.finalTotal = InvoiceHelper.subTotal - InvoiceHelper.discount;
+
     }
+
+    private void clearInvoiceHelperClass() {
+        InvoiceHelper.invNo = null;
+        InvoiceHelper.invTitle = null;
+        InvoiceHelper.invCreatedDate = null;
+        InvoiceHelper.invDueTerm = null;
+        InvoiceHelper.invDueDate = null;
+        InvoiceHelper.invoicePo = null;
+
+        InvoiceHelper.compName = null;
+        InvoiceHelper.compEmail = null;
+        InvoiceHelper.compPhone = null;
+        InvoiceHelper.compAdd1 = null;
+        InvoiceHelper.compAdd2 = null;
+        InvoiceHelper.compWebsite = null;
+        InvoiceHelper.compImage = null;
+
+        InvoiceHelper.clientName = null;
+        InvoiceHelper.clientEmail = null;
+        InvoiceHelper.clientPhone = null;
+        InvoiceHelper.clientBilAddress1 = null;
+        InvoiceHelper.clientBilAddress2 = null;
+        InvoiceHelper.clientShipAddress1 = null;
+        InvoiceHelper.clientShipAddress2 = null;
+        InvoiceHelper.clientDetails = null;
+
+        InvoiceHelper.itemsList.clear();
+
+        InvoiceHelper.discountType = null;
+        InvoiceHelper.discountValue = 0;
+
+
+        InvoiceHelper.countryName = null;
+        InvoiceHelper.countrySymbol = null;
+        InvoiceHelper.currencySymbol = null;
+
+
+        InvoiceHelper.subTotal = 0;
+        InvoiceHelper.discount = 0;
+        InvoiceHelper.finalTotal = 0;
+    }
+
 
     public void TemplateSelection(String selected_template) {
         Intent go = new Intent(TemplateSelectionActivity.this, ViewPDFPreviewActivity.class);

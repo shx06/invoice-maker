@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -279,13 +280,13 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 
         final Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(() -> {
+            updateInvoiceFromAdapter();
             updateInvoiceFinalDiscount();
             updateInvoiceFinalAmount();
         }, 300);
     }
 
     public void handleDiscount() {
-
 
         if (Constants.FinalInvoiceDiscountType != null) {
 

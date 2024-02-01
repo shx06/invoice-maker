@@ -153,9 +153,12 @@ public class CustomDialogs {
         TextView save = dialog.findViewById(R.id.save);
 
         List<CurrencyModel> list = new ArrayList<>();
-        list.add(new CurrencyModel("India", "Rs.", "ind"));
         list.add(new CurrencyModel("United States", "$", "usd"));
         list.add(new CurrencyModel("United Kingdom", "£", "uk"));
+        list.add(new CurrencyModel("Chine", "¥", "CHY"));
+        list.add(new CurrencyModel("Argentina", "$", "ARS"));
+        list.add(new CurrencyModel("India", "Rs.", "ind"));
+
 
         CurrencyAdapter currencyAdapter = new CurrencyAdapter(list, context);
         languageRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true));

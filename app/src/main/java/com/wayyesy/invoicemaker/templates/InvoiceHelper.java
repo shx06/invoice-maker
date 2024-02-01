@@ -63,8 +63,9 @@ public class InvoiceHelper {
 
 
     // todo :  others
-    public static String subTotal;
-    public static String finalTotal;
+    public static double subTotal;
+    public static double discount;
+    public static double finalTotal;
 
 
 }
