@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void shareApp() {
 
-        Bitmap bitmap = BitmapFactory.decodeResource(MainActivity.this.getResources(), R.drawable.share_icon);
+        Bitmap bitmap = BitmapFactory.decodeResource(MainActivity.this.getResources(), R.drawable.app_share_back_pic);
 
         Intent shareApp = new Intent(Intent.ACTION_SEND);
         shareApp.setType("image/jpeg");

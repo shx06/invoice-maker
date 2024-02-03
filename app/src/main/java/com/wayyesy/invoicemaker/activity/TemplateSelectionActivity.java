@@ -56,11 +56,11 @@ public class TemplateSelectionActivity extends AppCompatActivity {
 
         invoiceDB = new InvoiceDB(this);
 
-        selectTemplateList.add(new SelectTemplateModel(R.drawable.ic_upload_image, StaticConstants.TEMPLATE_1));
-        selectTemplateList.add(new SelectTemplateModel(R.drawable.ic_upload_image, StaticConstants.TEMPLATE_2));
-        selectTemplateList.add(new SelectTemplateModel(R.drawable.ic_upload_image, StaticConstants.TEMPLATE_3));
-        selectTemplateList.add(new SelectTemplateModel(R.drawable.ic_upload_image, StaticConstants.TEMPLATE_4));
-        selectTemplateList.add(new SelectTemplateModel(R.drawable.ic_upload_image, StaticConstants.TEMPLATE_5));
+        selectTemplateList.add(new SelectTemplateModel(R.drawable.invoice_1, StaticConstants.TEMPLATE_1));
+        selectTemplateList.add(new SelectTemplateModel(R.drawable.invoice_2, StaticConstants.TEMPLATE_2));
+        selectTemplateList.add(new SelectTemplateModel(R.drawable.invoice_3, StaticConstants.TEMPLATE_3));
+        selectTemplateList.add(new SelectTemplateModel(R.drawable.invoice_4, StaticConstants.TEMPLATE_4));
+        selectTemplateList.add(new SelectTemplateModel(R.drawable.invoice_5, StaticConstants.TEMPLATE_5));
 
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(TemplateSelectionActivity.this, 2, GridLayoutManager.VERTICAL, false);

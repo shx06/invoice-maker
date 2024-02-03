@@ -188,6 +188,7 @@ public class InvoiceTemplates {
         if (InvoiceHelper.compImage != null && InvoiceHelper.compImage.length > 0) {
             byte[] byteArray = InvoiceHelper.compImage;
             iconBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+
         } else {
             iconBitmap = BitmapFactory.decodeResource(resources, R.drawable.temp_2_icon);
         }

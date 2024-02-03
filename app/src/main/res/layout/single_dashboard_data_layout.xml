@@ -37,9 +37,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Client Name: "
+                        android:text="Client Name : "
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_14ssp"
+                        android:textSize="@dimen/_12ssp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -47,7 +47,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_14ssp"
+                        android:textSize="@dimen/_12ssp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -59,9 +59,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Invoice: "
+                        android:text="Invoice : "
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_13ssp" />
+                        android:textSize="@dimen/_11ssp" />
 
                     <TextView
                         android:id="@+id/invoice_no"
@@ -69,7 +69,7 @@
                         android:layout_height="wrap_content"
                         android:text=""
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_13ssp" />
+                        android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -80,9 +80,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Created Date: "
+                        android:text="Created Date : "
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_13ssp" />
+                        android:textSize="@dimen/_11ssp" />
 
                     <TextView
                         android:id="@+id/date"
@@ -90,7 +90,7 @@
                         android:layout_height="wrap_content"
                         android:text=""
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_13ssp" />
+                        android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -130,6 +130,7 @@
                     android:layout_height="wrap_content"
                     android:text="Edit"
                     android:textColor="@color/white" />
+
             </LinearLayout>
 
             <View
