@@ -17,6 +17,7 @@ public class StaticConstants {
     public static final String TEMPLATE_3 = "TEMPLATE_THREE";
     public static final String TEMPLATE_4 = "TEMPLATE_FOUR";
     public static final String TEMPLATE_5 = "TEMPLATE_FIVE";
+    public static final String TEMPLATE_6 = "TEMPLATE_SIX";
 
 
 

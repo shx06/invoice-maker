@@ -263,6 +263,10 @@ public class ViewPDFPreviewActivity extends AppCompatActivity {
                 invoiceTemplates.invoiceTemplate_5(document, getResources());
                 break;
 
+            case StaticConstants.TEMPLATE_6:
+                invoiceTemplates.invoiceTemplate_6(document, getResources());
+                break;
+
         }
 
         System.out.println("myPath" + pdfPath);

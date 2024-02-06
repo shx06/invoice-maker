@@ -68,6 +68,7 @@ public class InvoiceDB extends SQLiteOpenHelper {
     public static final String COL_6_comp_add2 = "comp_add2";
     public static final String COL_7_comp_website = "comp_website";
     public static final String COL_8_comp_image = "comp_image";
+    public static final String COL_9_comp_image = "comp_terms";
 
     /////////////////////--------------------------->>
 
@@ -164,7 +165,8 @@ public class InvoiceDB extends SQLiteOpenHelper {
                 COL_5_comp_add1 + " text, " +
                 COL_6_comp_add2 + " text, " +
                 COL_7_comp_website + " text, " +
-                COL_8_comp_image + " blob" +
+                COL_8_comp_image + " blob," +
+                COL_9_comp_image + " text" +
 
                 ")");
 
@@ -375,6 +377,7 @@ public class InvoiceDB extends SQLiteOpenHelper {
         contentValues.put(COL_6_comp_add2, add2);
         contentValues.put(COL_7_comp_website, website);
         contentValues.put(COL_8_comp_image, img);
+        contentValues.put(COL_9_comp_image, terms);
 
         long result = db.insert(table_name_company, null, contentValues);
 
@@ -399,8 +402,8 @@ public class InvoiceDB extends SQLiteOpenHelper {
         contentValues.put(COL_6_comp_add2, add2);
         contentValues.put(COL_7_comp_website, website);
         contentValues.put(COL_8_comp_image, img);
+        contentValues.put(COL_9_comp_image, terms);
 
-        Log.d(TAG, "update_company_details: " + new Gson().toJson(contentValues));
 
         long result = db.update(table_name_company, contentValues, " " + COL_1_comp_dc_id + " = ?", new String[]{String.valueOf(dc_id)});
 

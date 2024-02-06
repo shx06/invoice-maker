@@ -8,6 +8,22 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string-array name="currency_array">
+        <item>United States, $, usd</item>
+        <item>United Kingdom, £, uk</item>
+        <item>Sri Lanka, Rs., lkr</item>
+        <item>Saudi Arabia, ﷼, sar</item>
+        <item>Pakistan, Rs., pkr</item>
+        <item>Nepal, Rs., NPR</item>
+        <item>Indonesia, Rp, idr</item>
+        <item>Dubai, د.إ, aed</item>
+        <item>Chine, ¥, chy</item>
+        <item>Canada, $, cad</item>
+        <item>Bhutan, Nu., btn</item>
+        <item>Bangladesh, ৳, BDT</item>
+        <item>India, ₹, ind</item>
+    </string-array>
+
     <string-array name="due_date">
         <item>1 day</item>
         <item>2 days</item>

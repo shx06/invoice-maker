@@ -3,10 +3,12 @@ package com.wayyesy.invoicemaker.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,8 +20,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.wayyesy.invoicemaker.MainActivity;
 import com.wayyesy.invoicemaker.R;
+import com.wayyesy.invoicemaker.activity.TemplateSelectionActivity;
 import com.wayyesy.invoicemaker.db.InvoiceDB;
 import com.wayyesy.invoicemaker.model.DataControllerModel;
+import com.wayyesy.invoicemaker.utils.Constants;
 
 
 import java.util.List;
@@ -43,7 +47,7 @@ public class DashboardDataRecyclerView extends RecyclerView.Adapter<DashboardDat
         context = parent.getContext();
         invoiceDB = new InvoiceDB(context);
         View view = inflater.inflate(R.layout.single_dashboard_data_layout, parent, false);
-        return new DashboardDataRecyclerView.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @SuppressLint("SetTextI18n")
@@ -70,10 +74,10 @@ public class DashboardDataRecyclerView extends RecyclerView.Adapter<DashboardDat
         p_cur_inv_info.close();
         p_cur_inv_client.close();
 
-//        holder.cardView.setOnClickListener(v -> {
-//            Intent intent = new Intent(context, InvoiceDashboardActivity.class);
-//            context.startActivity(intent);
-//        });
+        holder.navigationIcon.setOnClickListener(v -> {
+            Constants.DCReferenceKey = data.get(position).getDc_id();
+            context.startActivity(new Intent(context, TemplateSelectionActivity.class));
+        });
 
         holder.edit.setOnClickListener(v -> {
             ((MainActivity)context).forEdit(data.get(position).getDc_id(), invoiceId);
@@ -127,11 +131,11 @@ public class DashboardDataRecyclerView extends RecyclerView.Adapter<DashboardDat
         return data.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView invoice_no, invoice_date, client_name;
         LinearLayout edit, delete;
-        CardView cardView;
+        ImageView navigationIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -142,7 +146,7 @@ public class DashboardDataRecyclerView extends RecyclerView.Adapter<DashboardDat
             edit = itemView.findViewById(R.id.edit);
             delete = itemView.findViewById(R.id.delete);
 
-            cardView = itemView.findViewById(R.id.item_layout);
+            navigationIcon = itemView.findViewById(R.id.navigate_icon);
         }
 
     }

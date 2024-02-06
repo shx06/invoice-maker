@@ -186,6 +186,7 @@ public class CompanyProfileActivity extends AppCompatActivity {
                     companyAddress1.setText(cur.getString(5));
                     companyAddress2.setText(cur.getString(6));
                     companyWebsite.setText(cur.getString(7));
+                    termsConditions.setText(cur.getString(9));
 
                     if(cur.getBlob(8)!=null) {
                         byte[] data = cur.getBlob(8);

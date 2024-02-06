@@ -166,13 +166,14 @@
                     android:layout_height="wrap_content"
                     app:endIconMode="clear_text"
                     app:helperTextTextColor="@color/red"
-                    app:placeholderText="Address line 1">
+                    app:placeholderText="Company's terms and conditions">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/terms_conditions"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text" />
+                        android:inputType="textMultiLine"
+                        android:lines="2" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button

@@ -102,7 +102,7 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
         });
 
         currencyLayout.setOnClickListener(v -> {
-            customDialogs.displayCurrencyDialog();
+            customDialogs.displayCurrencyDialog(getResources());
         });
 
 

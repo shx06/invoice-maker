@@ -61,6 +61,7 @@ public class TemplateSelectionActivity extends AppCompatActivity {
         selectTemplateList.add(new SelectTemplateModel(R.drawable.invoice_3, StaticConstants.TEMPLATE_3));
         selectTemplateList.add(new SelectTemplateModel(R.drawable.invoice_4, StaticConstants.TEMPLATE_4));
         selectTemplateList.add(new SelectTemplateModel(R.drawable.invoice_5, StaticConstants.TEMPLATE_5));
+        selectTemplateList.add(new SelectTemplateModel(R.drawable.invoice_5, StaticConstants.TEMPLATE_6));
 
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(TemplateSelectionActivity.this, 2, GridLayoutManager.VERTICAL, false);
@@ -81,7 +82,7 @@ public class TemplateSelectionActivity extends AppCompatActivity {
 
         //   get invoice data -------------------------------------------------------------------------
 
-        Cursor curInvInfo = invoiceDB.getRows_invoice_info(Constants.DCReferenceKey);
+        Cursor curInvInfo = invoiceDB.getRows_invoice_info(dc_id);
         if (curInvInfo.getCount() > 0) {
             while (curInvInfo.moveToNext()) {
                 InvoiceHelper.invTitle = curInvInfo.getString(2);
@@ -96,7 +97,7 @@ public class TemplateSelectionActivity extends AppCompatActivity {
 
         //   get company data -------------------------------------------------------------------------
 
-        Cursor curComp = invoiceDB.getRows_company(Constants.DCReferenceKey);
+        Cursor curComp = invoiceDB.getRows_company(dc_id);
         if (curComp.getCount() > 0) {
             while (curComp.moveToNext()) {
                 InvoiceHelper.compName = curComp.getString(2);
@@ -106,13 +107,14 @@ public class TemplateSelectionActivity extends AppCompatActivity {
                 InvoiceHelper.compAdd2 = curComp.getString(6);
                 InvoiceHelper.compWebsite = curComp.getString(7);
                 InvoiceHelper.compImage = curComp.getBlob(8);
+                InvoiceHelper.companyTerms = curComp.getString(9);
             }
         }
         curComp.close();
 
         //   get client data -------------------------------------------------------------------------
 
-        Cursor curClient = invoiceDB.getRows_client(Constants.DCReferenceKey);
+        Cursor curClient = invoiceDB.getRows_client(dc_id);
         if (curClient.getCount() > 0) {
             while (curClient.moveToNext()) {
                 InvoiceHelper.clientName = curClient.getString(2);
@@ -131,7 +133,7 @@ public class TemplateSelectionActivity extends AppCompatActivity {
         // items data --------------------------------------------------------------------
 
         List<SingleItemInvoiceLinkedModel> dataItemsList = new ArrayList<>();
-        Cursor countItems = invoiceDB.getRows_invoice_items_link(Constants.DCReferenceKey);
+        Cursor countItems = invoiceDB.getRows_invoice_items_link(dc_id);
 
         if (countItems.getCount() > 0) {
             while (countItems.moveToNext()) {
@@ -172,7 +174,7 @@ public class TemplateSelectionActivity extends AppCompatActivity {
 
         // items discount --------------------------------------------------------------------
 
-        Cursor curDiscount = invoiceDB.getRows_invoice_discount_by_dcId(Constants.DCReferenceKey);
+        Cursor curDiscount = invoiceDB.getRows_invoice_discount_by_dcId(dc_id);
         if (curDiscount.getCount() > 0) {
             while (curDiscount.moveToNext()) {
 
@@ -196,13 +198,14 @@ public class TemplateSelectionActivity extends AppCompatActivity {
         if (curCurrency.getCount() > 0) {
             while (curCurrency.moveToNext()) {
                 if(curCurrency.getString(3)!=null && curCurrency.getString(3).length() > 0) {
+                    InvoiceHelper.countryName = curCurrency.getString(2);
                     InvoiceHelper.currencySymbol = curCurrency.getString(3);
                 } else {
-                    InvoiceHelper.currencySymbol = "Rs.";
+                    InvoiceHelper.currencySymbol = "₹";
                 }
             }
         } else {
-            InvoiceHelper.currencySymbol = "Rs.";
+            InvoiceHelper.currencySymbol = "₹";
         }
         curCurrency.close();
 
@@ -226,6 +229,7 @@ public class TemplateSelectionActivity extends AppCompatActivity {
         InvoiceHelper.compAdd2 = null;
         InvoiceHelper.compWebsite = null;
         InvoiceHelper.compImage = null;
+        InvoiceHelper.companyTerms = null;
 
         InvoiceHelper.clientName = null;
         InvoiceHelper.clientEmail = null;

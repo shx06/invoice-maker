@@ -2,7 +2,9 @@ package com.wayyesy.invoicemaker.utils;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -25,6 +27,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CustomDialogs {
 
@@ -140,10 +143,10 @@ public class CustomDialogs {
         dialog.show();
     }
 
-    public void displayCurrencyDialog() {
+    public void displayCurrencyDialog(Resources resources) {
         dialog = new Dialog(context);
         dialog.setContentView(R.layout.language_list_layout);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        Objects.requireNonNull(dialog.getWindow()).setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         dialog.setCancelable(false);
 
         invoiceDB = new InvoiceDB(context);
@@ -153,15 +156,20 @@ public class CustomDialogs {
         TextView save = dialog.findViewById(R.id.save);
 
         List<CurrencyModel> list = new ArrayList<>();
-        list.add(new CurrencyModel("United States", "$", "usd"));
-        list.add(new CurrencyModel("United Kingdom", "£", "uk"));
-        list.add(new CurrencyModel("Chine", "¥", "CHY"));
-        list.add(new CurrencyModel("Argentina", "$", "ARS"));
-        list.add(new CurrencyModel("India", "Rs.", "ind"));
 
+        String[] currencyList = resources.getStringArray(R.array.currency_array);
+
+        for (String s : currencyList) {
+            String[] currency = s.split(", ");
+            list.add(new CurrencyModel(currency[0], currency[1], currency[2]));
+        }
 
         CurrencyAdapter currencyAdapter = new CurrencyAdapter(list, context);
-        languageRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true);
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+
+        languageRecyclerView.setLayoutManager(layoutManager);
         languageRecyclerView.setAdapter(currencyAdapter);
 
         cancel.setOnClickListener(v -> dialog.dismiss());
