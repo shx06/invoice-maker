@@ -74,7 +74,7 @@ public class DashboardDataRecyclerView extends RecyclerView.Adapter<DashboardDat
         p_cur_inv_info.close();
         p_cur_inv_client.close();
 
-        holder.navigationIcon.setOnClickListener(v -> {
+        holder.navigation.setOnClickListener(v -> {
             Constants.DCReferenceKey = data.get(position).getDc_id();
             context.startActivity(new Intent(context, TemplateSelectionActivity.class));
         });
@@ -135,7 +135,7 @@ public class DashboardDataRecyclerView extends RecyclerView.Adapter<DashboardDat
 
         TextView invoice_no, invoice_date, client_name;
         LinearLayout edit, delete;
-        ImageView navigationIcon;
+        LinearLayout navigation;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -146,7 +146,7 @@ public class DashboardDataRecyclerView extends RecyclerView.Adapter<DashboardDat
             edit = itemView.findViewById(R.id.edit);
             delete = itemView.findViewById(R.id.delete);
 
-            navigationIcon = itemView.findViewById(R.id.navigate_icon);
+            navigation = itemView.findViewById(R.id.navigate_layout);
         }
 
     }
