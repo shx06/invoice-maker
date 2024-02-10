@@ -69,7 +69,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/btn_background"
                 android:padding="@dimen/_5sdp"
-                android:text="share PDF"
+                android:text="Share PDF"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_14sdp"
