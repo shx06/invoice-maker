@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wayyesy.invoicemaker.R;
 import com.wayyesy.invoicemaker.adapters.InvoiceItemsAdapter;
@@ -235,6 +236,8 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
                 dataItemsList.add(new SingleItemInvoiceLinkedModel(couItems.getInt(0), couItems.getInt(1), couItems.getInt(2)));
             }
 
+        } else {
+            Constants.TotalInvoicePrice = 0;
         }
         couItems.close();
 
