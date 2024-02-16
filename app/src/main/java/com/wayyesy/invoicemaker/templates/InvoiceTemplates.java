@@ -139,13 +139,13 @@ public class InvoiceTemplates {
             if(!InvoiceHelper.itemsList.get(i).getItemDisc().equals("0")) {
                 tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice))).setBorder(Border.NO_BORDER));
             } else {
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ")).setBorder(Border.NO_BORDER));
+                tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setPaddingLeft(20f)).setBorder(Border.NO_BORDER));
             }
 
             if(!InvoiceHelper.itemsList.get(i).getItemTax().equals("0")) {
                 tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice))).setBorder(Border.NO_BORDER));
             } else {
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ")).setBorder(Border.NO_BORDER));
+                tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setPaddingLeft(20f)).setBorder(Border.NO_BORDER));
             }
 
             tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice))).setBorder(Border.NO_BORDER));
@@ -372,13 +372,13 @@ public class InvoiceTemplates {
                 if(!InvoiceHelper.itemsList.get(i).getItemDisc().equals("0")) {
                     tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setPaddingLeft(15f).setMarginTop(-3f).setHeight(25f).setHorizontalAlignment(HorizontalAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
                 }
 
                 if(!InvoiceHelper.itemsList.get(i).getItemTax().equals("0")) {
                     tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setPaddingLeft(15f).setMarginTop(-3f).setHeight(25f).setHorizontalAlignment(HorizontalAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
                 }
 
                 tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
@@ -397,8 +397,18 @@ public class InvoiceTemplates {
 
 
 
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                if(!InvoiceHelper.itemsList.get(i).getItemDisc().equals("0")) {
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                } else {
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setHeight(25f).setPaddingLeft(20f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                }
+
+                if(!InvoiceHelper.itemsList.get(i).getItemTax().equals("0")) {
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                } else {
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setHeight(25f).setPaddingLeft(20f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                }
+
                 tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
 
             }
@@ -628,13 +638,13 @@ public class InvoiceTemplates {
                 if(!InvoiceHelper.itemsList.get(i).getItemDisc().equals("0")) {
                     tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setPaddingLeft(15f).setMarginTop(-3f).setHeight(25f).setHorizontalAlignment(HorizontalAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
                 }
 
                 if(!InvoiceHelper.itemsList.get(i).getItemTax().equals("0")) {
                     tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setPaddingLeft(15f).setMarginTop(-3f).setHeight(25f).setHorizontalAlignment(HorizontalAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
                 }
 
                 tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
@@ -653,8 +663,18 @@ public class InvoiceTemplates {
 
 
 
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                if(!InvoiceHelper.itemsList.get(i).getItemDisc().equals("0")) {
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                } else {
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setHeight(25f).setPaddingLeft(20f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                }
+
+                if(!InvoiceHelper.itemsList.get(i).getItemTax().equals("0")) {
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                } else {
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setHeight(25f).setPaddingLeft(20f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                }
+
                 tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
 
             }
@@ -881,13 +901,13 @@ public class InvoiceTemplates {
                 if(!InvoiceHelper.itemsList.get(i).getItemDisc().equals("0")) {
                     tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setPaddingLeft(15f).setMarginTop(-3f).setHeight(25f).setHorizontalAlignment(HorizontalAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
                 }
 
                 if(!InvoiceHelper.itemsList.get(i).getItemTax().equals("0")) {
                     tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setPaddingLeft(15f).setMarginTop(-3f).setHeight(25f).setHorizontalAlignment(HorizontalAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
                 }
 
                 tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
@@ -906,8 +926,18 @@ public class InvoiceTemplates {
 
 
 
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                if(!InvoiceHelper.itemsList.get(i).getItemDisc().equals("0")) {
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                } else {
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setHeight(25f).setPaddingLeft(20f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                }
+
+                if(!InvoiceHelper.itemsList.get(i).getItemTax().equals("0")) {
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                } else {
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setHeight(25f).setPaddingLeft(20f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                }
+
                 tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
 
             }
@@ -1134,13 +1164,13 @@ public class InvoiceTemplates {
                 if(!InvoiceHelper.itemsList.get(i).getItemDisc().equals("0")) {
                     tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setPaddingLeft(15f).setMarginTop(-3f).setHeight(25f).setHorizontalAlignment(HorizontalAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
                 }
 
                 if(!InvoiceHelper.itemsList.get(i).getItemTax().equals("0")) {
                     tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setPaddingLeft(15f).setMarginTop(-3f).setHeight(25f).setHorizontalAlignment(HorizontalAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
                 }
 
                 tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
@@ -1159,8 +1189,18 @@ public class InvoiceTemplates {
 
 
 
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                if(!InvoiceHelper.itemsList.get(i).getItemDisc().equals("0")) {
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                } else {
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setHeight(25f).setPaddingLeft(20f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                }
+
+                if(!InvoiceHelper.itemsList.get(i).getItemTax().equals("0")) {
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                } else {
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setHeight(25f).setPaddingLeft(20f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                }
+
                 tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
 
             }

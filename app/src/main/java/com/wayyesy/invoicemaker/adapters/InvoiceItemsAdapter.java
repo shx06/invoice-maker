@@ -1,6 +1,9 @@
 package com.wayyesy.invoicemaker.adapters;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.view.LayoutInflater;
@@ -44,6 +47,7 @@ public class InvoiceItemsAdapter extends RecyclerView.Adapter<InvoiceItemsAdapte
         return new InvoiceItemsAdapter.ViewHolder(view);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onBindViewHolder(@NonNull InvoiceItemsAdapter.ViewHolder holder, int position) {
 
@@ -87,11 +91,18 @@ public class InvoiceItemsAdapter extends RecyclerView.Adapter<InvoiceItemsAdapte
         cur.close();
 
         holder.deleteItem.setOnClickListener(v -> {
-            invoiceDB.delete_invoice_item_link_by_id(data.get(position).getIim_id());
-            data.remove(position);
-            notifyDataSetChanged();
-
-            ((InvoiceDashboardActivity) context).fetchInvoiceData();
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Alert!");
+            builder.setMessage("Are you sure you want to delete this item from this invoice?");
+            builder.setPositiveButton("Confirm", (dialogInterface, i) -> {
+                invoiceDB.delete_invoice_item_link_by_id(data.get(position).getIim_id());
+                data.remove(position);
+                notifyDataSetChanged();
+                ((InvoiceDashboardActivity) context).fetchInvoiceData();
+            });
+            builder.setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
+            AlertDialog dialog = builder.create(); // Creating AlertDialog object after setting up buttons
+            dialog.show();
         });
 
         holder.editItem.setOnClickListener(v -> {

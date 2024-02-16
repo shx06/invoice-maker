@@ -1,22 +1,18 @@
 package com.wayyesy.invoicemaker.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.wayyesy.invoicemaker.R;
 import com.wayyesy.invoicemaker.adapters.InvoiceItemsAdapter;
 import com.wayyesy.invoicemaker.db.InvoiceDB;
@@ -24,7 +20,6 @@ import com.wayyesy.invoicemaker.model.SingleItemInvoiceLinkedModel;
 import com.wayyesy.invoicemaker.utils.Constants;
 import com.wayyesy.invoicemaker.utils.CustomDialogs;
 import com.wayyesy.invoicemaker.utils.StaticConstants;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
