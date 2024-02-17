@@ -4,8 +4,13 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+
 import android.content.ComponentName;
+
+import com.itextpdf.kernel.events.PdfDocumentEvent;
+import com.itextpdf.kernel.geom.PageSize;
 import com.wayyesy.invoicemaker.R;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,12 +23,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.wayyesy.invoicemaker.templates.InvoiceTemplates;
 import com.wayyesy.invoicemaker.utils.StaticConstants;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -241,40 +248,104 @@ public class ViewPDFPreviewActivity extends AppCompatActivity {
 
         Document document = new Document(pdfDocument);
 
+        boolean result = SetPageAndBackgroundPDF(pdfDocument, document,
+                selected_template);
+
+        if (result) {
+
+            switch (selected_template) {
+                case StaticConstants.TEMPLATE_1:
+                    invoiceTemplates.invoiceTemplate_1(document);
+                    break;
+
+                case StaticConstants.TEMPLATE_2:
+                    invoiceTemplates.invoiceTemplate_2(document, getResources());
+                    break;
+
+                case StaticConstants.TEMPLATE_3:
+                    invoiceTemplates.invoiceTemplate_3(document, getResources());
+                    break;
+
+                case StaticConstants.TEMPLATE_4:
+                    invoiceTemplates.invoiceTemplate_4(document, getResources());
+                    break;
+
+                case StaticConstants.TEMPLATE_5:
+                    invoiceTemplates.invoiceTemplate_5(document, getResources());
+                    break;
+
+                case StaticConstants.TEMPLATE_6:
+                    invoiceTemplates.invoiceTemplate_6(document, getResources());
+                    break;
+
+            }
+
+
+            System.out.println("myPath" + pdfPath);
+            // pdfView.fromFile(new File(pdfPath)).show();
+            pdfView.fromFile(new File(pdfPath))
+                    .spacing(16)
+                    .load();
+
+        }
+
+
+    }
+
+
+    public boolean SetPageAndBackgroundPDF(PdfDocument pdfDocument, Document document,
+                                           String selected_template) throws IOException {
+
+        boolean result = false;
+
+       // Toast.makeText(this, ""+selected_template, Toast.LENGTH_SHORT).show();
+
 
         switch (selected_template) {
             case StaticConstants.TEMPLATE_1:
-                invoiceTemplates.invoiceTemplate_1(document);
+                document.setMargins(10f, 10f, 10f, 10f);
                 break;
 
             case StaticConstants.TEMPLATE_2:
-                invoiceTemplates.invoiceTemplate_2(document, getResources());
+
                 break;
 
             case StaticConstants.TEMPLATE_3:
-                invoiceTemplates.invoiceTemplate_3(document, getResources());
+
                 break;
 
             case StaticConstants.TEMPLATE_4:
-                invoiceTemplates.invoiceTemplate_4(document, getResources());
+
                 break;
 
             case StaticConstants.TEMPLATE_5:
-                invoiceTemplates.invoiceTemplate_5(document, getResources());
+
                 break;
 
             case StaticConstants.TEMPLATE_6:
-                invoiceTemplates.invoiceTemplate_6(document, getResources());
+
                 break;
 
         }
 
-        System.out.println("myPath" + pdfPath);
-        // pdfView.fromFile(new File(pdfPath)).show();
-        pdfView.fromFile(new File(pdfPath))
-                .spacing(16)
-                .load();
 
+        try {
+            PageSize pageSize = PageSize.A4; //---> page_width : 595
+            pdfDocument.setDefaultPageSize(pageSize);
+
+          //  System.out.println("pageSize width:" + pageSize.getWidth());  // pageSize width:595.0
+          //  System.out.println("pageSize height:" + pageSize.getHeight()); //pageSize height:842.0
+
+
+            result = true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Preview Page : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+
+        return result;
     }
 
 
