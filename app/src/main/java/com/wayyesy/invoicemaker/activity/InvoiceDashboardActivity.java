@@ -290,12 +290,12 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
 
             discountAmount.setVisibility(View.VISIBLE);
             if (Constants.FinalInvoiceDiscountType.equals(StaticConstants.DISCOUNT_PERCENTAGE)) {
-                discountAmount.setText(Constants.InvoiceCurrencySymbol + " " + new DecimalFormat("##.##").format(Double.valueOf(Constants.SelectedInvoiceDiscount) / 100 * Double.valueOf(Constants.TotalInvoicePrice)));
+                discountAmount.setText("- " + Constants.InvoiceCurrencySymbol + " " + new DecimalFormat("##.##").format(Double.valueOf(Constants.SelectedInvoiceDiscount) / 100 * Double.valueOf(Constants.TotalInvoicePrice)));
                 discountPercent.setVisibility(View.VISIBLE);
                 discountPercent.setText(Constants.SelectedInvoiceDiscount + "%");
             } else {
                 discountPercent.setVisibility(View.GONE);
-                discountAmount.setText(Constants.InvoiceCurrencySymbol + " " + Constants.SelectedInvoiceDiscount);
+                discountAmount.setText("- " + Constants.InvoiceCurrencySymbol + " " + Constants.SelectedInvoiceDiscount);
             }
         }
     }
@@ -344,7 +344,7 @@ public class InvoiceDashboardActivity extends AppCompatActivity {
         companyAddress = findViewById(R.id.company_address);
         companyWebsite = findViewById(R.id.company_website);
         discountAmount = findViewById(R.id.discount_val);
-        discountPercent = findViewById(R.id.disp_percent);
+        discountPercent = findViewById(R.id.disc_percent);
 
         clientName = findViewById(R.id.client_name);
         clientAdd1 = findViewById(R.id.client_add1);

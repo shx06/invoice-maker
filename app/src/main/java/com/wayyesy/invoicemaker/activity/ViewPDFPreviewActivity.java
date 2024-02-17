@@ -7,6 +7,7 @@ import androidx.core.content.FileProvider;
 
 import android.content.ComponentName;
 
+import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.events.PdfDocumentEvent;
 import com.itextpdf.kernel.geom.PageSize;
 import com.wayyesy.invoicemaker.R;
@@ -253,29 +254,54 @@ public class ViewPDFPreviewActivity extends AppCompatActivity {
 
         if (result) {
 
+            DeviceRgb themeFontColor, lightThemeFontColor, whiteFontColor;
+
             switch (selected_template) {
                 case StaticConstants.TEMPLATE_1:
                     invoiceTemplates.invoiceTemplate_1(document);
                     break;
 
                 case StaticConstants.TEMPLATE_2:
-                    invoiceTemplates.invoiceTemplate_2(document, getResources());
+
+                    themeFontColor = new DeviceRgb(0, 150, 255);
+                    lightThemeFontColor = new DeviceRgb(153, 204, 255);
+                    whiteFontColor = new DeviceRgb(255, 255, 255);
+
+                    invoiceTemplates.invoiceTemplate_2(document, themeFontColor, lightThemeFontColor, whiteFontColor, getResources());
                     break;
 
                 case StaticConstants.TEMPLATE_3:
-                    invoiceTemplates.invoiceTemplate_3(document, getResources());
+
+                    themeFontColor = new DeviceRgb(204, 0, 204);
+                    lightThemeFontColor = new DeviceRgb(255, 204, 255);
+                    whiteFontColor = new DeviceRgb(255, 255, 255);
+                    invoiceTemplates.invoiceTemplate_3(document, themeFontColor, lightThemeFontColor, whiteFontColor, getResources());
                     break;
 
                 case StaticConstants.TEMPLATE_4:
-                    invoiceTemplates.invoiceTemplate_4(document, getResources());
+
+                    themeFontColor = new DeviceRgb(0, 153, 153);
+                    lightThemeFontColor = new DeviceRgb(204, 255, 204);
+                    whiteFontColor = new DeviceRgb(255, 255, 255);
+
+                    invoiceTemplates.invoiceTemplate_4(document, themeFontColor, lightThemeFontColor, whiteFontColor, getResources());
                     break;
 
                 case StaticConstants.TEMPLATE_5:
-                    invoiceTemplates.invoiceTemplate_5(document, getResources());
+
+                    themeFontColor = new DeviceRgb(225, 128, 0);
+                    lightThemeFontColor = new DeviceRgb(255, 204, 153);
+                    whiteFontColor = new DeviceRgb(255, 255, 255);
+
+                    invoiceTemplates.invoiceTemplate_5(document, themeFontColor, lightThemeFontColor, whiteFontColor, getResources());
                     break;
 
                 case StaticConstants.TEMPLATE_6:
-                    invoiceTemplates.invoiceTemplate_6(document, getResources());
+
+                    themeFontColor = new DeviceRgb(153, 0, 0);
+                    lightThemeFontColor = new DeviceRgb(255, 204, 204);
+
+                    invoiceTemplates.invoiceTemplate_6(document, themeFontColor, lightThemeFontColor, getResources());
                     break;
 
             }
@@ -298,7 +324,7 @@ public class ViewPDFPreviewActivity extends AppCompatActivity {
 
         boolean result = false;
 
-       // Toast.makeText(this, ""+selected_template, Toast.LENGTH_SHORT).show();
+        // Toast.makeText(this, ""+selected_template, Toast.LENGTH_SHORT).show();
 
 
         switch (selected_template) {
@@ -307,23 +333,23 @@ public class ViewPDFPreviewActivity extends AppCompatActivity {
                 break;
 
             case StaticConstants.TEMPLATE_2:
-
+                document.setMargins(10f, 20f, 10f, 20f);
                 break;
 
             case StaticConstants.TEMPLATE_3:
-
+                document.setMargins(10f, 20f, 10f, 20f);
                 break;
 
             case StaticConstants.TEMPLATE_4:
-
+                document.setMargins(10f, 20f, 10f, 20f);
                 break;
 
             case StaticConstants.TEMPLATE_5:
-
+                document.setMargins(10f, 20f, 10f, 20f);
                 break;
 
             case StaticConstants.TEMPLATE_6:
-
+                document.setMargins(10f, 20f, 10f, 20f);
                 break;
 
         }
@@ -333,15 +359,15 @@ public class ViewPDFPreviewActivity extends AppCompatActivity {
             PageSize pageSize = PageSize.A4; //---> page_width : 595
             pdfDocument.setDefaultPageSize(pageSize);
 
-          //  System.out.println("pageSize width:" + pageSize.getWidth());  // pageSize width:595.0
-          //  System.out.println("pageSize height:" + pageSize.getHeight()); //pageSize height:842.0
+            //  System.out.println("pageSize width:" + pageSize.getWidth());  // pageSize width:595.0
+            //  System.out.println("pageSize height:" + pageSize.getHeight()); //pageSize height:842.0
 
 
             result = true;
 
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "Preview Page : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Preview Page Error : " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
 

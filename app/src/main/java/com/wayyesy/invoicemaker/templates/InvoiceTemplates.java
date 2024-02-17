@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
@@ -17,6 +16,7 @@ import com.itextpdf.kernel.pdf.canvas.draw.ILineDrawer;
 import com.itextpdf.kernel.pdf.canvas.draw.SolidLine;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.borders.Border;
+import com.itextpdf.layout.borders.DashedBorder;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.LineSeparator;
@@ -28,8 +28,8 @@ import com.itextpdf.layout.property.VerticalAlignment;
 import com.wayyesy.invoicemaker.R;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.Objects;
 
 public class InvoiceTemplates {
 
@@ -148,7 +148,7 @@ public class InvoiceTemplates {
                 .setTextAlignment(TextAlignment.CENTER)
         );
 
-      //  Table tableDataDetailsBody = new Table(tableCol3).setMarginTop(20f);
+        //  Table tableDataDetailsBody = new Table(tableCol3).setMarginTop(20f);
 
 
         float[] tableCol3_1 = {140, 55, 85, 105, 105, 85};  // 575
@@ -175,7 +175,8 @@ public class InvoiceTemplates {
 
             double netItemPrice = extra + totalItemPrice;
 
-            if (!InvoiceHelper.itemsList.get(i).getItemDisc().equals("0")) {
+           // if (!InvoiceHelper.itemsList.get(i).getItemDisc().equals("0")) {
+            if(!(Objects.equals(InvoiceHelper.itemsList.get(i).getItemDisc(),"0"))) {
                 tableDataDetailsBody.addCell(new Cell().add(new Paragraph("-" + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice)))
                         .setBorder(Border.NO_BORDER)
                         .setTextAlignment(TextAlignment.CENTER)
@@ -254,12 +255,7 @@ public class InvoiceTemplates {
     }
 
 
-    public void invoiceTemplate_2(Document document, Resources resources) {
-
-        DeviceRgb themeFontColor = new DeviceRgb(0, 150, 255);
-        DeviceRgb lightThemeFontColor = new DeviceRgb(153, 204, 255);
-        DeviceRgb whiteFontColor = new DeviceRgb(255, 255, 255);
-
+    public void invoiceTemplate_2(Document document, DeviceRgb themeFontColor, DeviceRgb lightThemeFontColor, DeviceRgb whiteFontColor, Resources resources) {
 
         PdfFont font = InvoiceHelper.selectPDFFont(InvoiceHelper.countryName);
 
@@ -277,25 +273,33 @@ public class InvoiceTemplates {
         iconBitmap.compress(Bitmap.CompressFormat.PNG, 100, iconStream);
         ImageData iconImageData = ImageDataFactory.create(iconStream.toByteArray());
 
-        float[] tableCol1 = {100f, 230f, 230f};
+        float[] tableCol1 = {100f, 230f, 225f};
         Table tableHeader = new Table(tableCol1);
 
+
+
         if (InvoiceHelper.compImage != null && InvoiceHelper.compImage.length > 0) {
-            tableHeader.addCell(new Cell(6, 1).add(new Image(iconImageData).setWidth(100f)).setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE));
+            tableHeader.addCell(new Cell(6, 1).add(new Image(iconImageData).setWidth(100f))
+                    .setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE));
         } else {
-            tableHeader.addCell(new Cell(6, 1).add(new Paragraph("")).setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE));
+            tableHeader.addCell(new Cell(6, 1).add(new Paragraph(""))
+                    .setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE));
         }
 
         if (InvoiceHelper.compName != null && !(TextUtils.isEmpty(InvoiceHelper.compName))) {
-            tableHeader.addCell(new Cell().add(new Paragraph(InvoiceHelper.compName).setBold().setFontSize(17f).setMarginLeft(30f)).setBorder(Border.NO_BORDER).setHorizontalAlignment(HorizontalAlignment.CENTER));
+            tableHeader.addCell(new Cell().add(new Paragraph(InvoiceHelper.compName).setBold().setFontSize(17f).setMarginLeft(30f).setTextAlignment(TextAlignment.LEFT))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableHeader.addCell(new Cell().add(new Paragraph("WayyEasy").setBold().setFontSize(17f).setMarginLeft(30f)).setBorder(Border.NO_BORDER).setHorizontalAlignment(HorizontalAlignment.CENTER));
+            tableHeader.addCell(new Cell().add(new Paragraph("WayyEasy").setBold().setFontSize(17f).setMarginLeft(30f).setTextAlignment(TextAlignment.RIGHT))
+                    .setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.invNo != null && !(TextUtils.isEmpty(InvoiceHelper.invNo))) {
-            tableHeader.addCell(new Cell(6, 1).add(new Paragraph(InvoiceHelper.invNo).setHorizontalAlignment(HorizontalAlignment.RIGHT).setBold().setFontColor(themeFontColor).setFontSize(35f).setMarginTop(40f)).setBorder(Border.NO_BORDER));
+            tableHeader.addCell(new Cell(6, 1).add(new Paragraph(InvoiceHelper.invNo).setTextAlignment(TextAlignment.RIGHT).setBold().setFontColor(themeFontColor).setFontSize(35f).setMarginTop(40f))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableHeader.addCell(new Cell(6, 1).add(new Paragraph("INVOICE").setHorizontalAlignment(HorizontalAlignment.RIGHT).setBold().setFontColor(themeFontColor).setFontSize(35f).setMarginTop(40f)).setBorder(Border.NO_BORDER));
+            tableHeader.addCell(new Cell(6, 1).add(new Paragraph("INVOICE").setTextAlignment(TextAlignment.RIGHT).setBold().setFontColor(themeFontColor).setFontSize(35f).setMarginTop(40f))
+                    .setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.compAdd1 != null && !(TextUtils.isEmpty(InvoiceHelper.compAdd1))) {
@@ -328,95 +332,151 @@ public class InvoiceTemplates {
             tableHeader.addCell(new Cell().add(new Paragraph("").setFontSize(15f).setMarginLeft(30f).setMarginTop(-7f)).setBorder(Border.NO_BORDER).setHorizontalAlignment(HorizontalAlignment.CENTER));
         }
 
+        document.add(tableHeader);
+
         ILineDrawer solidLine = new SolidLine();
         LineSeparator hrLine = new LineSeparator(solidLine).setOpacity(0.5f).setMarginTop(20f).setMarginBottom(15f);
+        document.add(hrLine);
 
-        float[] tableCol2 = {240, 180f, 140f};
+        float[] tableCol2 = {235, 180f, 140f};
         Table tableUserDetails = new Table(tableCol2);
         tableUserDetails.addCell(new Cell().add(new Paragraph("BILL TO").setBold().setFontSize(17f)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("INVOICE #").setBold().setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("INVOICE #").setBold().setFontSize(17f)).setBorder(Border.NO_BORDER));
         if (InvoiceHelper.invNo != null && !(TextUtils.isEmpty(InvoiceHelper.invNo))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invNo).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invNo).setFontSize(17f).setTextAlignment(TextAlignment.RIGHT))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f)).setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.clientName != null && !(TextUtils.isEmpty(InvoiceHelper.clientName))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientName).setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientName).setMarginTop(-7f).setFontSize(15f))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         }
-        tableUserDetails.addCell(new Cell().add(new Paragraph("Created Date").setFontSize(17f).setBold().setHorizontalAlignment(HorizontalAlignment.RIGHT).setMarginTop(-7f)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("Created Date").setFontSize(17f).setBold().setMarginTop(-7f)).setBorder(Border.NO_BORDER));
         if (InvoiceHelper.invCreatedDate != null && !(TextUtils.isEmpty(InvoiceHelper.invCreatedDate))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invCreatedDate).setMarginTop(-7f).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invCreatedDate).setMarginTop(-7f).setFontSize(17f).setTextAlignment(TextAlignment.RIGHT))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(17f)).setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.clientBilAddress1 != null && !(TextUtils.isEmpty(InvoiceHelper.clientBilAddress1))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientBilAddress1).setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientBilAddress1).setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         }
-        tableUserDetails.addCell(new Cell().add(new Paragraph("DUE Date").setFontSize(17f).setBold().setMarginTop(-7f).setHorizontalAlignment(HorizontalAlignment.RIGHT).setMarginTop(-7f)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("DUE Date").setFontSize(17f).setBold().setMarginTop(-7f).setMarginTop(-7f)).setBorder(Border.NO_BORDER));
         if (InvoiceHelper.invDueDate != null && !(TextUtils.isEmpty(InvoiceHelper.invDueDate))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invDueDate).setMarginTop(-7f).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invDueDate).setMarginTop(-7f).setFontSize(17f).setTextAlignment(TextAlignment.RIGHT))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f))
+                    .setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.clientBilAddress2 != null && !(TextUtils.isEmpty(InvoiceHelper.clientBilAddress2))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientBilAddress2).setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientBilAddress2).setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f))
+                    .setBorder(Border.NO_BORDER));
         }
 
-        tableUserDetails.addCell(new Cell().add(new Paragraph("P.O.#").setFontSize(17f).setMarginTop(-7f).setBold().setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("P.O.#").setFontSize(17f).setMarginTop(-7f).setBold())
+                .setBorder(Border.NO_BORDER));
 
         if (InvoiceHelper.invoicePo != null && !(TextUtils.isEmpty(InvoiceHelper.invoicePo))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invoicePo).setMarginTop(-7f).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invoicePo).setMarginTop(-7f).setFontSize(17f).setTextAlignment(TextAlignment.RIGHT))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(17f)).setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.clientPhone != null && !(TextUtils.isEmpty(InvoiceHelper.clientPhone))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientPhone).setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientPhone).setMarginTop(-7f).setFontSize(15f))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f))
+                    .setBorder(Border.NO_BORDER));
         }
 
-        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f).setBold().setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f).setBold()).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f)).setBorder(Border.NO_BORDER));
 
 
         if (InvoiceHelper.clientEmail != null && !(TextUtils.isEmpty(InvoiceHelper.clientEmail))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientEmail).setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientEmail).setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         }
 
-        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f).setBold().setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f).setBold()).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f)).setBorder(Border.NO_BORDER));
+
+        document.add(tableUserDetails);
+
+     ///   float[] tableCol3 = {140, 55, 80, 100, 100, 80};  // 555
+//        float[] tableCol3 = {140f, 44f, 84f, 104f, 104f, 84f};
+      //  Table tableDataDetailsHead = new Table(tableCol3).setBackgroundColor(themeFontColor).setMarginTop(10f);
+
+        float[] tableCol3 = {140, 55, 80, 100, 100, 80};  // 555
+        Table tableDataDetailsHead = new Table(tableCol3).setBackgroundColor(themeFontColor).setMarginTop(10f).setWidth(555f).setFixedLayout();
 
 
-        float[] tableCol3 = {140f, 44f, 84f, 104f, 104f, 84f};
-        Table tableDataDetailsHead = new Table(tableCol3).setBackgroundColor(themeFontColor).setMarginTop(10f);
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("ITEM").setBold().setFontColor(whiteFontColor).setFontSize(14f).setPaddingLeft(5f)).setBorder(Border.NO_BORDER));
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("QTY").setBold().setFontColor(whiteFontColor).setFontSize(14f)).setBorder(Border.NO_BORDER));
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("PRICE").setBold().setFontColor(whiteFontColor).setFontSize(14f)).setBorder(Border.NO_BORDER));
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("DISCOUNT").setBold().setFontColor(whiteFontColor).setFontSize(14f)).setBorder(Border.NO_BORDER));
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("TAX").setBold().setFontColor(whiteFontColor).setFontSize(14f)).setBorder(Border.NO_BORDER));
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("AMOUNT").setBold().setFontColor(whiteFontColor).setFontSize(14f).setPaddingRight(5f)).setBorder(Border.NO_BORDER));
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("ITEM NAME").setPaddingLeft(5f).setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.LEFT)
 
-        Table tableDataDetailsBody = new Table(tableCol3).setMarginTop(10f);
+        );
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("QTY").setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.CENTER)
+        );
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("PRICE").setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.CENTER)
+        );
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("DISCOUNT").setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.CENTER)
+        );
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("TAX").setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.CENTER)
+        );
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("AMOUNT").setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.CENTER)
+        );
+        document.add(tableDataDetailsHead);
+
+
+
+        float[] tableCol3_1 = {140, 55, 80, 100, 100, 80};
 
         for (int i = 0; i < InvoiceHelper.itemsList.size(); i++) {
 
+            Table tableDataDetailsBody = new Table(tableCol3_1).setBackgroundColor(lightThemeFontColor).setWidth(555f).setFixedLayout();
+
+            Table tableDataDetailsBodyWhite = new Table(tableCol3_1).setWidth(555f).setFixedLayout();
+
             if (i % 2 == 0) {
 
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemName()).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemQuantity()).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + InvoiceHelper.itemsList.get(i).getItemPrice()).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemName())
+                                        .setFont(font).setPaddingLeft(5f).setTextAlignment(TextAlignment.LEFT))
+                                .setBorder(Border.NO_BORDER)
+                        );
+                tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemQuantity())
+                                .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER)
+                );
+                tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + InvoiceHelper.itemsList.get(i)
+                                .getItemPrice())
+                                .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER)
+                );
 
                 double totalItemPrice = Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemQuantity()) * Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemPrice());
 
@@ -425,24 +485,55 @@ public class InvoiceTemplates {
                 double netItemPrice = extra + totalItemPrice;
 
                 if (!InvoiceHelper.itemsList.get(i).getItemDisc().equals("0")) {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice))
+                                    .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setPaddingLeft(15f).setMarginTop(-3f).setHeight(25f).setHorizontalAlignment(HorizontalAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph("--")
+                                    .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 }
 
                 if (!InvoiceHelper.itemsList.get(i).getItemTax().equals("0")) {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice))
+                                    .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setPaddingLeft(15f).setMarginTop(-3f).setHeight(25f).setHorizontalAlignment(HorizontalAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph("--")
+                                    .setFont(font))
+                            .setBorder(Border.NO_BORDER)
+                            .setTextAlignment(TextAlignment.CENTER)
+                    );
                 }
 
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice))
+                                .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER)
+                );
 
+                document.add(tableDataDetailsBodyWhite);
             } else {
 
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemName()).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemQuantity()).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + InvoiceHelper.itemsList.get(i).getItemPrice()).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemName())
+                                .setFont(font).setPaddingLeft(5f).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.LEFT))
+                        .setBorder(Border.NO_BORDER)
+                );
+
+
+
+
+                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemQuantity())
+                                .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER)
+                );
+
+                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + InvoiceHelper.itemsList.get(i).getItemPrice())
+                                .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER)
+                );
 
                 double totalItemPrice = Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemQuantity()) * Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemPrice());
 
@@ -452,47 +543,69 @@ public class InvoiceTemplates {
 
 
                 if (!InvoiceHelper.itemsList.get(i).getItemDisc().equals("0")) {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice))
+                                    .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setHeight(25f).setPaddingLeft(20f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--")
+                                    .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 }
 
                 if (!InvoiceHelper.itemsList.get(i).getItemTax().equals("0")) {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice))
+                                    .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setHeight(25f).setPaddingLeft(20f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--")
+                                    .setFont(font).setBackgroundColor(lightThemeFontColor))
+                            .setBorder(Border.NO_BORDER)
+                            .setTextAlignment(TextAlignment.CENTER)
+                    );
                 }
 
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice))
+                                .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER));
+
+
+                document.add(tableDataDetailsBody);
 
             }
         }
 
-        Table tableDataDetailsCalculation = new Table(tableCol3).setMarginTop(10f);
+        float[] tableCol4 = {140, 55, 80, 80, 80, 120};
+
+        Table tableDataDetailsCalculation = new Table(tableCol4).setMarginTop(15f);
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("SUBTOTAL").setBold()).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.subTotal)).setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("SUBTOTAL :").setFont(font).setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.subTotal)).setTextAlignment(TextAlignment.RIGHT).setPaddingRight(5f).setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
 
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("DISCOUNT").setBold()).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("DISCOUNT :").setFont(font).setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
         if (InvoiceHelper.discount > 0) {
-            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph('-' + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.discount)).setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
+            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph('-' + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.discount)).setTextAlignment(TextAlignment.RIGHT).setPaddingRight(5f).setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
         } else {
-            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("---").setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
+            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("--").setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
         }
 
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("TOTAL").setBold().setBackgroundColor(themeFontColor).setHeight(25f).setFontColor(whiteFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.finalTotal)).setFont(font).setBackgroundColor(themeFontColor).setHeight(25f).setFontColor(whiteFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("TOTAL :").setFont(font).setBackgroundColor(themeFontColor).setTextAlignment(TextAlignment.RIGHT).setHeight(25f).setFontColor(whiteFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.finalTotal)).setTextAlignment(TextAlignment.RIGHT).setPaddingRight(5f).setFont(font).setBackgroundColor(themeFontColor).setHeight(25f).setFontColor(whiteFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+
+        document.add(tableDataDetailsCalculation);
 
         float[] tableTermsCol = {560};
         Table tableTermsHeader = new Table(tableTermsCol).setFixedPosition(30f, 20, 560);
@@ -503,15 +616,15 @@ public class InvoiceTemplates {
         } else {
             tableTermsHeader.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f)).setBorder(Border.NO_BORDER));
         }
-
-
-        document.add(tableHeader);
-        document.add(hrLine);
-        document.add(tableUserDetails);
-        document.add(tableDataDetailsHead);
-        document.add(tableDataDetailsBody);
-        document.add(tableDataDetailsCalculation);
         document.add(tableTermsHeader);
+
+//        document.add(tableHeader);
+//        document.add(hrLine);
+//        document.add(tableUserDetails);
+//        document.add(tableDataDetailsHead);
+//        document.add(tableDataDetailsBody);
+
+
 
 
         document.close();
@@ -519,12 +632,7 @@ public class InvoiceTemplates {
 
     }
 
-    public void invoiceTemplate_3(Document document, Resources resources) {
-
-        DeviceRgb themeFontColor = new DeviceRgb(204, 0, 204);
-        DeviceRgb lightThemeFontColor = new DeviceRgb(255, 204, 255);
-        DeviceRgb whiteFontColor = new DeviceRgb(255, 255, 255);
-
+    public void invoiceTemplate_3(Document document, DeviceRgb themeFontColor, DeviceRgb lightThemeFontColor, DeviceRgb whiteFontColor, Resources resources) {
 
         PdfFont font = InvoiceHelper.selectPDFFont(InvoiceHelper.countryName);
 
@@ -542,25 +650,33 @@ public class InvoiceTemplates {
         iconBitmap.compress(Bitmap.CompressFormat.PNG, 100, iconStream);
         ImageData iconImageData = ImageDataFactory.create(iconStream.toByteArray());
 
-        float[] tableCol1 = {100f, 230f, 230f};
+        float[] tableCol1 = {100f, 230f, 225f};
         Table tableHeader = new Table(tableCol1);
 
+
+
         if (InvoiceHelper.compImage != null && InvoiceHelper.compImage.length > 0) {
-            tableHeader.addCell(new Cell(6, 1).add(new Image(iconImageData).setWidth(100f)).setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE));
+            tableHeader.addCell(new Cell(6, 1).add(new Image(iconImageData).setWidth(100f))
+                    .setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE));
         } else {
-            tableHeader.addCell(new Cell(6, 1).add(new Paragraph("")).setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE));
+            tableHeader.addCell(new Cell(6, 1).add(new Paragraph(""))
+                    .setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE));
         }
 
         if (InvoiceHelper.compName != null && !(TextUtils.isEmpty(InvoiceHelper.compName))) {
-            tableHeader.addCell(new Cell().add(new Paragraph(InvoiceHelper.compName).setBold().setFontSize(17f).setMarginLeft(30f)).setBorder(Border.NO_BORDER).setHorizontalAlignment(HorizontalAlignment.CENTER));
+            tableHeader.addCell(new Cell().add(new Paragraph(InvoiceHelper.compName).setBold().setFontSize(17f).setMarginLeft(30f).setTextAlignment(TextAlignment.LEFT))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableHeader.addCell(new Cell().add(new Paragraph("WayyEasy").setBold().setFontSize(17f).setMarginLeft(30f)).setBorder(Border.NO_BORDER).setHorizontalAlignment(HorizontalAlignment.CENTER));
+            tableHeader.addCell(new Cell().add(new Paragraph("WayyEasy").setBold().setFontSize(17f).setMarginLeft(30f).setTextAlignment(TextAlignment.RIGHT))
+                    .setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.invNo != null && !(TextUtils.isEmpty(InvoiceHelper.invNo))) {
-            tableHeader.addCell(new Cell(6, 1).add(new Paragraph(InvoiceHelper.invNo).setHorizontalAlignment(HorizontalAlignment.RIGHT).setBold().setFontColor(themeFontColor).setFontSize(35f).setMarginTop(40f)).setBorder(Border.NO_BORDER));
+            tableHeader.addCell(new Cell(6, 1).add(new Paragraph(InvoiceHelper.invNo).setTextAlignment(TextAlignment.RIGHT).setBold().setFontColor(themeFontColor).setFontSize(35f).setMarginTop(40f))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableHeader.addCell(new Cell(6, 1).add(new Paragraph("INVOICE").setHorizontalAlignment(HorizontalAlignment.RIGHT).setBold().setFontColor(themeFontColor).setFontSize(35f).setMarginTop(40f)).setBorder(Border.NO_BORDER));
+            tableHeader.addCell(new Cell(6, 1).add(new Paragraph("INVOICE").setTextAlignment(TextAlignment.RIGHT).setBold().setFontColor(themeFontColor).setFontSize(35f).setMarginTop(40f))
+                    .setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.compAdd1 != null && !(TextUtils.isEmpty(InvoiceHelper.compAdd1))) {
@@ -593,95 +709,151 @@ public class InvoiceTemplates {
             tableHeader.addCell(new Cell().add(new Paragraph("").setFontSize(15f).setMarginLeft(30f).setMarginTop(-7f)).setBorder(Border.NO_BORDER).setHorizontalAlignment(HorizontalAlignment.CENTER));
         }
 
+        document.add(tableHeader);
+
         ILineDrawer solidLine = new SolidLine();
         LineSeparator hrLine = new LineSeparator(solidLine).setOpacity(0.5f).setMarginTop(20f).setMarginBottom(15f);
+        document.add(hrLine);
 
-        float[] tableCol2 = {240, 180f, 140f};
+        float[] tableCol2 = {235, 180f, 140f};
         Table tableUserDetails = new Table(tableCol2);
         tableUserDetails.addCell(new Cell().add(new Paragraph("BILL TO").setBold().setFontSize(17f)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("INVOICE #").setBold().setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("INVOICE #").setBold().setFontSize(17f)).setBorder(Border.NO_BORDER));
         if (InvoiceHelper.invNo != null && !(TextUtils.isEmpty(InvoiceHelper.invNo))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invNo).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invNo).setFontSize(17f).setTextAlignment(TextAlignment.RIGHT))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f)).setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.clientName != null && !(TextUtils.isEmpty(InvoiceHelper.clientName))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientName).setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientName).setMarginTop(-7f).setFontSize(15f))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         }
-        tableUserDetails.addCell(new Cell().add(new Paragraph("Created Date").setFontSize(17f).setBold().setHorizontalAlignment(HorizontalAlignment.RIGHT).setMarginTop(-7f)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("Created Date").setFontSize(17f).setBold().setMarginTop(-7f)).setBorder(Border.NO_BORDER));
         if (InvoiceHelper.invCreatedDate != null && !(TextUtils.isEmpty(InvoiceHelper.invCreatedDate))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invCreatedDate).setMarginTop(-7f).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invCreatedDate).setMarginTop(-7f).setFontSize(17f).setTextAlignment(TextAlignment.RIGHT))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(17f)).setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.clientBilAddress1 != null && !(TextUtils.isEmpty(InvoiceHelper.clientBilAddress1))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientBilAddress1).setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientBilAddress1).setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         }
-        tableUserDetails.addCell(new Cell().add(new Paragraph("DUE Date").setFontSize(17f).setBold().setMarginTop(-7f).setHorizontalAlignment(HorizontalAlignment.RIGHT).setMarginTop(-7f)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("DUE Date").setFontSize(17f).setBold().setMarginTop(-7f).setMarginTop(-7f)).setBorder(Border.NO_BORDER));
         if (InvoiceHelper.invDueDate != null && !(TextUtils.isEmpty(InvoiceHelper.invDueDate))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invDueDate).setMarginTop(-7f).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invDueDate).setMarginTop(-7f).setFontSize(17f).setTextAlignment(TextAlignment.RIGHT))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f))
+                    .setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.clientBilAddress2 != null && !(TextUtils.isEmpty(InvoiceHelper.clientBilAddress2))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientBilAddress2).setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientBilAddress2).setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f))
+                    .setBorder(Border.NO_BORDER));
         }
 
-        tableUserDetails.addCell(new Cell().add(new Paragraph("P.O.#").setFontSize(17f).setMarginTop(-7f).setBold().setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("P.O.#").setFontSize(17f).setMarginTop(-7f).setBold())
+                .setBorder(Border.NO_BORDER));
 
         if (InvoiceHelper.invoicePo != null && !(TextUtils.isEmpty(InvoiceHelper.invoicePo))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invoicePo).setMarginTop(-7f).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invoicePo).setMarginTop(-7f).setFontSize(17f).setTextAlignment(TextAlignment.RIGHT))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(17f)).setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.clientPhone != null && !(TextUtils.isEmpty(InvoiceHelper.clientPhone))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientPhone).setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientPhone).setMarginTop(-7f).setFontSize(15f))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f))
+                    .setBorder(Border.NO_BORDER));
         }
 
-        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f).setBold().setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f).setBold()).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f)).setBorder(Border.NO_BORDER));
 
 
         if (InvoiceHelper.clientEmail != null && !(TextUtils.isEmpty(InvoiceHelper.clientEmail))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientEmail).setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientEmail).setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         }
 
-        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f).setBold().setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f).setBold()).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f)).setBorder(Border.NO_BORDER));
+
+        document.add(tableUserDetails);
+
+        ///   float[] tableCol3 = {140, 55, 80, 100, 100, 80};  // 555
+//        float[] tableCol3 = {140f, 44f, 84f, 104f, 104f, 84f};
+        //  Table tableDataDetailsHead = new Table(tableCol3).setBackgroundColor(themeFontColor).setMarginTop(10f);
+
+        float[] tableCol3 = {140, 55, 80, 100, 100, 80};  // 555
+        Table tableDataDetailsHead = new Table(tableCol3).setBackgroundColor(themeFontColor).setMarginTop(10f).setWidth(555f).setFixedLayout();
 
 
-        float[] tableCol3 = {140f, 44f, 84f, 104f, 104f, 84f};
-        Table tableDataDetailsHead = new Table(tableCol3).setBackgroundColor(themeFontColor).setMarginTop(10f);
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("ITEM").setBold().setFontColor(whiteFontColor).setFontSize(14f).setPaddingLeft(5f)).setBorder(Border.NO_BORDER));
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("QTY").setBold().setFontColor(whiteFontColor).setFontSize(14f)).setBorder(Border.NO_BORDER));
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("PRICE").setBold().setFontColor(whiteFontColor).setFontSize(14f)).setBorder(Border.NO_BORDER));
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("DISCOUNT").setBold().setFontColor(whiteFontColor).setFontSize(14f)).setBorder(Border.NO_BORDER));
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("TAX").setBold().setFontColor(whiteFontColor).setFontSize(14f)).setBorder(Border.NO_BORDER));
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("AMOUNT").setBold().setFontColor(whiteFontColor).setFontSize(14f).setPaddingRight(5f)).setBorder(Border.NO_BORDER));
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("ITEM NAME").setPaddingLeft(5f).setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.LEFT)
 
-        Table tableDataDetailsBody = new Table(tableCol3).setMarginTop(10f);
+        );
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("QTY").setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.CENTER)
+        );
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("PRICE").setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.CENTER)
+        );
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("DISCOUNT").setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.CENTER)
+        );
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("TAX").setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.CENTER)
+        );
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("AMOUNT").setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.CENTER)
+        );
+        document.add(tableDataDetailsHead);
+
+
+
+        float[] tableCol3_1 = {140, 55, 80, 100, 100, 80};
 
         for (int i = 0; i < InvoiceHelper.itemsList.size(); i++) {
 
+            Table tableDataDetailsBody = new Table(tableCol3_1).setBackgroundColor(lightThemeFontColor).setWidth(555f).setFixedLayout();
+
+            Table tableDataDetailsBodyWhite = new Table(tableCol3_1).setWidth(555f).setFixedLayout();
+
             if (i % 2 == 0) {
 
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemName()).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemQuantity()).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + InvoiceHelper.itemsList.get(i).getItemPrice()).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemName())
+                                .setFont(font).setPaddingLeft(5f).setTextAlignment(TextAlignment.LEFT))
+                        .setBorder(Border.NO_BORDER)
+                );
+                tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemQuantity())
+                                .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER)
+                );
+                tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + InvoiceHelper.itemsList.get(i)
+                                .getItemPrice())
+                                .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER)
+                );
 
                 double totalItemPrice = Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemQuantity()) * Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemPrice());
 
@@ -690,24 +862,55 @@ public class InvoiceTemplates {
                 double netItemPrice = extra + totalItemPrice;
 
                 if (!InvoiceHelper.itemsList.get(i).getItemDisc().equals("0")) {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice))
+                                    .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setPaddingLeft(15f).setMarginTop(-3f).setHeight(25f).setHorizontalAlignment(HorizontalAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph("--")
+                                    .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 }
 
                 if (!InvoiceHelper.itemsList.get(i).getItemTax().equals("0")) {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice))
+                                    .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setPaddingLeft(15f).setMarginTop(-3f).setHeight(25f).setHorizontalAlignment(HorizontalAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph("--")
+                                    .setFont(font))
+                            .setBorder(Border.NO_BORDER)
+                            .setTextAlignment(TextAlignment.CENTER)
+                    );
                 }
 
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice))
+                                .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER)
+                );
 
+                document.add(tableDataDetailsBodyWhite);
             } else {
 
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemName()).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemQuantity()).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + InvoiceHelper.itemsList.get(i).getItemPrice()).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemName())
+                                .setFont(font).setPaddingLeft(5f).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.LEFT))
+                        .setBorder(Border.NO_BORDER)
+                );
+
+
+
+
+                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemQuantity())
+                                .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER)
+                );
+
+                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + InvoiceHelper.itemsList.get(i).getItemPrice())
+                                .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER)
+                );
 
                 double totalItemPrice = Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemQuantity()) * Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemPrice());
 
@@ -717,76 +920,96 @@ public class InvoiceTemplates {
 
 
                 if (!InvoiceHelper.itemsList.get(i).getItemDisc().equals("0")) {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice))
+                                    .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setHeight(25f).setPaddingLeft(20f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--")
+                                    .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 }
 
                 if (!InvoiceHelper.itemsList.get(i).getItemTax().equals("0")) {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice))
+                                    .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setHeight(25f).setPaddingLeft(20f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--")
+                                    .setFont(font).setBackgroundColor(lightThemeFontColor))
+                            .setBorder(Border.NO_BORDER)
+                            .setTextAlignment(TextAlignment.CENTER)
+                    );
                 }
 
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice))
+                                .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER));
+
+
+                document.add(tableDataDetailsBody);
 
             }
         }
 
-        Table tableDataDetailsCalculation = new Table(tableCol3).setMarginTop(10f);
+        float[] tableCol4 = {140, 55, 80, 80, 80, 120};
+
+        Table tableDataDetailsCalculation = new Table(tableCol4).setMarginTop(15f);
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("SUBTOTAL").setBold()).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.subTotal)).setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("SUBTOTAL :").setFont(font).setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.subTotal)).setTextAlignment(TextAlignment.RIGHT).setPaddingRight(5f).setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
 
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("DISCOUNT").setBold()).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("DISCOUNT :").setFont(font).setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
         if (InvoiceHelper.discount > 0) {
-            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph('-' + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.discount)).setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
+            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph('-' + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.discount)).setTextAlignment(TextAlignment.RIGHT).setPaddingRight(5f).setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
         } else {
-            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("---").setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
+            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("--").setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
         }
 
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("TOTAL").setBold().setBackgroundColor(themeFontColor).setHeight(25f).setFontColor(whiteFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.finalTotal)).setFont(font).setBackgroundColor(themeFontColor).setHeight(25f).setFontColor(whiteFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("TOTAL :").setFont(font).setBackgroundColor(themeFontColor).setTextAlignment(TextAlignment.RIGHT).setHeight(25f).setFontColor(whiteFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.finalTotal)).setTextAlignment(TextAlignment.RIGHT).setPaddingRight(5f).setFont(font).setBackgroundColor(themeFontColor).setHeight(25f).setFontColor(whiteFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
 
+        document.add(tableDataDetailsCalculation);
 
         float[] tableTermsCol = {560};
         Table tableTermsHeader = new Table(tableTermsCol).setFixedPosition(30f, 20, 560);
+
         if (InvoiceHelper.companyTerms != null && !(TextUtils.isEmpty(InvoiceHelper.companyTerms))) {
             tableTermsHeader.addCell(new Cell().add(new Paragraph("Terms and Conditions:").setBold().setFontColor(themeFontColor)).setBorder(Border.NO_BORDER));
             tableTermsHeader.addCell(new Cell().add(new Paragraph(InvoiceHelper.companyTerms).setMarginTop(-7f)).setBorder(Border.NO_BORDER));
         } else {
             tableTermsHeader.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f)).setBorder(Border.NO_BORDER));
         }
-
-        document.add(tableHeader);
-        document.add(hrLine);
-        document.add(tableUserDetails);
-        document.add(tableDataDetailsHead);
-        document.add(tableDataDetailsBody);
-        document.add(tableDataDetailsCalculation);
         document.add(tableTermsHeader);
+
+//        document.add(tableHeader);
+//        document.add(hrLine);
+//        document.add(tableUserDetails);
+//        document.add(tableDataDetailsHead);
+//        document.add(tableDataDetailsBody);
+
+
 
 
         document.close();
+
+
     }
 
-    public void invoiceTemplate_4(Document document, Resources resources) {
-
-        DeviceRgb themeFontColor = new DeviceRgb(0, 153, 153);
-        DeviceRgb lightThemeFontColor = new DeviceRgb(204, 255, 204);
-        DeviceRgb whiteFontColor = new DeviceRgb(255, 255, 255);
-
+    public void invoiceTemplate_4(Document document, DeviceRgb themeFontColor, DeviceRgb lightThemeFontColor, DeviceRgb whiteFontColor, Resources resources) {
 
         PdfFont font = InvoiceHelper.selectPDFFont(InvoiceHelper.countryName);
 
@@ -804,25 +1027,33 @@ public class InvoiceTemplates {
         iconBitmap.compress(Bitmap.CompressFormat.PNG, 100, iconStream);
         ImageData iconImageData = ImageDataFactory.create(iconStream.toByteArray());
 
-        float[] tableCol1 = {100f, 230f, 230f};
+        float[] tableCol1 = {100f, 230f, 225f};
         Table tableHeader = new Table(tableCol1);
 
+
+
         if (InvoiceHelper.compImage != null && InvoiceHelper.compImage.length > 0) {
-            tableHeader.addCell(new Cell(6, 1).add(new Image(iconImageData).setWidth(100f)).setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE));
+            tableHeader.addCell(new Cell(6, 1).add(new Image(iconImageData).setWidth(100f))
+                    .setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE));
         } else {
-            tableHeader.addCell(new Cell(6, 1).add(new Paragraph("")).setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE));
+            tableHeader.addCell(new Cell(6, 1).add(new Paragraph(""))
+                    .setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE));
         }
 
         if (InvoiceHelper.compName != null && !(TextUtils.isEmpty(InvoiceHelper.compName))) {
-            tableHeader.addCell(new Cell().add(new Paragraph(InvoiceHelper.compName).setBold().setFontSize(17f).setMarginLeft(30f)).setBorder(Border.NO_BORDER).setHorizontalAlignment(HorizontalAlignment.CENTER));
+            tableHeader.addCell(new Cell().add(new Paragraph(InvoiceHelper.compName).setBold().setFontSize(17f).setMarginLeft(30f).setTextAlignment(TextAlignment.LEFT))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableHeader.addCell(new Cell().add(new Paragraph("WayyEasy").setBold().setFontSize(17f).setMarginLeft(30f)).setBorder(Border.NO_BORDER).setHorizontalAlignment(HorizontalAlignment.CENTER));
+            tableHeader.addCell(new Cell().add(new Paragraph("WayyEasy").setBold().setFontSize(17f).setMarginLeft(30f).setTextAlignment(TextAlignment.RIGHT))
+                    .setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.invNo != null && !(TextUtils.isEmpty(InvoiceHelper.invNo))) {
-            tableHeader.addCell(new Cell(6, 1).add(new Paragraph(InvoiceHelper.invNo).setHorizontalAlignment(HorizontalAlignment.RIGHT).setBold().setFontColor(themeFontColor).setFontSize(35f).setMarginTop(40f)).setBorder(Border.NO_BORDER));
+            tableHeader.addCell(new Cell(6, 1).add(new Paragraph(InvoiceHelper.invNo).setTextAlignment(TextAlignment.RIGHT).setBold().setFontColor(themeFontColor).setFontSize(35f).setMarginTop(40f))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableHeader.addCell(new Cell(6, 1).add(new Paragraph("INVOICE").setHorizontalAlignment(HorizontalAlignment.RIGHT).setBold().setFontColor(themeFontColor).setFontSize(35f).setMarginTop(40f)).setBorder(Border.NO_BORDER));
+            tableHeader.addCell(new Cell(6, 1).add(new Paragraph("INVOICE").setTextAlignment(TextAlignment.RIGHT).setBold().setFontColor(themeFontColor).setFontSize(35f).setMarginTop(40f))
+                    .setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.compAdd1 != null && !(TextUtils.isEmpty(InvoiceHelper.compAdd1))) {
@@ -855,95 +1086,151 @@ public class InvoiceTemplates {
             tableHeader.addCell(new Cell().add(new Paragraph("").setFontSize(15f).setMarginLeft(30f).setMarginTop(-7f)).setBorder(Border.NO_BORDER).setHorizontalAlignment(HorizontalAlignment.CENTER));
         }
 
+        document.add(tableHeader);
+
         ILineDrawer solidLine = new SolidLine();
         LineSeparator hrLine = new LineSeparator(solidLine).setOpacity(0.5f).setMarginTop(20f).setMarginBottom(15f);
+        document.add(hrLine);
 
-        float[] tableCol2 = {240, 180f, 140f};
+        float[] tableCol2 = {235, 180f, 140f};
         Table tableUserDetails = new Table(tableCol2);
         tableUserDetails.addCell(new Cell().add(new Paragraph("BILL TO").setBold().setFontSize(17f)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("INVOICE #").setBold().setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("INVOICE #").setBold().setFontSize(17f)).setBorder(Border.NO_BORDER));
         if (InvoiceHelper.invNo != null && !(TextUtils.isEmpty(InvoiceHelper.invNo))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invNo).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invNo).setFontSize(17f).setTextAlignment(TextAlignment.RIGHT))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f)).setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.clientName != null && !(TextUtils.isEmpty(InvoiceHelper.clientName))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientName).setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientName).setMarginTop(-7f).setFontSize(15f))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         }
-        tableUserDetails.addCell(new Cell().add(new Paragraph("Created Date").setFontSize(17f).setBold().setHorizontalAlignment(HorizontalAlignment.RIGHT).setMarginTop(-7f)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("Created Date").setFontSize(17f).setBold().setMarginTop(-7f)).setBorder(Border.NO_BORDER));
         if (InvoiceHelper.invCreatedDate != null && !(TextUtils.isEmpty(InvoiceHelper.invCreatedDate))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invCreatedDate).setMarginTop(-7f).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invCreatedDate).setMarginTop(-7f).setFontSize(17f).setTextAlignment(TextAlignment.RIGHT))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(17f)).setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.clientBilAddress1 != null && !(TextUtils.isEmpty(InvoiceHelper.clientBilAddress1))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientBilAddress1).setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientBilAddress1).setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         }
-        tableUserDetails.addCell(new Cell().add(new Paragraph("DUE Date").setFontSize(17f).setBold().setMarginTop(-7f).setHorizontalAlignment(HorizontalAlignment.RIGHT).setMarginTop(-7f)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("DUE Date").setFontSize(17f).setBold().setMarginTop(-7f).setMarginTop(-7f)).setBorder(Border.NO_BORDER));
         if (InvoiceHelper.invDueDate != null && !(TextUtils.isEmpty(InvoiceHelper.invDueDate))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invDueDate).setMarginTop(-7f).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invDueDate).setMarginTop(-7f).setFontSize(17f).setTextAlignment(TextAlignment.RIGHT))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f))
+                    .setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.clientBilAddress2 != null && !(TextUtils.isEmpty(InvoiceHelper.clientBilAddress2))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientBilAddress2).setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientBilAddress2).setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f))
+                    .setBorder(Border.NO_BORDER));
         }
 
-        tableUserDetails.addCell(new Cell().add(new Paragraph("P.O.#").setFontSize(17f).setMarginTop(-7f).setBold().setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("P.O.#").setFontSize(17f).setMarginTop(-7f).setBold())
+                .setBorder(Border.NO_BORDER));
 
         if (InvoiceHelper.invoicePo != null && !(TextUtils.isEmpty(InvoiceHelper.invoicePo))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invoicePo).setMarginTop(-7f).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invoicePo).setMarginTop(-7f).setFontSize(17f).setTextAlignment(TextAlignment.RIGHT))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(17f)).setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.clientPhone != null && !(TextUtils.isEmpty(InvoiceHelper.clientPhone))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientPhone).setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientPhone).setMarginTop(-7f).setFontSize(15f))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f))
+                    .setBorder(Border.NO_BORDER));
         }
 
-        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f).setBold().setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f).setBold()).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f)).setBorder(Border.NO_BORDER));
 
 
         if (InvoiceHelper.clientEmail != null && !(TextUtils.isEmpty(InvoiceHelper.clientEmail))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientEmail).setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientEmail).setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         }
 
-        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f).setBold().setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f).setBold()).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f)).setBorder(Border.NO_BORDER));
+
+        document.add(tableUserDetails);
+
+     ///   float[] tableCol3 = {140, 55, 80, 100, 100, 80};  // 555
+//        float[] tableCol3 = {140f, 44f, 84f, 104f, 104f, 84f};
+      //  Table tableDataDetailsHead = new Table(tableCol3).setBackgroundColor(themeFontColor).setMarginTop(10f);
+
+        float[] tableCol3 = {140, 55, 80, 100, 100, 80};  // 555
+        Table tableDataDetailsHead = new Table(tableCol3).setBackgroundColor(themeFontColor).setMarginTop(10f).setWidth(555f).setFixedLayout();
 
 
-        float[] tableCol3 = {140f, 44f, 84f, 104f, 104f, 84f};
-        Table tableDataDetailsHead = new Table(tableCol3).setBackgroundColor(themeFontColor).setMarginTop(10f);
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("ITEM").setBold().setFontColor(whiteFontColor).setFontSize(14f).setPaddingLeft(5f)).setBorder(Border.NO_BORDER));
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("QTY").setBold().setFontColor(whiteFontColor).setFontSize(14f)).setBorder(Border.NO_BORDER));
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("PRICE").setBold().setFontColor(whiteFontColor).setFontSize(14f)).setBorder(Border.NO_BORDER));
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("DISCOUNT").setBold().setFontColor(whiteFontColor).setFontSize(14f)).setBorder(Border.NO_BORDER));
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("TAX").setBold().setFontColor(whiteFontColor).setFontSize(14f)).setBorder(Border.NO_BORDER));
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("AMOUNT").setBold().setFontColor(whiteFontColor).setFontSize(14f).setPaddingRight(5f)).setBorder(Border.NO_BORDER));
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("ITEM NAME").setPaddingLeft(5f).setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.LEFT)
 
-        Table tableDataDetailsBody = new Table(tableCol3).setMarginTop(10f);
+        );
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("QTY").setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.CENTER)
+        );
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("PRICE").setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.CENTER)
+        );
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("DISCOUNT").setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.CENTER)
+        );
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("TAX").setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.CENTER)
+        );
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("AMOUNT").setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.CENTER)
+        );
+        document.add(tableDataDetailsHead);
+
+
+
+        float[] tableCol3_1 = {140, 55, 80, 100, 100, 80};
 
         for (int i = 0; i < InvoiceHelper.itemsList.size(); i++) {
 
+            Table tableDataDetailsBody = new Table(tableCol3_1).setBackgroundColor(lightThemeFontColor).setWidth(555f).setFixedLayout();
+
+            Table tableDataDetailsBodyWhite = new Table(tableCol3_1).setWidth(555f).setFixedLayout();
+
             if (i % 2 == 0) {
 
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemName()).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemQuantity()).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + InvoiceHelper.itemsList.get(i).getItemPrice()).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemName())
+                                        .setFont(font).setPaddingLeft(5f).setTextAlignment(TextAlignment.LEFT))
+                                .setBorder(Border.NO_BORDER)
+                        );
+                tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemQuantity())
+                                .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER)
+                );
+                tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + InvoiceHelper.itemsList.get(i)
+                                .getItemPrice())
+                                .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER)
+                );
 
                 double totalItemPrice = Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemQuantity()) * Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemPrice());
 
@@ -952,24 +1239,55 @@ public class InvoiceTemplates {
                 double netItemPrice = extra + totalItemPrice;
 
                 if (!InvoiceHelper.itemsList.get(i).getItemDisc().equals("0")) {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice))
+                                    .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setPaddingLeft(15f).setMarginTop(-3f).setHeight(25f).setHorizontalAlignment(HorizontalAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph("--")
+                                    .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 }
 
                 if (!InvoiceHelper.itemsList.get(i).getItemTax().equals("0")) {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice))
+                                    .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setPaddingLeft(15f).setMarginTop(-3f).setHeight(25f).setHorizontalAlignment(HorizontalAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph("--")
+                                    .setFont(font))
+                            .setBorder(Border.NO_BORDER)
+                            .setTextAlignment(TextAlignment.CENTER)
+                    );
                 }
 
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice))
+                                .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER)
+                );
 
+                document.add(tableDataDetailsBodyWhite);
             } else {
 
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemName()).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemQuantity()).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + InvoiceHelper.itemsList.get(i).getItemPrice()).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemName())
+                                .setFont(font).setPaddingLeft(5f).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.LEFT))
+                        .setBorder(Border.NO_BORDER)
+                );
+
+
+
+
+                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemQuantity())
+                                .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER)
+                );
+
+                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + InvoiceHelper.itemsList.get(i).getItemPrice())
+                                .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER)
+                );
 
                 double totalItemPrice = Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemQuantity()) * Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemPrice());
 
@@ -979,76 +1297,96 @@ public class InvoiceTemplates {
 
 
                 if (!InvoiceHelper.itemsList.get(i).getItemDisc().equals("0")) {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice))
+                                    .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setHeight(25f).setPaddingLeft(20f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--")
+                                    .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 }
 
                 if (!InvoiceHelper.itemsList.get(i).getItemTax().equals("0")) {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice))
+                                    .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setHeight(25f).setPaddingLeft(20f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--")
+                                    .setFont(font).setBackgroundColor(lightThemeFontColor))
+                            .setBorder(Border.NO_BORDER)
+                            .setTextAlignment(TextAlignment.CENTER)
+                    );
                 }
 
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice))
+                                .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER));
+
+
+                document.add(tableDataDetailsBody);
 
             }
         }
 
-        Table tableDataDetailsCalculation = new Table(tableCol3).setMarginTop(10f);
+        float[] tableCol4 = {140, 55, 80, 80, 80, 120};
+
+        Table tableDataDetailsCalculation = new Table(tableCol4).setMarginTop(15f);
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("SUBTOTAL").setBold()).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.subTotal)).setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("SUBTOTAL :").setFont(font).setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.subTotal)).setTextAlignment(TextAlignment.RIGHT).setPaddingRight(5f).setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
 
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("DISCOUNT").setBold()).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("DISCOUNT :").setFont(font).setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
         if (InvoiceHelper.discount > 0) {
-            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph('-' + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.discount)).setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
+            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph('-' + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.discount)).setTextAlignment(TextAlignment.RIGHT).setPaddingRight(5f).setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
         } else {
-            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("---").setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
+            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("--").setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
         }
 
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("TOTAL").setBold().setBackgroundColor(themeFontColor).setHeight(25f).setFontColor(whiteFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.finalTotal)).setFont(font).setBackgroundColor(themeFontColor).setHeight(25f).setFontColor(whiteFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("TOTAL :").setFont(font).setBackgroundColor(themeFontColor).setTextAlignment(TextAlignment.RIGHT).setHeight(25f).setFontColor(whiteFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.finalTotal)).setTextAlignment(TextAlignment.RIGHT).setPaddingRight(5f).setFont(font).setBackgroundColor(themeFontColor).setHeight(25f).setFontColor(whiteFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
 
+        document.add(tableDataDetailsCalculation);
 
         float[] tableTermsCol = {560};
         Table tableTermsHeader = new Table(tableTermsCol).setFixedPosition(30f, 20, 560);
+
         if (InvoiceHelper.companyTerms != null && !(TextUtils.isEmpty(InvoiceHelper.companyTerms))) {
             tableTermsHeader.addCell(new Cell().add(new Paragraph("Terms and Conditions:").setBold().setFontColor(themeFontColor)).setBorder(Border.NO_BORDER));
             tableTermsHeader.addCell(new Cell().add(new Paragraph(InvoiceHelper.companyTerms).setMarginTop(-7f)).setBorder(Border.NO_BORDER));
         } else {
             tableTermsHeader.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f)).setBorder(Border.NO_BORDER));
         }
-
-        document.add(tableHeader);
-        document.add(hrLine);
-        document.add(tableUserDetails);
-        document.add(tableDataDetailsHead);
-        document.add(tableDataDetailsBody);
-        document.add(tableDataDetailsCalculation);
         document.add(tableTermsHeader);
+
+//        document.add(tableHeader);
+//        document.add(hrLine);
+//        document.add(tableUserDetails);
+//        document.add(tableDataDetailsHead);
+//        document.add(tableDataDetailsBody);
+
+
 
 
         document.close();
+
+
     }
 
-    public void invoiceTemplate_5(Document document, Resources resources) {
-
-        DeviceRgb themeFontColor = new DeviceRgb(225, 128, 0);
-        DeviceRgb lightThemeFontColor = new DeviceRgb(255, 204, 153);
-        DeviceRgb whiteFontColor = new DeviceRgb(255, 255, 255);
-
+    public void invoiceTemplate_5(Document document, DeviceRgb themeFontColor, DeviceRgb lightThemeFontColor, DeviceRgb whiteFontColor, Resources resources) {
 
         PdfFont font = InvoiceHelper.selectPDFFont(InvoiceHelper.countryName);
 
@@ -1066,25 +1404,33 @@ public class InvoiceTemplates {
         iconBitmap.compress(Bitmap.CompressFormat.PNG, 100, iconStream);
         ImageData iconImageData = ImageDataFactory.create(iconStream.toByteArray());
 
-        float[] tableCol1 = {100f, 230f, 230f};
+        float[] tableCol1 = {100f, 230f, 225f};
         Table tableHeader = new Table(tableCol1);
 
+
+
         if (InvoiceHelper.compImage != null && InvoiceHelper.compImage.length > 0) {
-            tableHeader.addCell(new Cell(6, 1).add(new Image(iconImageData).setWidth(100f)).setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE));
+            tableHeader.addCell(new Cell(6, 1).add(new Image(iconImageData).setWidth(100f))
+                    .setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE));
         } else {
-            tableHeader.addCell(new Cell(6, 1).add(new Paragraph("")).setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE));
+            tableHeader.addCell(new Cell(6, 1).add(new Paragraph(""))
+                    .setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE));
         }
 
         if (InvoiceHelper.compName != null && !(TextUtils.isEmpty(InvoiceHelper.compName))) {
-            tableHeader.addCell(new Cell().add(new Paragraph(InvoiceHelper.compName).setBold().setFontSize(17f).setMarginLeft(30f)).setBorder(Border.NO_BORDER).setHorizontalAlignment(HorizontalAlignment.CENTER));
+            tableHeader.addCell(new Cell().add(new Paragraph(InvoiceHelper.compName).setBold().setFontSize(17f).setMarginLeft(30f).setTextAlignment(TextAlignment.LEFT))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableHeader.addCell(new Cell().add(new Paragraph("WayyEasy").setBold().setFontSize(17f).setMarginLeft(30f)).setBorder(Border.NO_BORDER).setHorizontalAlignment(HorizontalAlignment.CENTER));
+            tableHeader.addCell(new Cell().add(new Paragraph("WayyEasy").setBold().setFontSize(17f).setMarginLeft(30f).setTextAlignment(TextAlignment.RIGHT))
+                    .setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.invNo != null && !(TextUtils.isEmpty(InvoiceHelper.invNo))) {
-            tableHeader.addCell(new Cell(6, 1).add(new Paragraph(InvoiceHelper.invNo).setHorizontalAlignment(HorizontalAlignment.RIGHT).setBold().setFontColor(themeFontColor).setFontSize(35f).setMarginTop(40f)).setBorder(Border.NO_BORDER));
+            tableHeader.addCell(new Cell(6, 1).add(new Paragraph(InvoiceHelper.invNo).setTextAlignment(TextAlignment.RIGHT).setBold().setFontColor(themeFontColor).setFontSize(35f).setMarginTop(40f))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableHeader.addCell(new Cell(6, 1).add(new Paragraph("INVOICE").setHorizontalAlignment(HorizontalAlignment.RIGHT).setBold().setFontColor(themeFontColor).setFontSize(35f).setMarginTop(40f)).setBorder(Border.NO_BORDER));
+            tableHeader.addCell(new Cell(6, 1).add(new Paragraph("INVOICE").setTextAlignment(TextAlignment.RIGHT).setBold().setFontColor(themeFontColor).setFontSize(35f).setMarginTop(40f))
+                    .setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.compAdd1 != null && !(TextUtils.isEmpty(InvoiceHelper.compAdd1))) {
@@ -1117,95 +1463,151 @@ public class InvoiceTemplates {
             tableHeader.addCell(new Cell().add(new Paragraph("").setFontSize(15f).setMarginLeft(30f).setMarginTop(-7f)).setBorder(Border.NO_BORDER).setHorizontalAlignment(HorizontalAlignment.CENTER));
         }
 
+        document.add(tableHeader);
+
         ILineDrawer solidLine = new SolidLine();
         LineSeparator hrLine = new LineSeparator(solidLine).setOpacity(0.5f).setMarginTop(20f).setMarginBottom(15f);
+        document.add(hrLine);
 
-        float[] tableCol2 = {240, 180f, 140f};
+        float[] tableCol2 = {235, 180f, 140f};
         Table tableUserDetails = new Table(tableCol2);
         tableUserDetails.addCell(new Cell().add(new Paragraph("BILL TO").setBold().setFontSize(17f)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("INVOICE #").setBold().setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("INVOICE #").setBold().setFontSize(17f)).setBorder(Border.NO_BORDER));
         if (InvoiceHelper.invNo != null && !(TextUtils.isEmpty(InvoiceHelper.invNo))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invNo).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invNo).setFontSize(17f).setTextAlignment(TextAlignment.RIGHT))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f)).setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.clientName != null && !(TextUtils.isEmpty(InvoiceHelper.clientName))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientName).setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientName).setMarginTop(-7f).setFontSize(15f))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         }
-        tableUserDetails.addCell(new Cell().add(new Paragraph("Created Date").setFontSize(17f).setBold().setHorizontalAlignment(HorizontalAlignment.RIGHT).setMarginTop(-7f)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("Created Date").setFontSize(17f).setBold().setMarginTop(-7f)).setBorder(Border.NO_BORDER));
         if (InvoiceHelper.invCreatedDate != null && !(TextUtils.isEmpty(InvoiceHelper.invCreatedDate))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invCreatedDate).setMarginTop(-7f).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invCreatedDate).setMarginTop(-7f).setFontSize(17f).setTextAlignment(TextAlignment.RIGHT))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(17f)).setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.clientBilAddress1 != null && !(TextUtils.isEmpty(InvoiceHelper.clientBilAddress1))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientBilAddress1).setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientBilAddress1).setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         }
-        tableUserDetails.addCell(new Cell().add(new Paragraph("DUE Date").setFontSize(17f).setBold().setMarginTop(-7f).setHorizontalAlignment(HorizontalAlignment.RIGHT).setMarginTop(-7f)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("DUE Date").setFontSize(17f).setBold().setMarginTop(-7f).setMarginTop(-7f)).setBorder(Border.NO_BORDER));
         if (InvoiceHelper.invDueDate != null && !(TextUtils.isEmpty(InvoiceHelper.invDueDate))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invDueDate).setMarginTop(-7f).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invDueDate).setMarginTop(-7f).setFontSize(17f).setTextAlignment(TextAlignment.RIGHT))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f))
+                    .setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.clientBilAddress2 != null && !(TextUtils.isEmpty(InvoiceHelper.clientBilAddress2))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientBilAddress2).setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientBilAddress2).setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f))
+                    .setBorder(Border.NO_BORDER));
         }
 
-        tableUserDetails.addCell(new Cell().add(new Paragraph("P.O.#").setFontSize(17f).setMarginTop(-7f).setBold().setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("P.O.#").setFontSize(17f).setMarginTop(-7f).setBold())
+                .setBorder(Border.NO_BORDER));
 
         if (InvoiceHelper.invoicePo != null && !(TextUtils.isEmpty(InvoiceHelper.invoicePo))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invoicePo).setMarginTop(-7f).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.invoicePo).setMarginTop(-7f).setFontSize(17f).setTextAlignment(TextAlignment.RIGHT))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(17f)).setBorder(Border.NO_BORDER));
         }
 
         if (InvoiceHelper.clientPhone != null && !(TextUtils.isEmpty(InvoiceHelper.clientPhone))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientPhone).setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientPhone).setMarginTop(-7f).setFontSize(15f))
+                    .setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f))
+                    .setBorder(Border.NO_BORDER));
         }
 
-        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f).setBold().setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f).setBold()).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f)).setBorder(Border.NO_BORDER));
 
 
         if (InvoiceHelper.clientEmail != null && !(TextUtils.isEmpty(InvoiceHelper.clientEmail))) {
-            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientEmail).setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph(InvoiceHelper.clientEmail).setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         } else {
-            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+            tableUserDetails.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f).setFontSize(15f)).setBorder(Border.NO_BORDER));
         }
 
-        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f).setBold().setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
-        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setHorizontalAlignment(HorizontalAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f).setMarginTop(-7f).setBold()).setBorder(Border.NO_BORDER));
+        tableUserDetails.addCell(new Cell().add(new Paragraph("").setFontSize(17f)).setBorder(Border.NO_BORDER));
+
+        document.add(tableUserDetails);
+
+     ///   float[] tableCol3 = {140, 55, 80, 100, 100, 80};  // 555
+//        float[] tableCol3 = {140f, 44f, 84f, 104f, 104f, 84f};
+      //  Table tableDataDetailsHead = new Table(tableCol3).setBackgroundColor(themeFontColor).setMarginTop(10f);
+
+        float[] tableCol3 = {140, 55, 80, 100, 100, 80};  // 555
+        Table tableDataDetailsHead = new Table(tableCol3).setBackgroundColor(themeFontColor).setMarginTop(10f).setWidth(555f).setFixedLayout();
 
 
-        float[] tableCol3 = {140f, 44f, 84f, 104f, 104f, 84f};
-        Table tableDataDetailsHead = new Table(tableCol3).setBackgroundColor(themeFontColor).setMarginTop(10f);
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("ITEM").setBold().setFontColor(whiteFontColor).setFontSize(14f).setPaddingLeft(5f)).setBorder(Border.NO_BORDER));
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("QTY").setBold().setFontColor(whiteFontColor).setFontSize(14f)).setBorder(Border.NO_BORDER));
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("PRICE").setBold().setFontColor(whiteFontColor).setFontSize(14f)).setBorder(Border.NO_BORDER));
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("DISCOUNT").setBold().setFontColor(whiteFontColor).setFontSize(14f)).setBorder(Border.NO_BORDER));
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("TAX").setBold().setFontColor(whiteFontColor).setFontSize(14f)).setBorder(Border.NO_BORDER));
-        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("AMOUNT").setBold().setFontColor(whiteFontColor).setFontSize(14f).setPaddingRight(5f)).setBorder(Border.NO_BORDER));
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("ITEM NAME").setPaddingLeft(5f).setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.LEFT)
 
-        Table tableDataDetailsBody = new Table(tableCol3).setMarginTop(10f);
+        );
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("QTY").setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.CENTER)
+        );
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("PRICE").setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.CENTER)
+        );
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("DISCOUNT").setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.CENTER)
+        );
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("TAX").setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.CENTER)
+        );
+        tableDataDetailsHead.addCell(new Cell().add(new Paragraph("AMOUNT").setFont(font).setFontColor(whiteFontColor).setFontSize(14f))
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.CENTER)
+        );
+        document.add(tableDataDetailsHead);
+
+
+
+        float[] tableCol3_1 = {140, 55, 80, 100, 100, 80};
 
         for (int i = 0; i < InvoiceHelper.itemsList.size(); i++) {
 
+            Table tableDataDetailsBody = new Table(tableCol3_1).setBackgroundColor(lightThemeFontColor).setWidth(555f).setFixedLayout();
+
+            Table tableDataDetailsBodyWhite = new Table(tableCol3_1).setWidth(555f).setFixedLayout();
+
             if (i % 2 == 0) {
 
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemName()).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemQuantity()).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + InvoiceHelper.itemsList.get(i).getItemPrice()).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemName())
+                                        .setFont(font).setPaddingLeft(5f).setTextAlignment(TextAlignment.LEFT))
+                                .setBorder(Border.NO_BORDER)
+                        );
+                tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemQuantity())
+                                .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER)
+                );
+                tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + InvoiceHelper.itemsList.get(i)
+                                .getItemPrice())
+                                .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER)
+                );
 
                 double totalItemPrice = Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemQuantity()) * Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemPrice());
 
@@ -1214,24 +1616,55 @@ public class InvoiceTemplates {
                 double netItemPrice = extra + totalItemPrice;
 
                 if (!InvoiceHelper.itemsList.get(i).getItemDisc().equals("0")) {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice))
+                                    .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setPaddingLeft(15f).setMarginTop(-3f).setHeight(25f).setHorizontalAlignment(HorizontalAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph("--")
+                                    .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 }
 
                 if (!InvoiceHelper.itemsList.get(i).getItemTax().equals("0")) {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice))
+                                    .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setPaddingLeft(15f).setMarginTop(-3f).setHeight(25f).setHorizontalAlignment(HorizontalAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph("--")
+                                    .setFont(font))
+                            .setBorder(Border.NO_BORDER)
+                            .setTextAlignment(TextAlignment.CENTER)
+                    );
                 }
 
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice)).setFont(font).setMarginTop(-3f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                tableDataDetailsBodyWhite.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice))
+                                .setFont(font).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER)
+                );
 
+                document.add(tableDataDetailsBodyWhite);
             } else {
 
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemName()).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemQuantity()).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + InvoiceHelper.itemsList.get(i).getItemPrice()).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemName())
+                                .setFont(font).setPaddingLeft(5f).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.LEFT))
+                        .setBorder(Border.NO_BORDER)
+                );
+
+
+
+
+                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.itemsList.get(i).getItemQuantity())
+                                .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER)
+                );
+
+                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + InvoiceHelper.itemsList.get(i).getItemPrice())
+                                .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER)
+                );
 
                 double totalItemPrice = Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemQuantity()) * Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemPrice());
 
@@ -1241,74 +1674,96 @@ public class InvoiceTemplates {
 
 
                 if (!InvoiceHelper.itemsList.get(i).getItemDisc().equals("0")) {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("- " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemDisc()) / 100 * totalItemPrice))
+                                    .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setHeight(25f).setPaddingLeft(20f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--")
+                                    .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 }
 
                 if (!InvoiceHelper.itemsList.get(i).getItemTax().equals("0")) {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("+ " + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(Double.parseDouble(InvoiceHelper.itemsList.get(i).getItemTax()) / 100 * totalItemPrice))
+                                    .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                            .setBorder(Border.NO_BORDER)
+                    );
                 } else {
-                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--- ").setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setHeight(25f).setPaddingLeft(20f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                    tableDataDetailsBody.addCell(new Cell().add(new Paragraph("--")
+                                    .setFont(font).setBackgroundColor(lightThemeFontColor))
+                            .setBorder(Border.NO_BORDER)
+                            .setTextAlignment(TextAlignment.CENTER)
+                    );
                 }
 
-                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice)).setFont(font).setMarginTop(-3f).setBackgroundColor(lightThemeFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setHeight(25f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+                tableDataDetailsBody.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(netItemPrice))
+                                .setFont(font).setBackgroundColor(lightThemeFontColor).setTextAlignment(TextAlignment.CENTER))
+                        .setBorder(Border.NO_BORDER));
+
+
+                document.add(tableDataDetailsBody);
 
             }
         }
 
-        Table tableDataDetailsCalculation = new Table(tableCol3).setMarginTop(10f);
+        float[] tableCol4 = {140, 55, 80, 80, 80, 120};
+
+        Table tableDataDetailsCalculation = new Table(tableCol4).setMarginTop(15f);
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("SUBTOTAL").setBold()).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.subTotal)).setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("SUBTOTAL :").setFont(font).setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.subTotal)).setTextAlignment(TextAlignment.RIGHT).setPaddingRight(5f).setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
 
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("DISCOUNT").setBold()).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("DISCOUNT :").setFont(font).setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
         if (InvoiceHelper.discount > 0) {
-            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph('-' + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.discount)).setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
+            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph('-' + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.discount)).setTextAlignment(TextAlignment.RIGHT).setPaddingRight(5f).setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
         } else {
-            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("---").setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
+            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("--").setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
         }
 
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("TOTAL").setBold().setBackgroundColor(themeFontColor).setHeight(25f).setFontColor(whiteFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.finalTotal)).setFont(font).setBackgroundColor(themeFontColor).setHeight(25f).setFontColor(whiteFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("TOTAL :").setFont(font).setBackgroundColor(themeFontColor).setTextAlignment(TextAlignment.RIGHT).setHeight(25f).setFontColor(whiteFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.finalTotal)).setTextAlignment(TextAlignment.RIGHT).setPaddingRight(5f).setFont(font).setBackgroundColor(themeFontColor).setHeight(25f).setFontColor(whiteFontColor).setMarginLeft(-5f).setPaddingLeft(5f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
 
+        document.add(tableDataDetailsCalculation);
 
         float[] tableTermsCol = {560};
         Table tableTermsHeader = new Table(tableTermsCol).setFixedPosition(30f, 20, 560);
+
         if (InvoiceHelper.companyTerms != null && !(TextUtils.isEmpty(InvoiceHelper.companyTerms))) {
             tableTermsHeader.addCell(new Cell().add(new Paragraph("Terms and Conditions:").setBold().setFontColor(themeFontColor)).setBorder(Border.NO_BORDER));
             tableTermsHeader.addCell(new Cell().add(new Paragraph(InvoiceHelper.companyTerms).setMarginTop(-7f)).setBorder(Border.NO_BORDER));
         } else {
             tableTermsHeader.addCell(new Cell().add(new Paragraph("").setMarginTop(-7f)).setBorder(Border.NO_BORDER));
         }
-
-        document.add(tableHeader);
-        document.add(hrLine);
-        document.add(tableUserDetails);
-        document.add(tableDataDetailsHead);
-        document.add(tableDataDetailsBody);
-        document.add(tableDataDetailsCalculation);
         document.add(tableTermsHeader);
+
+//        document.add(tableHeader);
+//        document.add(hrLine);
+//        document.add(tableUserDetails);
+//        document.add(tableDataDetailsHead);
+//        document.add(tableDataDetailsBody);
+
+
 
 
         document.close();
+
+
     }
 
-    public void invoiceTemplate_6(Document document, Resources resources) {
-
-        DeviceRgb themeFontColor = new DeviceRgb(153, 0, 0);
-        DeviceRgb lightThemeFontColor = new DeviceRgb(255, 204, 204);
+    public void invoiceTemplate_6(Document document, DeviceRgb themeFontColor, DeviceRgb lightThemeFontColor, Resources resources) {
 
 
         PdfFont font = InvoiceHelper.selectPDFFont(InvoiceHelper.countryName);
@@ -1461,31 +1916,27 @@ public class InvoiceTemplates {
             }
         }
 
-        Table tableDataDetailsCalculation = new Table(tableCol3).setMarginTop(10f);
+        float[] tableCol3_1 = {280f, 80f, 80f, 120f};
+
+        Table tableDataDetailsCalculation = new Table(tableCol3_1).setMarginTop(10f);
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-//        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-//        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("Subtotal:").setBold().setFontColor(themeFontColor)).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.subTotal)).setFontColor(themeFontColor).setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("Subtotal :").setFont(font).setTextAlignment(TextAlignment.RIGHT).setFontColor(themeFontColor)).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.subTotal)).setTextAlignment(TextAlignment.RIGHT).setFontColor(themeFontColor).setFont(font).setMarginTop(-3f)).setBorder(Border.NO_BORDER));
 
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-//        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-//        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("Discount:").setBold().setMarginTop(-7f)).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("Discount :").setFont(font).setTextAlignment(TextAlignment.RIGHT).setMarginTop(-7f)).setBorder(Border.NO_BORDER));
         if (InvoiceHelper.discount > 0) {
-            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph('-' + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.discount)).setFont(font).setMarginTop(-8f)).setBorder(Border.NO_BORDER));
+            tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph('-' + InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.discount)).setTextAlignment(TextAlignment.RIGHT).setFont(font).setMarginTop(-8f)).setBorder(Border.NO_BORDER));
         } else {
             tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("---").setFont(font).setMarginTop(-7f)).setBorder(Border.NO_BORDER));
         }
 
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-//        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-//        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
         tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("")).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("Invoice Total:").setBold().setFontColor(themeFontColor).setHeight(25f).setMarginLeft(-5f).setPaddingLeft(5f).setVerticalAlignment(VerticalAlignment.MIDDLE).setMarginTop(-10f)).setBorder(Border.NO_BORDER));
-        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.finalTotal)).setFont(font).setHeight(25f).setFontColor(themeFontColor).setMarginTop(-10f).setPaddingLeft(5f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph("Invoice Total :").setFont(font).setTextAlignment(TextAlignment.RIGHT).setFontColor(themeFontColor).setHeight(25f).setMarginLeft(-5f).setPaddingLeft(5f).setVerticalAlignment(VerticalAlignment.MIDDLE).setMarginTop(-10f)).setBorder(Border.NO_BORDER));
+        tableDataDetailsCalculation.addCell(new Cell().add(new Paragraph(InvoiceHelper.currencySymbol + " " + new DecimalFormat("##.##").format(InvoiceHelper.finalTotal)).setTextAlignment(TextAlignment.RIGHT).setFont(font).setHeight(25f).setFontColor(themeFontColor).setMarginTop(-10f).setPaddingLeft(5f).setVerticalAlignment(VerticalAlignment.MIDDLE)).setBorder(Border.NO_BORDER));
 
 
         float[] tableTermsCol = {560};

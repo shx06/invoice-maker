@@ -437,7 +437,7 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/disp_percent"
+                                android:id="@+id/disc_percent"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="%"
